@@ -69,16 +69,6 @@ export const assetslist = [
         src: './node_modules/swiper/dist/**/*',
         dest: 'swiper/'
     },
-    {
-        name: 'Animatewithsass',
-        src: './node_modules/animatewithsass/**/*',
-        dest: 'animatewithsass/'
-    },
-    {
-        name: 'Swiper',
-        src: './node_modules/swiper/dist/**/*',
-        dest: 'swiper/'
-    },
 ];
 
 export const autoPrefixerConf = {
