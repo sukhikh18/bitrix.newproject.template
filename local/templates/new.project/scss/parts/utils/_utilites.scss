@@ -1,0 +1,72 @@
+
+$spacer: 1rem !default;
+
+$media-sm: 576px !default;
+$media-md: 768px !default;
+$media-lg: 992px !default;
+$media-xl: 1200px !default;
+$media-hd: 1440px !default;
+$media-fhd: 1620px !default;
+
+.full {
+    max-width: 9999px !important;
+}
+
+.wide {
+    max-width: 9999px !important;
+    width: 100%;
+}
+
+.no-underline { &, &:hover, &:focus {
+    text-decoration: none;
+} }
+
+.clear-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+// .two-columns {
+//     @include two-columns();
+// }
+
+// based on column-count (this is not need child elements)
+// .two-columns-text {
+//     @include two-columns(vertical);
+// }
+
+//
+// Aligments
+//
+.alignleft, .al, .alignright, .ar {
+    display: inline;
+    margin-bottom: $spacer;
+}
+
+.alignleft, .al {
+    float: left;
+    margin-right: 1.5em;
+}
+
+.alignright, .ar {
+    float: right;
+    margin-left: 1.5em;
+}
+
+.aligncenter, .ac {
+    clear: both;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fll, .float-left, .pull-left { float: left !important; }
+.flr, .float-right, .pull-right { float: right !important; }
+.fln, .float-none, .pull-none  { float: none !important; }
+
+//
+// Compatibility only
+// @see new d-{media}-{state}. Ex: d-sm-none
+//
+.hidden { display: none !important; }
+.invisible { visibility: hidden !important; }
