@@ -4,7 +4,10 @@ if( !function_exists('is_front_page') ) {
     function is_front_page() {
         global $APPLICATION;
 
-        return '/' === $APPLICATION->GetCurDir();
+        $curDir = $APPLICATION->GetCurDir();
+        $onRequest = empty($_SERVER['REQUEST_URI']) || in_array($_SERVER['REQUEST_URI'], array($curDir, '/index.php'));
+
+        return $onRequest && '/' === $curDir;
     }
 }
 
