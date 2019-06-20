@@ -15,10 +15,9 @@
 └── Catalog.Filter       - [Фильтр по элементам](https://dev.1c-bitrix.ru/user_help/components/content/catalog/catalog_filter.php)  
 
 Sale.Basket.Basket       - [Корзина](https://dev.1c-bitrix.ru/user_help/components/magazin/basket/sale_basket_basket.php) ([Отличная статья по D7 от mr.cappuccino](https://mrcappuccino.ru/blog/post/work-with-basket-bitrix-d7))  
+Sale.Order.Ajax          - [Подтверждение заказа](https://dev.1c-bitrix.ru/user_help/components/magazin/zakaz/sale_order_ajax.php) ([Кастомизация нового шаблона компонента от OlegPro](https://www.olegpro.ru/post/1c_bitriks_kastomizaciya_novogo_shablona_komponenta_saleorderajax.html))
 
-Sale.Order.Ajax          - [Подтверждение заказа](https://dev.1c-bitrix.ru/user_help/components/magazin/zakaz/sale_order_ajax.php) ([Кастомизация нового шаблона компонента от OlegPro](https://www.olegpro.ru/post/1c_bitriks_kastomizaciya_novogo_shablona_komponenta_saleorderajax.html))  
-
-Sale.Personal.Order:      - [Персональная информация (/personal/order/)](https://dev.1c-bitrix.ru/user_help/components/magazin/profiles/sale_personal_order.php)
+Sale.Personal.Order:      - [Персональная информация (/personal/order/)](https://dev.1c-bitrix.ru/user_help/components/magazin/profiles/sale_personal_order.php)  
 Sale.Personal.Order.List: - [Список заказов](https://dev.1c-bitrix.ru/user_help/components/magazin/profiles/sale_personal_order_list.php)  
 
 \* Комплексный компонент - Обертка запускающая/связывающая под-компоненты
