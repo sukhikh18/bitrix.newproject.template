@@ -21,4 +21,4 @@ Sale.Order.Ajax          - [Подтверждение заказа](https://dev
 Sale.Personal.Order:      - [Персональная информация (/personal/order/)](https://dev.1c-bitrix.ru/user_help/components/magazin/profiles/sale_personal_order.php)
 Sale.Personal.Order.List: - [Список заказов](https://dev.1c-bitrix.ru/user_help/components/magazin/profiles/sale_personal_order_list.php)  
 
-* - Комплексный компонент (Обертка запускающая/связывающая под-компоненты)
+\* Комплексный компонент - Обертка запускающая/связывающая под-компоненты
