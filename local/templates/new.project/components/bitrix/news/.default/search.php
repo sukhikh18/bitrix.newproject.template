@@ -26,30 +26,29 @@ $folder = $this->GetFolder();
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(false);
+?>
+<section class="news news--search component component--news">
+	<section class="news__search component--search-page">
+	<?$APPLICATION->IncludeComponent(
+		"bitrix:search.page",
+		"",
+		Array(
+			"CHECK_DATES" => $arParams["CHECK_DATES"]!=="N"? "Y": "N",
+			"arrWHERE" => array("iblock_".$arParams["IBLOCK_TYPE"]),
+			"arrFILTER" => array("iblock_".$arParams["IBLOCK_TYPE"]),
+			"SHOW_WHERE" => "N",
+			"NO_WORD_LOGIC" => "Y",
+			"USE_TITLE_RANK" => "Y",
+			"DISPLAY_TOP_PAGER" => "N",
+			"TAGS_INHERIT" => "Y",
+			"CACHE_TYPE" => $arParams["CACHE_TYPE"],
+			"CACHE_TIME" => $arParams["CACHE_TIME"],
+			"SET_TITLE" => $arParams["SET_TITLE"],
+			"arrFILTER_iblock_".$arParams["IBLOCK_TYPE"] => array($arParams["IBLOCK_ID"]),
+		),
+		$component
+	);?>
+	</section>
 
-$file = new Main\IO\File( $documentRoot . $folder . "/search-form.php" );
-if ($file->isExists()) include($file->getPath());
-
-$APPLICATION->IncludeComponent(
-	"bitrix:search.page",
-	"",
-	Array(
-		"CHECK_DATES" => $arParams["CHECK_DATES"]!=="N"? "Y": "N",
-		"arrWHERE" => Array("iblock_".$arParams["IBLOCK_TYPE"]),
-		"arrFILTER" => Array("iblock_".$arParams["IBLOCK_TYPE"]),
-		"SHOW_WHERE" => "N",
-		//"PAGE_RESULT_COUNT" => "",
-		"CACHE_TYPE" => $arParams["CACHE_TYPE"],
-		"CACHE_TIME" => $arParams["CACHE_TIME"],
-		"SET_TITLE" => $arParams["SET_TITLE"],
-		"arrFILTER_iblock_".$arParams["IBLOCK_TYPE"] => Array($arParams["IBLOCK_ID"]),
-		"PAGE_RESULT_COUNT" => 8,
-
-		"DISPLAY_TOP_PAGER" => $arParams["SEARCH_DISPLAY_TOP_PAGER"],
-		"DISPLAY_BOTTOM_PAGER" => $arParams["SEARCH_DISPLAY_BOTTOM_PAGER"],
-		"IBLOCK_ID" => $arParams["IBLOCK_ID"],
-	),
-	$component
-);/*?>
-<p><a href="<?=$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["news"]?>"><?=GetMessage("T_NEWS_DETAIL_BACK")?></a></p>
-*/
+	<p><a href="<?=$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["news"]?>"><?=GetMessage("T_NEWS_DETAIL_BACK")?></a></p>
+</section><!-- .component--news -->

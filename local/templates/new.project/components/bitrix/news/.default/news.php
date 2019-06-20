@@ -1,8 +1,5 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
-use Bitrix\Main;
-use Bitrix\Main\Security\Random;
-
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
@@ -16,75 +13,131 @@ use Bitrix\Main\Security\Random;
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
 
-$form_id = 'form-' . Random::getInt(0, 999);
-
-$assets = Main\Page\Asset::getInstance();
-$min = ("N" == Main\Config\Option::get("main", "use_minified_assets")) ? '' : '.min';
-
-$assets->addCss(TPL . '/assets/fancybox/jquery.fancybox'.$min.'.css');
-$assets->addJs(TPL . '/assets/fancybox/jquery.fancybox'.$min.'.js');
-
-$documentRoot = Main\Application::getDocumentRoot();
-$folder = $this->GetFolder();
 ?>
+<section class="news component component--news">
+<?if($arParams["USE_RSS"]=="Y"):?>
+    <?if(method_exists($APPLICATION, 'addheadstring'))
+        $APPLICATION->AddHeadString('<link rel="alternate" type="application/rss+xml" title="'.$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["rss"].'" href="'.$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["rss"].'" />');?>
+<?endif?>
 
-<?php if("Y" == $arParams["USE_RSS"]) : ?>
-    <div class="rss-component">
-        <?php
-        if(method_exists($APPLICATION, 'addheadstring')) {
-            $APPLICATION->AddHeadString(
-                sprintf('<link rel="alternate" type="application/rss+xml" title="%1$s" href="%1$s" />',
-                    $arResult["FOLDER"] . $arResult["URL_TEMPLATES"]["rss"])
-            );
-        }
+<?if($arParams["USE_SEARCH"]=="Y"):?>
+    <section class="news__search component--search-form">
+    <?$APPLICATION->IncludeComponent(
+        "bitrix:search.form",
+        "",
+        Array(
+            "PAGE" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["search"],
+            "TEMPLATE_THEME" => $arParams["TEMPLATE_THEME"]
+        ),
+        $component
+    );?>
+    </section>
+<?endif?>
 
-        printf('<a href="%s" title="rss" target="_self"><img alt="RSS" src="%s" class="alignright" /></a>',
-            $arResult["FOLDER"] . $arResult["URL_TEMPLATES"]["rss"],
-            $templateFolder . '/images/feed-icon-16x16.png');
-        ?>
-    </div>
-<?php endif; ?>
+<?if($arParams["USE_FILTER"]=="Y"):?>
+    <section class="news__filter component--catalog-filter">
+    <?$APPLICATION->IncludeComponent(
+        "bitrix:catalog.filter",
+        "",
+        Array(
+            "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+            "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+            "FILTER_NAME" => $arParams["FILTER_NAME"],
+            "FIELD_CODE" => $arParams["FILTER_FIELD_CODE"],
+            "PROPERTY_CODE" => $arParams["FILTER_PROPERTY_CODE"],
+            "CACHE_TYPE" => $arParams["CACHE_TYPE"],
+            "CACHE_TIME" => $arParams["CACHE_TIME"],
+            "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
+            "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
+            "TEMPLATE_THEME" => $arParams["TEMPLATE_THEME"]
+        ),
+        $component
+    );
+    ?>
+    </section>
+<?endif?>
 
-<?php
-if("Y" == $arParams["USE_SEARCH"]) {
-    $file = new Main\IO\File( $documentRoot . $folder . "/search-form.php" );
-    if ($file->isExists()) include($file->getPath());
-}
+    <section class="news__list component--news-list">
+    <?$APPLICATION->IncludeComponent(
+        "bitrix:news.list",
+        "",
+        Array(
+            "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+            "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+            "NEWS_COUNT" => $arParams["NEWS_COUNT"],
 
-if("Y" == $arParams["USE_FILTER"]) : ?>
-    <div class="filter-component">
-        <?php
-        $APPLICATION->IncludeComponent(
-            "bitrix:catalog.filter",
-            "",
-            Array(
-                "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                "FILTER_NAME" => $arParams["FILTER_NAME"],
-                "FIELD_CODE" => $arParams["FILTER_FIELD_CODE"],
-                "PROPERTY_CODE" => $arParams["FILTER_PROPERTY_CODE"],
-                "CACHE_TYPE" => $arParams["CACHE_TYPE"],
-                "CACHE_TIME" => $arParams["CACHE_TIME"],
-                "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
-                "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
-            ),
-            false // $component get default template
-        );
-        ?>
-    </div>
-<?php endif; ?>
+            "SORT_BY1" => $arParams["SORT_BY1"],
+            "SORT_ORDER1" => $arParams["SORT_ORDER1"],
+            "SORT_BY2" => $arParams["SORT_BY2"],
+            "SORT_ORDER2" => $arParams["SORT_ORDER2"],
 
-<?
-foreach ($arParams as $arParamKey => $arParam) {
-    if( 0 === strpos($arParamKey, 'LIST_') ) {
-        $arParams[ str_replace('LIST_', '', $arParamKey) ] = $arParam;
-        unset( $arParams[ $arParamKey ] );
-    }
-}
+            "FILTER_NAME" => $arParams["FILTER_NAME"],
+            "FIELD_CODE" => $arParams["LIST_FIELD_CODE"],
+            "PROPERTY_CODE" => $arParams["LIST_PROPERTY_CODE"],
+            "CHECK_DATES" => $arParams["CHECK_DATES"],
+            "IBLOCK_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["news"],
+            "SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
+            "DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["detail"],
+            "SEARCH_PAGE" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["search"],
 
-$APPLICATION->IncludeComponent(
-    "bitrix:news.list",
-    ".default",
-    $arParams, // experiment
-    $component
-);?>
+            "CACHE_TYPE" => $arParams["CACHE_TYPE"],
+            "CACHE_TIME" => $arParams["CACHE_TIME"],
+            "CACHE_FILTER" => $arParams["CACHE_FILTER"],
+            "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
+
+            "PREVIEW_TRUNCATE_LEN" => $arParams["PREVIEW_TRUNCATE_LEN"],
+            "ACTIVE_DATE_FORMAT" => $arParams["LIST_ACTIVE_DATE_FORMAT"],
+            "SET_TITLE" => $arParams["SET_TITLE"],
+            "SET_BROWSER_TITLE" => "Y",
+            "SET_META_KEYWORDS" => "Y",
+            "SET_META_DESCRIPTION" => "Y",
+            "MESSAGE_404" => $arParams["MESSAGE_404"],
+            "SET_STATUS_404" => $arParams["SET_STATUS_404"],
+            "SHOW_404" => $arParams["SHOW_404"],
+            "FILE_404" => $arParams["FILE_404"],
+            "SET_LAST_MODIFIED" => $arParams["SET_LAST_MODIFIED"],
+            "INCLUDE_IBLOCK_INTO_CHAIN" => $arParams["INCLUDE_IBLOCK_INTO_CHAIN"],
+            "ADD_SECTIONS_CHAIN" => "N",
+            "HIDE_LINK_WHEN_NO_DETAIL" => $arParams["HIDE_LINK_WHEN_NO_DETAIL"],
+
+            "PARENT_SECTION" => "",
+            "PARENT_SECTION_CODE" => "",
+            "INCLUDE_SUBSECTIONS" => "Y",
+
+            "DISPLAY_DATE" => $arParams["DISPLAY_DATE"],
+            "DISPLAY_NAME" => "Y",
+            "DISPLAY_PICTURE" => $arParams["DISPLAY_PICTURE"],
+            "DISPLAY_PREVIEW_TEXT" => $arParams["DISPLAY_PREVIEW_TEXT"],
+            "MEDIA_PROPERTY" => $arParams["MEDIA_PROPERTY"],
+            "SLIDER_PROPERTY" => $arParams["SLIDER_PROPERTY"],
+
+            "PAGER_TEMPLATE" => $arParams["PAGER_TEMPLATE"],
+            "DISPLAY_TOP_PAGER" => $arParams["DISPLAY_TOP_PAGER"],
+            "DISPLAY_BOTTOM_PAGER" => $arParams["DISPLAY_BOTTOM_PAGER"],
+            "PAGER_TITLE" => $arParams["PAGER_TITLE"],
+            "PAGER_SHOW_ALWAYS" => $arParams["PAGER_SHOW_ALWAYS"],
+            "PAGER_DESC_NUMBERING" => $arParams["PAGER_DESC_NUMBERING"],
+            "PAGER_DESC_NUMBERING_CACHE_TIME" => $arParams["PAGER_DESC_NUMBERING_CACHE_TIME"],
+            "PAGER_SHOW_ALL" => $arParams["PAGER_SHOW_ALL"],
+            "PAGER_BASE_LINK_ENABLE" => $arParams["PAGER_BASE_LINK_ENABLE"],
+            "PAGER_BASE_LINK" => $arParams["PAGER_BASE_LINK"],
+            "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
+
+            "USE_RATING" => $arParams["USE_RATING"],
+            "DISPLAY_AS_RATING" => $arParams["DISPLAY_AS_RATING"],
+            "MAX_VOTE" => $arParams["MAX_VOTE"],
+            "VOTE_NAMES" => $arParams["VOTE_NAMES"],
+
+            "USE_SHARE" => $arParams["LIST_USE_SHARE"],
+            "SHARE_HIDE" => $arParams["SHARE_HIDE"],
+            "SHARE_TEMPLATE" => $arParams["SHARE_TEMPLATE"],
+            "SHARE_HANDLERS" => $arParams["SHARE_HANDLERS"],
+            "SHARE_SHORTEN_URL_LOGIN" => $arParams["SHARE_SHORTEN_URL_LOGIN"],
+            "SHARE_SHORTEN_URL_KEY" => $arParams["SHARE_SHORTEN_URL_KEY"],
+
+            "TEMPLATE_THEME" => $arParams["TEMPLATE_THEME"],
+        ),
+        $component
+    );?>
+    </section>
+</section><!-- .component--news -->

@@ -1,10 +1,12 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
 $res = CIBlock::GetByID( $arParams['IBLOCK_ID'] );
-if($ar_res = $res->GetNext())
+if($ar_res = $res->GetNext()) {
     $arParams['IBLOCK_CODE'] = $ar_res['CODE'];
+}
 
-foreach ($arResult["ITEMS"] as &$arItem) {
+foreach ($arResult["ITEMS"] as &$arItem)
+{
     $more = $arParams["MORE_LINK_TEXT"];
 
     // disable access if is link empty (not exists)
@@ -22,29 +24,95 @@ foreach ($arResult["ITEMS"] as &$arItem) {
         $more = 'читать в источнике';
     } // */
 
-    if( !empty($arItem['DETAIL_PAGE_URL']) && "Y" == $arParams["DISPLAY_MORE_LINK"] )
+    if( !empty($arItem['DETAIL_PAGE_URL']) && "Y" == $arParams["DISPLAY_MORE_LINK"] ) {
         $arItem['DETAIL_PAGE_URL_HTML'] = '<a class="item__more" href="' .$arItem['DETAIL_PAGE_URL']. '">' .$more. '</a>';
+    }
+
+    $arItem['HTML'] = array(
+        'IMAGE' => '',
+        'NAME' => '',
+        'GL_LINK_START' => '',
+        'GL_LINK_END' => '',
+    );
+
+    /** @var string */
+    $arItem['COLUMN_CLASS'] = $arParams['ITEM_CLASS'].' '.$arParams['COLUMN_CLASS'];
+
+    /**
+     * Set preview picture
+     */
+    if( "Y" == $arParams["DISPLAY_PICTURE"] && !empty($arItem["PREVIEW_PICTURE"]["SRC"]) ) {
+        $columnClass .= ' has-picture';
+
+        $arItem['HTML']['IMAGE'] = sprintf('<img src="%s" alt="">',
+            $arItem["PREVIEW_PICTURE"]["SRC"]);
+
+        /** @var string $arParams['PICTURE_DETAIL_URL'] Y|N */
+        if( "Y" == $arParams['PICTURE_DETAIL_URL'] && !empty($arItem["DETAIL_PICTURE"]["SRC"]) ) {
+            $arItem['HTML']['IMAGE'] = sprintf('<a href="%s" class="zoom">%s</a>',
+                $arItem["DETAIL_PICTURE"]["SRC"],
+                $arItem['HTML']['IMAGE']
+            );
+
+            if("Y" == $arParams['WIDE_GLOBAL_LINK']) {
+                $arItem['HTML']['IMAGE'] = '<object>' .$arItem['HTML']['IMAGE']. '</object>';
+            }
+        }
+    }
+
+    /**
+     * Set name html
+     * @var string $arParams["DISPLAY_NAME"] Y|N
+     */
+    if("Y" == $arParams["DISPLAY_NAME"]) {
+        $arItem['HTML']['NAME'] = sprintf('<%1$s class="%3$s__name">%2$s</%1$s>',
+            $arParams["NAME_TAG"],
+            $arItem["NAME"],
+            $arParams['ITEM_CLASS']
+        );
+    }
+
+    /**
+     * Set global link wrapper
+     */
+    if("Y" == $arParams['WIDE_GLOBAL_LINK']) {
+        // add wide global link
+        $arItem['HTML']['GL_LINK_START'] = "<a href=". $arItem["DETAIL_PAGE_URL"] .">";
+        $arItem['HTML']['GL_LINK_END'] = '</a>';
+    }
+    else {
+        if("Y" != $arParams['HIDE_GLOBAL_LINK'] && $arItem["DETAIL_PAGE_URL"]) {
+            // Add link to image
+            if( "Y" != $arParams['PICTURE_DETAIL_URL'] || empty($arItem["DETAIL_PICTURE"]["SRC"]) ) {
+                $arItem['HTML']['IMAGE'] = sprintf('<a href="%s">%s</a>',
+                    $arItem["DETAIL_PAGE_URL"],
+                    $arItem['HTML']['IMAGE']
+                );
+            }
+
+            // add title link
+            $arItem['HTML']['NAME'] = sprintf('<a href="%s">%s</a>',
+                $arItem["DETAIL_PAGE_URL"],
+                $arItem["NAME"]
+            );
+        }
+    }
 }
 
-$sectClass = array(
+$arResult['SECTION_CLASS'] = implode(' ', array(
     'news-list',
     $arParams['ITEM_CLASS'] . "-list",
     "news-list_type_" . $arParams['IBLOCK_CODE'],
     "news-list_id_" . $arParams['IBLOCK_ID'],
-);
-$arResult['SECTION_CLASS'] = implode(' ', $sectClass);
-
-if( empty($arParams['ROW_CLASS']) )
-    $arParams['ROW_CLASS'] = 'row';
-
-if( empty($arParams['COLUMNS']) )
-    $arParams['COLUMNS'] = 1;
+));
 
 $arParams['COLUMN_CLASS'] = function_exists('get_column_class') ?
     get_column_class($arParams['COLUMNS']) : 'columns-' . $arParams['COLUMNS'];
 
-if( empty($arParams['ITEM_CLASS']) )
-    $arParams['ITEM_CLASS'] = 'item';
-
-if( empty($arParams["NAME_TAG"]) )
-    $arParams["NAME_TAG"] = 'h3';
+/**
+ * Set defaults
+ */
+if( empty($arParams['ROW_CLASS']) ) $arParams['ROW_CLASS'] = 'row';
+if( empty($arParams['COLUMNS']) ) $arParams['COLUMNS'] = 1;
+if( empty($arParams['ITEM_CLASS']) ) $arParams['ITEM_CLASS'] = 'item';
+if( empty($arParams["NAME_TAG"]) ) $arParams["NAME_TAG"] = 'h3';
