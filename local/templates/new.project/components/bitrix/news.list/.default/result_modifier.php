@@ -5,10 +5,26 @@ if($ar_res = $res->GetNext()) {
     $arParams['IBLOCK_CODE'] = $ar_res['CODE'];
 }
 
+if( empty($arParams['COLUMNS']) ) $arParams['COLUMNS'] = 1;
+
+$SECTION_CLASS = array('news-list');
+if( !empty($arParams['ITEM_CLASS']) )  $SECTION_CLASS[] = $arParams['ITEM_CLASS'] . "-list";
+if( !empty($arParams['IBLOCK_CODE']) ) $SECTION_CLASS[] = "news-list_type_" . $arParams['IBLOCK_CODE'];
+if( !empty($arParams['IBLOCK_ID']) )   $SECTION_CLASS[] = "news-list_id_" . $arParams['IBLOCK_ID'];
+$arResult['SECTION_CLASS'] = implode(' ', $SECTION_CLASS);
+
+$arParams['COLUMN_CLASS'] = function_exists('get_column_class') ?
+    get_column_class($arParams['COLUMNS']) : 'columns-' . $arParams['COLUMNS'];
+
+/**
+ * Set defaults html attrs
+ */
+if( empty($arParams['ROW_CLASS']) ) $arParams['ROW_CLASS'] = 'row';
+if( empty($arParams['ITEM_CLASS']) ) $arParams['ITEM_CLASS'] = 'item';
+if( empty($arParams["NAME_TAG"]) ) $arParams["NAME_TAG"] = 'h3';
+
 foreach ($arResult["ITEMS"] as &$arItem)
 {
-    $more = $arParams["MORE_LINK_TEXT"];
-
     // disable access if is link empty (not exists)
     if( !$arItem["DETAIL_PAGE_URL"] || "#" == $arItem["DETAIL_PAGE_URL"] )
         $arResult["USER_HAVE_ACCESS"] = false;
@@ -25,7 +41,10 @@ foreach ($arResult["ITEMS"] as &$arItem)
     } // */
 
     if( !empty($arItem['DETAIL_PAGE_URL']) && "Y" == $arParams["DISPLAY_MORE_LINK"] ) {
-        $arItem['DETAIL_PAGE_URL_HTML'] = '<a class="item__more" href="' .$arItem['DETAIL_PAGE_URL']. '">' .$more. '</a>';
+        $arItem['DETAIL_PAGE_URL_HTML'] = printf('<a class="item__more" href="%s">%s</a>',
+            $arItem['DETAIL_PAGE_URL'],
+            $arParams["MORE_LINK_TEXT"]
+        );
     }
 
     $arItem['HTML'] = array(
@@ -36,7 +55,7 @@ foreach ($arResult["ITEMS"] as &$arItem)
     );
 
     /** @var string */
-    $arItem['COLUMN_CLASS'] = $arParams['ITEM_CLASS'].' '.$arParams['COLUMN_CLASS'];
+    $arItem['COLUMN_CLASS'] = $arParams['ITEM_CLASS'].'--column '.$arParams['COLUMN_CLASS'];
 
     /**
      * Set preview picture
@@ -98,21 +117,3 @@ foreach ($arResult["ITEMS"] as &$arItem)
         }
     }
 }
-
-$arResult['SECTION_CLASS'] = implode(' ', array(
-    'news-list',
-    $arParams['ITEM_CLASS'] . "-list",
-    "news-list_type_" . $arParams['IBLOCK_CODE'],
-    "news-list_id_" . $arParams['IBLOCK_ID'],
-));
-
-$arParams['COLUMN_CLASS'] = function_exists('get_column_class') ?
-    get_column_class($arParams['COLUMNS']) : 'columns-' . $arParams['COLUMNS'];
-
-/**
- * Set defaults
- */
-if( empty($arParams['ROW_CLASS']) ) $arParams['ROW_CLASS'] = 'row';
-if( empty($arParams['COLUMNS']) ) $arParams['COLUMNS'] = 1;
-if( empty($arParams['ITEM_CLASS']) ) $arParams['ITEM_CLASS'] = 'item';
-if( empty($arParams["NAME_TAG"]) ) $arParams["NAME_TAG"] = 'h3';

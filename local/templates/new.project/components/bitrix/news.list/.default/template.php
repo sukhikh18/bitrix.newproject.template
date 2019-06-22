@@ -16,7 +16,7 @@ $this->setFrameMode(true);
 ?>
 <section class='<?= $arResult['SECTION_CLASS'] ?>'>
     <?if( $arParams["DISPLAY_TOP_PAGER"] ):?>
-    <div class='<?= $arParams['IBLOCK_CODE'] ?>__pager <?= $arParams['IBLOCK_CODE'] ?>__pager_top'><?= $arResult["NAV_STRING"] ?></div>
+    <div class="<?= $arParams['IBLOCK_CODE'] ?>__pager <?= $arParams['IBLOCK_CODE'] ?>__pager_top"><?= $arResult["NAV_STRING"] ?></div>
     <?endif;?>
 
     <div class="<?= $arParams['ROW_CLASS'] ?>">
@@ -68,8 +68,6 @@ $this->setFrameMode(true);
     </div><!-- .<?= $arParams['ROW_CLASS'] ?> -->
 
     <?if( $arParams["DISPLAY_BOTTOM_PAGER"] ):?>
-    <div class='<?= $arParams['IBLOCK_CODE'] ?>__pager <?= $arParams['IBLOCK_CODE'] ?>__pager_bottom'>
-        <?= $arResult["NAV_STRING"] ?>
-    </div>
+    <div class="<?= $arParams['IBLOCK_CODE'] ?>__pager <?= $arParams['IBLOCK_CODE'] ?>__pager_bottom"><?=$arResult["NAV_STRING"];?></div>
     <?endif;?>
 </section>
