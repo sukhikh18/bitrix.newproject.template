@@ -12,13 +12,20 @@ $arTemplateParameters = array(
 		"TYPE" => "TEXT",
 		"DEFAULT" => "item",
 	),
-
 	"COLUMNS" => Array(
 		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_COLUMNS"),
 		"TYPE" => "TEXT",
 		"DEFAULT" => "1",
 	),
-
+	"ITEM_DIRECTION" => Array(
+		"NAME" => "Расположение элемента",
+		"TYPE" => "LIST",
+		"DEFAULT" => "VERTICAL",
+		"VALUES" => array(
+			"VERTICAL" => "Вертикальное",
+			"HORIZONTAL" => "Горизонтальное",
+		)
+	),
 	"DISPLAY_DATE" => Array(
 		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_DISPLAY_DATE"),
 		"TYPE" => "CHECKBOX",

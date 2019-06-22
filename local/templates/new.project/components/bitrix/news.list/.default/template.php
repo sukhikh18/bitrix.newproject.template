@@ -23,7 +23,7 @@ $this->setFrameMode(true);
         <?foreach($arResult["ITEMS"] as $arItem):?>
             <div class="<?= $arItem['COLUMN_CLASS'] ?>" id="<?= $this->GetEditAreaId($arItem['ID']) ?>">
                 <?= $arItem['HTML']['GL_LINK_START'] ?>
-                <article class="media <?= $arParams['ITEM_CLASS'] ?>">
+                <article class="<?if('HORIZONTAL' == $arParams['ITEM_DIRECTION']) echo "media "?><?= $arParams['ITEM_CLASS'] ?>">
                     <?if( "N" !== $arParams["DISPLAY_PICTURE"] ):?>
                     <div class="<?= $arParams['ITEM_CLASS'] ?>__image">
                         <?= $arItem['HTML']['IMAGE'] ?>
