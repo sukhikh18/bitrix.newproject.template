@@ -78,6 +78,16 @@ $arTemplateParameters = array(
 		"TYPE" => "TEXT",
 		"DEFAULT" => GetMessage("T_IBLOCK_VALUE_NEWS_MORE_LINK_TEXT"),
 	),
+	"LAZY_LOAD" => Array(
+		"NAME" => 'Ленивая подгрузка',
+		"TYPE" => "CHECKBOX",
+		"DEFAULT" => "N",
+	),
+	"INFINITY_SCROLL" => Array(
+		"NAME" => 'Бесконечная прокрутка',
+		"TYPE" => "CHECKBOX",
+		"DEFAULT" => "N",
+	),
 
 	/**
 	 * @todo

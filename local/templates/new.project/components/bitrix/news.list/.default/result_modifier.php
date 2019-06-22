@@ -117,3 +117,25 @@ foreach ($arResult["ITEMS"] as &$arItem)
         }
     }
 }
+
+/**
+ * @fix it if is change SEO_URL
+ */
+if( "Y" == $arParams['LAZY_LOAD'] ) {
+    $paramName = 'PAGEN_'.$arResult['NAV_RESULT']->NavNum;
+    $paramValue = $arResult['NAV_RESULT']->NavPageNomer;
+    $pageCount = $arResult['NAV_RESULT']->NavPageCount;
+
+    $arResult['MORE_ITEMS_LINK'] = '';
+    if( $arResult['NAV_RESULT']->NavPageCount <= 1 ) {
+        $arParams['LAZY_LOAD'] = "N";
+    }
+    elseif ( $paramValue < $pageCount ) {
+        $arResult['MORE_ITEMS_LINK'] = htmlspecialcharsbx(
+            $APPLICATION->GetCurPageParam(
+                sprintf('%s=%s', $paramName, ++$paramValue),
+                array($paramName, 'LAZY_LOAD')
+            )
+        );
+    }
+}
