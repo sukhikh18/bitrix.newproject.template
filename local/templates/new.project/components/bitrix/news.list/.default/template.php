@@ -23,39 +23,39 @@ $this->setFrameMode(true);
     <div class="<?= $arParams['ROW_CLASS'] ?>">
         <?foreach($arResult["ITEMS"] as $arItem):?>
             <div class="<?= $arItem['COLUMN_CLASS'] ?>" id="<?= $this->GetEditAreaId($arItem['ID']) ?>">
-                <?= $arItem['HTML']['GL_LINK_START'] ?>
                 <article class="<?if('HORIZONTAL' == $arParams['ITEM_DIRECTION']) echo "media "?><?= $arParams['ITEM_CLASS'] ?>">
-                    <?if( "N" !== $arParams["DISPLAY_PICTURE"] ):?>
-                    <div class="<?= $arParams['ITEM_CLASS'] ?>__image">
-                        <?= $arItem['HTML']['IMAGE'] ?>
+
+                <?if( "N" !== $arParams["DISPLAY_PICTURE"] && !empty($arItem["PREVIEW_PICTURE"]["SRC"]) ):?>
+                    <div class="<?= $arParams['ITEM_CLASS'] ?>__pict">
+                        <img src="<?= $arItem["PREVIEW_PICTURE"]["SRC"] ?>" alt="<?= htmlspecialcharsEx($arItem["~NAME"]) ?>" />
                     </div>
-                    <?endif?>
+                <?endif?>
 
                     <div class="media-body <?= $arParams['ITEM_CLASS'] ?>__body">
-                        <?php
-                        if( "N" !== $arParams["DISPLAY_NAME"] ) {
-                            echo $arItem['HTML']['NAME'];
-                        }
 
-                        if( "Y" === $arParams["DISPLAY_DATE"] && $arItem["DISPLAY_ACTIVE_FROM"]) {
-                            printf('<div class="%s__date">%s</div>',
-                                $arParams['ITEM_CLASS'],
-                                $arItem["DISPLAY_ACTIVE_FROM"]
-                            );
-                        }
+                    <?if( "Y" == $arParams["DISPLAY_NAME"] ):?>
+                        <<?= $arParams["NAME_TAG"] ?> class="<?= $arParams['ITEM_CLASS'] ?>__name">
+                            <?= $arItem["NAME"] ?>
+                        </<?= $arParams["NAME_TAG"] ?>>
+                    <?endif?>
 
-                        if( "N" !== $arParams["DISPLAY_PREVIEW_TEXT"] && $arItem["PREVIEW_TEXT"]) {
-                            printf('<div class="%s__desc">%s</div>',
-                                $arParams['ITEM_CLASS'],
-                                $arItem["PREVIEW_TEXT"]
-                            );
-                        }
-                        ?>
+                    <?if( "Y" === $arParams["DISPLAY_DATE"] && $arItem["DISPLAY_ACTIVE_FROM"]):?>
+                        <div class="<?= $arParams['ITEM_CLASS'] ?>__date"><?= $arItem["DISPLAY_ACTIVE_FROM"] ?></div>
+                    <?endif?>
 
-                        <?= $arItem["DETAIL_PAGE_URL_HTML"] ?>
+                    <?if( "N" !== $arParams["DISPLAY_PREVIEW_TEXT"] && $arItem["PREVIEW_TEXT"]):?>
+                        <div class="<?= $arParams['ITEM_CLASS'] ?>__desc">
+                            <?= $arItem["PREVIEW_TEXT"] ?>
+                        </div>
+                    <?endif?>
+
+                    <?if( !empty($arItem['DETAIL_PAGE_URL']) && !empty($arParams["MORE_LINK_TEXT"]) ):?>
+                        <a class="<?= $arParams['ITEM_CLASS'] ?>__more" href="<?= $arItem['DETAIL_PAGE_URL'] ?>"><?= $arParams["MORE_LINK_TEXT"] ?></a>
+                    <?endif?>
+
                     </div>
+
                 </article>
-                <?= $arItem['HTML']['GL_LINK_END'] ?>
             </div>
 
             <?// add edit areas
@@ -68,13 +68,13 @@ $this->setFrameMode(true);
         <?endforeach?>
     </div><!-- .<?= $arParams['ROW_CLASS'] ?> -->
 
-    <?if( $arParams["DISPLAY_BOTTOM_PAGER"] ):?>
+    <?/*if( $arParams["DISPLAY_BOTTOM_PAGER"] ):?>
     <div class="<?= $arParams['IBLOCK_CODE'] ?>_<?= $arParams['ITEM_CLASS'] ?>__pager <?= $arParams['IBLOCK_CODE'] ?>_<?= $arParams['ITEM_CLASS'] ?>__pager_bottom"><?=$arResult["NAV_STRING"];?></div>
-    <?endif;?>
+    <?endif;*/?>
 
     <?if($arResult['MORE_ITEMS_LINK']):?>
     <div class="ajax-pager-wrap">
-        <a class="more-items-link" href="<?= $arResult['MORE_ITEMS_LINK'] ?>">More</a>
+        <a class="more-items-link btn btn-red" href="<?= $arResult['MORE_ITEMS_LINK'] ?>">больше<br> статей</a>
     </div>
     <?endif?>
 

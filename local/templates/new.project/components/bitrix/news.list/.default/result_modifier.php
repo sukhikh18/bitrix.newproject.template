@@ -26,11 +26,22 @@ if( empty($arParams["NAME_TAG"]) ) $arParams["NAME_TAG"] = 'h3';
 foreach ($arResult["ITEMS"] as &$arItem)
 {
     // disable access if is link empty (not exists)
-    if( !$arItem["DETAIL_PAGE_URL"] || "#" == $arItem["DETAIL_PAGE_URL"] )
+    if( !$arItem["DETAIL_PAGE_URL"] || "#" == $arItem["DETAIL_PAGE_URL"] ) {
         $arResult["USER_HAVE_ACCESS"] = false;
+    }
 
     $arItem['DETAIL_PAGE_URL'] = ("N" != $arParams["HIDE_LINK_WHEN_NO_DETAIL"]) ||
         ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"]) ? $arItem["DETAIL_PAGE_URL"] : false;
+
+    /** @var string */
+    $arItem['COLUMN_CLASS'] = $arParams['ITEM_CLASS'].'--column '.$arParams['COLUMN_CLASS'];
+    if( "Y" == $arParams["DISPLAY_PICTURE"] && !empty($arItem["PREVIEW_PICTURE"]["SRC"]) ) {
+        $arItem['COLUMN_CLASS'] .= ' has-picture';
+    }
+
+    if( !empty($arItem['DETAIL_PAGE_URL']) && "Y" !== $arParams['WIDE_GLOBAL_LINK'] ) {
+        $arItem["NAME"] = sprintf('<a href="%s">%s</a>', $arItem['DETAIL_PAGE_URL'], $arItem["NAME"]);
+    }
 
     /**
      * @todo
@@ -39,103 +50,24 @@ foreach ($arResult["ITEMS"] as &$arItem)
         $arItem['DETAIL_PAGE_URL'] = $arItem['PROPERTIES'][ $arParams['EXTERNAL_LINK_PROPERTY'] ]['VALUE'];
         $more = 'читать в источнике';
     } // */
-
-    if( !empty($arItem['DETAIL_PAGE_URL']) && "Y" == $arParams["DISPLAY_MORE_LINK"] ) {
-        $arItem['DETAIL_PAGE_URL_HTML'] = printf('<a class="item__more" href="%s">%s</a>',
-            $arItem['DETAIL_PAGE_URL'],
-            $arParams["MORE_LINK_TEXT"]
-        );
-    }
-
-    $arItem['HTML'] = array(
-        'IMAGE' => '',
-        'NAME' => '',
-        'GL_LINK_START' => '',
-        'GL_LINK_END' => '',
-    );
-
-    /** @var string */
-    $arItem['COLUMN_CLASS'] = $arParams['ITEM_CLASS'].'--column '.$arParams['COLUMN_CLASS'];
-
-    /**
-     * Set preview picture
-     */
-    if( "Y" == $arParams["DISPLAY_PICTURE"] && !empty($arItem["PREVIEW_PICTURE"]["SRC"]) ) {
-        $columnClass .= ' has-picture';
-
-        $arItem['HTML']['IMAGE'] = sprintf('<img src="%s" alt="">',
-            $arItem["PREVIEW_PICTURE"]["SRC"]);
-
-        /** @var string $arParams['PICTURE_DETAIL_URL'] Y|N */
-        if( "Y" == $arParams['PICTURE_DETAIL_URL'] && !empty($arItem["DETAIL_PICTURE"]["SRC"]) ) {
-            $arItem['HTML']['IMAGE'] = sprintf('<a href="%s" class="zoom">%s</a>',
-                $arItem["DETAIL_PICTURE"]["SRC"],
-                $arItem['HTML']['IMAGE']
-            );
-
-            if("Y" == $arParams['WIDE_GLOBAL_LINK']) {
-                $arItem['HTML']['IMAGE'] = '<object>' .$arItem['HTML']['IMAGE']. '</object>';
-            }
-        }
-    }
-
-    /**
-     * Set name html
-     * @var string $arParams["DISPLAY_NAME"] Y|N
-     */
-    if("Y" == $arParams["DISPLAY_NAME"]) {
-        $arItem['HTML']['NAME'] = sprintf('<%1$s class="%3$s__name">%2$s</%1$s>',
-            $arParams["NAME_TAG"],
-            $arItem["NAME"],
-            $arParams['ITEM_CLASS']
-        );
-    }
-
-    /**
-     * Set global link wrapper
-     */
-    if("Y" == $arParams['WIDE_GLOBAL_LINK']) {
-        // add wide global link
-        $arItem['HTML']['GL_LINK_START'] = "<a href=". $arItem["DETAIL_PAGE_URL"] .">";
-        $arItem['HTML']['GL_LINK_END'] = '</a>';
-    }
-    else {
-        if("Y" != $arParams['HIDE_GLOBAL_LINK'] && $arItem["DETAIL_PAGE_URL"]) {
-            // Add link to image
-            if( "Y" != $arParams['PICTURE_DETAIL_URL'] || empty($arItem["DETAIL_PICTURE"]["SRC"]) ) {
-                $arItem['HTML']['IMAGE'] = sprintf('<a href="%s">%s</a>',
-                    $arItem["DETAIL_PAGE_URL"],
-                    $arItem['HTML']['IMAGE']
-                );
-            }
-
-            // add title link
-            $arItem['HTML']['NAME'] = sprintf('<a href="%s">%s</a>',
-                $arItem["DETAIL_PAGE_URL"],
-                $arItem["NAME"]
-            );
-        }
-    }
 }
 
 /**
  * @fix it if is change SEO_URL
  */
-if( "Y" == $arParams['LAZY_LOAD'] ) {
-    $paramName = 'PAGEN_'.$arResult['NAV_RESULT']->NavNum;
-    $paramValue = $arResult['NAV_RESULT']->NavPageNomer;
-    $pageCount = $arResult['NAV_RESULT']->NavPageCount;
+$paramName = 'PAGEN_'.$arResult['NAV_RESULT']->NavNum;
+$paramValue = $arResult['NAV_RESULT']->NavPageNomer;
+$pageCount = $arResult['NAV_RESULT']->NavPageCount;
 
-    $arResult['MORE_ITEMS_LINK'] = '';
-    if( $arResult['NAV_RESULT']->NavPageCount <= 1 ) {
-        $arParams['LAZY_LOAD'] = "N";
-    }
-    elseif ( $paramValue < $pageCount ) {
-        $arResult['MORE_ITEMS_LINK'] = htmlspecialcharsbx(
-            $APPLICATION->GetCurPageParam(
-                sprintf('%s=%s', $paramName, ++$paramValue),
-                array($paramName, 'LAZY_LOAD')
-            )
-        );
-    }
+$arResult['MORE_ITEMS_LINK'] = '';
+if( $arResult['NAV_RESULT']->NavPageCount <= 1 ) {
+    $arParams['LAZY_LOAD'] = "N";
+}
+elseif ( $paramValue < $pageCount ) {
+    $arResult['MORE_ITEMS_LINK'] = htmlspecialcharsbx(
+        $APPLICATION->GetCurPageParam(
+            sprintf('%s=%s', $paramName, ++$paramValue),
+            array($paramName, 'LAZY_LOAD')
+        )
+    );
 }
