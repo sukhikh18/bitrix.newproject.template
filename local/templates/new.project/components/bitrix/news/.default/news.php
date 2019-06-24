@@ -14,7 +14,11 @@
 $this->setFrameMode(true);
 
 ?>
-<section class="news component component--news">
+
+<section class="news news--news component component--news">
+    <div class="container">
+        <h1 class="section-title"><?= $arParams['PAGER_TITLE'] ?></h1>
+
 <?if($arParams["USE_RSS"]=="Y"):?>
     <?if(method_exists($APPLICATION, 'addheadstring'))
         $APPLICATION->AddHeadString('<link rel="alternate" type="application/rss+xml" title="'.$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["rss"].'" href="'.$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["rss"].'" />');?>
@@ -104,12 +108,22 @@ $this->setFrameMode(true);
             "PARENT_SECTION_CODE" => "",
             "INCLUDE_SUBSECTIONS" => "Y",
 
-            "DISPLAY_DATE" => $arParams["DISPLAY_DATE"],
-            "DISPLAY_NAME" => "Y",
-            "DISPLAY_PICTURE" => $arParams["DISPLAY_PICTURE"],
-            "DISPLAY_PREVIEW_TEXT" => $arParams["DISPLAY_PREVIEW_TEXT"],
+            "LIST_ACTIVE_DATE_FORMAT" => "d.m.Y",
+            "COLUMNS" => $arParams["LIST_COLUMNS"],
+
+            "SORT_ELEMENTS" => $arParams["SORT_ELEMENTS"],
+            // "DISPLAY_DATE" => $arParams["LIST_DISPLAY_DATE"],
+            // "DISPLAY_NAME" => $arParams["LIST_DISPLAY_NAME"],
+            // "DISPLAY_PICTURE" => $arParams["LIST_DISPLAY_PICTURE"],
+            // "DISPLAY_PREVIEW_TEXT" => $arParams["DISPLAY_PREVIEW_TEXT"],
             "MEDIA_PROPERTY" => $arParams["MEDIA_PROPERTY"],
             "SLIDER_PROPERTY" => $arParams["SLIDER_PROPERTY"],
+            "ROW_CLASS" => $arParams["ROW_CLASS"],
+            "ITEM_CLASS" => $arParams["ITEM_CLASS"],
+            "NAME_TAG" => $arParams["LIST_NAME_TAG"],
+            // "ITEM_DIRECTION" => "VERTICAL",
+            "LAZY_LOAD" => $arParams["LAZY_LOAD"],
+            "INFINITY_SCROLL" => $arParams["INFINITY_SCROLL"],
 
             "PAGER_TEMPLATE" => $arParams["PAGER_TEMPLATE"],
             "DISPLAY_TOP_PAGER" => $arParams["DISPLAY_TOP_PAGER"],
@@ -136,8 +150,11 @@ $this->setFrameMode(true);
             "SHARE_SHORTEN_URL_KEY" => $arParams["SHARE_SHORTEN_URL_KEY"],
 
             "TEMPLATE_THEME" => $arParams["TEMPLATE_THEME"],
+            "MORE_LINK_TEXT" => $arParams["MORE_LINK_TEXT"],
+            "LAZY_LOAD" => $arParams["LAZY_LOAD"],
         ),
         $component
     );?>
     </section>
+    </div>
 </section><!-- .component--news -->

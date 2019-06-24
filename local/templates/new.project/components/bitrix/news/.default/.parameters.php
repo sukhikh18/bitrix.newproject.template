@@ -19,35 +19,34 @@ $arTemplateParameters = array(
 	"DISPLAY_NAME" => Array(
 		"HIDDEN" => 'Y',
 	),
-	"LIST_DISPLAY_NAME" => Array(
-		"PARENT" => "LIST_SETTINGS",
-		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_NAME"),
-		"TYPE" => "CHECKBOX",
-		"DEFAULT" => "Y",
+	"SORT_ELEMENTS" => Array(
+		"NAME" => 'Расположение элементов',
+		"TYPE" => "TEXT",
+		"DEFAULT" => "PICT,NAME,DESC,MORE",
 	),
-	"LIST_DISPLAY_DATE" => Array(
-		"PARENT" => "LIST_SETTINGS",
-		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_DATE"),
-		"TYPE" => "CHECKBOX",
-		"DEFAULT" => "Y",
-	),
-	"LIST_DISPLAY_PICTURE" => Array(
-		"PARENT" => "LIST_SETTINGS",
-		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_PICTURE"),
-		"TYPE" => "CHECKBOX",
-		"DEFAULT" => "Y",
-	),
-	"LIST_DISPLAY_PREVIEW_TEXT" => Array(
-		"PARENT" => "LIST_SETTINGS",
-		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_TEXT"),
-		"TYPE" => "CHECKBOX",
-		"DEFAULT" => "Y",
-	),
+	// "LIST_DISPLAY_NAME" => Array(
+	// 	"PARENT" => "LIST_SETTINGS",
+	// 	"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_NAME"),
+	// 	"TYPE" => "CHECKBOX",
+	// 	"DEFAULT" => "Y",
+	// ),
+	// "LIST_DISPLAY_DATE" => Array(
+	// 	"PARENT" => "LIST_SETTINGS",
+	// 	"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_DATE"),
+	// 	"TYPE" => "CHECKBOX",
+	// 	"DEFAULT" => "Y",
+	// ),
+	// "LIST_DISPLAY_PICTURE" => Array(
+	// 	"PARENT" => "LIST_SETTINGS",
+	// 	"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_PICTURE"),
+	// 	"TYPE" => "CHECKBOX",
+	// 	"DEFAULT" => "Y",
+	// ),
 	"LIST_COLUMNS" => Array(
 		"PARENT" => "LIST_SETTINGS",
 		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_LIST_COLUMNS"),
 		"TYPE" => "STRING",
-		"DEFAULT" => "2",
+		"DEFAULT" => "4",
 	),
 	"DISPLAY_MORE_LINK" => Array(
 		"PARENT" => "LIST_SETTINGS",
@@ -55,19 +54,42 @@ $arTemplateParameters = array(
 		"TYPE" => "CHECKBOX",
 		"DEFAULT" => "Y",
 	),
-	"HIDE_GLOBAL_LINK" => Array(
-		"PARENT" => "LIST_SETTINGS",
-		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_HIDE_GLOBAL_LINK"),
-		"TYPE" => "CHECKBOX",
-		"DEFAULT" => "Y",
-	),
 	"MORE_LINK_TEXT" => Array(
 		"PARENT" => "LIST_SETTINGS",
 		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_MORE_LINK_TEXT"),
 		"TYPE" => "STRING",
-		"DEFAULT" => "читать далее",
+		"DEFAULT" => "Читать далее",
 	),
-
+	"ITEM_CLASS" => Array(
+		"PARENT" => "LIST_SETTINGS",
+		"NAME" => 'Класс элемента из списка',
+		"TYPE" => "STRING",
+		"DEFAULT" => "item",
+	),
+	"ROW_CLASS" => Array(
+		"PARENT" => "LIST_SETTINGS",
+		"NAME" => 'Класс строки элементов',
+		"TYPE" => "STRING",
+		"DEFAULT" => "row",
+	),
+	"LIST_NAME_TAG" => Array(
+		"PARENT" => "LIST_SETTINGS",
+		"NAME" => 'Класс элемента из списка',
+		"TYPE" => "STRING",
+		"DEFAULT" => "item",
+	),
+	"LAZY_LOAD" => Array(
+		"PARENT" => "LIST_SETTINGS",
+		"NAME" => "Ленивая загрузка",
+		"TYPE" => "CHECKBOX",
+		"DEFAULT" => "N",
+	),
+	"INFINITY_SCROLL" => Array(
+		"PARENT" => "LIST_SETTINGS",
+		"NAME" => "Бесконечная ленивая загрузка",
+		"TYPE" => "CHECKBOX",
+		"DEFAULT" => "N",
+	),
 	"DETAIL_DISPLAY_NAME" => Array(
 		"PARENT" => "DETAIL_SETTINGS",
 		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_NAME"),
