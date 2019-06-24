@@ -55,11 +55,11 @@ if( $cp = $this->__component ) {
 foreach ($arResult["ITEMS"] as &$arItem)
 {
     // disable access if is link empty (not exists)
-    if( !$arItem["DETAIL_PAGE_URL"] || "#" == $arItem["DETAIL_PAGE_URL"] ) {
+    if( !$arItem["DETAIL_PAGE_URL"] || 2 >= strlen($arItem["DETAIL_PAGE_URL"]) ) {
         $arResult["USER_HAVE_ACCESS"] = false;
     }
 
-    $arItem['DETAIL_PAGE_URL'] = ("N" != $arParams["HIDE_LINK_WHEN_NO_DETAIL"]) ||
+    $arItem['DETAIL_PAGE_URL'] = "N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] ||
         ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"]) ? $arItem["DETAIL_PAGE_URL"] : false;
 
     /** @var string */
@@ -80,13 +80,21 @@ foreach ($arResult["ITEMS"] as &$arItem)
     if( isset($arParams['SORT_ELEMENTS']['PICT']) && !empty($arItem["PREVIEW_PICTURE"]["SRC"]) ) {
         $arItem['COLUMN_CLASS'] .= ' has-picture';
 
-        $arItem["HTML"]["PICT"] = sprintf('<div class="%s__pict"><a href="%s"><img src="%s" alt="%s"></a></div>',
-            $arParams['ITEM_CLASS'],
-            htmlspecialcharsEx( "Y" === $arParams['PICTURE_DETAIL_URL'] && !empty($arItem["DETAIL_PICTURE"]["SRC"]) ?
-                $arItem["DETAIL_PICTURE"]["SRC"] : $arItem["PREVIEW_PICTURE"]["SRC"]
-            ),
+        $arItem["HTML"]["PICT"] = sprintf('<img src="%s" alt="%s">',
             htmlspecialcharsEx($arItem["PREVIEW_PICTURE"]["SRC"]),
             htmlspecialcharsEx($arItem["NAME"])
+        );
+
+        if( "Y" === $arParams['PICTURE_DETAIL_URL'] ) {
+            $arItem["HTML"]["PICT"] = sprintf('<a href="%s">%s</a>',
+                htmlspecialcharsEx($arItem["DETAIL_PICTURE"]["SRC"]),
+                $arItem["HTML"]["PICT"]
+            );
+        }
+
+        $arItem["HTML"]["PICT"] = sprintf('<div class="%s__pict">%s</div>',
+            $arParams['ITEM_CLASS'],
+            $arItem["HTML"]["PICT"]
         );
     }
 
