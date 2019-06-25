@@ -3,104 +3,72 @@
 use \Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\Loader;
 
-class customAuthComponent extends CBitrixComponent
+class CustomBitrixComponent extends CBitrixComponent
 {
-    /** @const array (do not const for php version compatibility) */
-    protected $needModules = array();
-
-    /** @var array */
+    /**
+     * @var array
+     */
     private $errors = array();
-
-    /** @var array Field for ajax request data */
-    private $arResponse = array(
-        'errors' => array(),
-        'html' => ''
-    );
 
     function __construct($component = null)
     {
-        parent::__construct($component);
-
-        foreach ($this->needModules as $module) {
-            if( !Loader::includeModule( $module ) ) {
-                $this->errors[] = "No {$module} module.";
-            }
-        }
     }
 
-    function onPrepareComponentParams($arParams)
+    private function addError( $message = null )
     {
-        /**
-         * If is ACTION param exists, strval to define
-         */
-        if ( isset($arParams['ACTION']) && strlen($arParams['ACTION']) > 0 ) {
-            $arParams['ACTION'] = strval($arParams['ACTION']);
-        }
-        elseif ( !empty($this->request['action']) ) {
-            $arParams['ACTION'] = strval($this->request['action']);
+        if( !$message ) return;
+        if( !is_array($this->arResult['ERRORS']) ) $this->arResult['ERRORS'] = array();
+
+        if( $message instanceof \Exception ) {
+            $this->arResult['ERRORS'][] = $message->getMessage();
         }
         else {
-            $arParams['ACTION'] = '';
+            $this->arResult['ERRORS'][] = $message;
         }
-
-        /**
-         * If is IS_AJAX param exists, check the true defined
-         */
-        if ( isset($arParams['IS_AJAX']) && in_array($arParams['IS_AJAX'], array('Y', 'N')) ) {
-            $arParams['IS_AJAX'] = $arParams['IS_AJAX'] == 'Y';
-        }
-        /**
-         * Same as param with request
-         */
-        elseif( isset($this->request['is_ajax']) && in_array($this->request['is_ajax'], array('Y', 'N')) ) {
-            $arParams['IS_AJAX'] = $this->request['is_ajax'] == 'Y';
-        }
-        else {
-            $arParams['IS_AJAX'] = false;
-        }
-
-        return $arParams;
     }
 
-    protected function registerAction()
+    private function getErrors()
     {
-        // global $USER;
+        return $this->arResult['ERRORS'];
     }
 
-    function executeComponent()
+    /**
+     * @note Default bitrix method
+     */
+    function executeComponent($component = null)
     {
         global $APPLICATION;
 
-        if( !empty($this->arParams['ACTION']) ) {
-            if ( is_callable(array($this, $this->arParams['ACTION'] . "Action")) ) {
+        parent::__construct($component);
+
+        // Load required modules
+        if( !Loader::includeModule('iblock') ) {
+            $this->addError('IBlock module required.');
+        };
+
+        // Do action ( %sAction() )
+        if(!empty($this->request['action']) && ($methodAction = strval($this->request['action']))) {
+            if ( is_callable(array($this, $methodAction . "Action")) ) {
                 try {
-                    call_user_func( array($this, $this->arParams['ACTION'] . "Action") );
+                    call_user_func( array($this, $methodAction . "Action") );
                 } catch (\Exception $e) {
-                    $this->errors[] = $e->getMessage();
+                    $this->addError( $e );
                 }
             }
         }
 
-        if ($this->arParams['IS_AJAX']) {
-            $APPLICATION->RestartBuffer();
-            // if ($this->getTemplateName() != '') {
-            //     ob_start();
-            //     $this->includeComponentTemplate();
-            //     $this->arResponse['html'] = ob_get_contents();
-            //     ob_end_clean();
-            // }
+        $this->includeComponentTemplate();
+    }
 
-            $this->arResponse['errors'] = $this->errors;
+    /**
+     * @note Default bitrix method
+     */
+    function onPrepareComponentParams($arParams)
+    {
+        return $arParams;
+    }
 
-            header('Content-Type: application/json');
-            echo json_encode($this->arResponse);
-            $APPLICATION->FinalActions();
-            die();
-        }
-        else {
-            $this->arResult['errors'] = $this->errors;
-
-            $this->includeComponentTemplate();
-        }
+    function customAction()
+    {
     }
 }
