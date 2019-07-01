@@ -37,7 +37,9 @@ $this->setFrameMode(true);
                     ?>
                 </div>
 
-                <?if($arItem['DETAIL_PAGE_URL']):?><a href="<?= $arItem['DETAIL_PAGE_URL'] ?>"></a><?endif?>
+                <?if($arItem['DETAIL_PAGE_URL'] && $arParams['USE_GLOBAL_LINK']):?>
+                <a href="<?= $arItem['DETAIL_PAGE_URL'] ?>"></a>
+                <?endif?>
             </article>
         </div>
 
@@ -55,7 +57,7 @@ $this->setFrameMode(true);
     <div class="<?= $arParams['IBLOCK_CODE'] ?>_<?= $arParams['ITEM_CLASS'] ?>__pager <?= $arParams['IBLOCK_CODE'] ?>_<?= $arParams['ITEM_CLASS'] ?>__pager_bottom"><?=$arResult["NAV_STRING"];?></div>
     <?endif;?>
 
-    <?if($arResult['MORE_ITEMS_LINK']):?>
+    <?if($arResult['MORE_ITEMS_LINK'] && "Y" == $arParams['LAZY_LOAD']):?>
     <div class="ajax-pager-wrap">
         <a class="more-items-link btn btn-red" href="<?= $arResult['MORE_ITEMS_LINK'] ?>">больше<br> статей</a>
     </div>

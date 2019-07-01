@@ -18,13 +18,18 @@ $arTemplateParameters = array(
 		"DEFAULT" => "1",
 	),
 	"ITEM_DIRECTION" => Array(
-		"NAME" => "Расположение элемента",
+		"NAME" => "Положение элемента",
 		"TYPE" => "LIST",
 		"DEFAULT" => "VERTICAL",
 		"VALUES" => array(
 			"VERTICAL" => "Вертикальное",
 			"HORIZONTAL" => "Горизонтальное",
 		)
+	),
+	"USE_GLOBAL_LINK" => Array(
+		"NAME" => "Добавить ссылку в конце элемента",
+		"TYPE" => "CHECKBOX",
+		"DEFAULT" => "N",
 	),
 	"DISPLAY_PICTURE" => Array(
 		"NAME" => GetMessage("T_IBLOCK_DESC_NEWS_DISPLAY_PICTURE"),

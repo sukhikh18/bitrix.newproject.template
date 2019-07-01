@@ -20,9 +20,31 @@ $arTemplateParameters = array(
 		"HIDDEN" => 'Y',
 	),
 	"SORT_ELEMENTS" => Array(
+		"PARENT" => "LIST_SETTINGS",
 		"NAME" => 'Расположение элементов',
 		"TYPE" => "TEXT",
 		"DEFAULT" => "PICT,NAME,DESC,MORE",
+	),
+	"ITEM_DIRECTION" => Array(
+		"PARENT" => "LIST_SETTINGS",
+		"NAME" => "Положение элемента",
+		"TYPE" => "LIST",
+		"DEFAULT" => "VERTICAL",
+		"VALUES" => array(
+			"VERTICAL" => "Вертикальное",
+			"HORIZONTAL" => "Горизонтальное",
+		)
+	),
+	"USE_GLOBAL_LINK" => Array(
+		"PARENT" => "LIST_SETTINGS",
+		"NAME" => "Добавить ссылку в конце элемента",
+		"TYPE" => "CHECKBOX",
+		"DEFAULT" => "N",
+	),
+	"BACKLINK_TEXT" => Array(
+		"NAME" => 'Текст кнопки вернуться к списку',
+		"TYPE" => "TEXT",
+		"DEFAULT" => "Все статьи",
 	),
 	// "LIST_DISPLAY_NAME" => Array(
 	// 	"PARENT" => "LIST_SETTINGS",
@@ -74,9 +96,9 @@ $arTemplateParameters = array(
 	),
 	"LIST_NAME_TAG" => Array(
 		"PARENT" => "LIST_SETTINGS",
-		"NAME" => 'Класс элемента из списка',
+		"NAME" => 'Тэг заголовка',
 		"TYPE" => "STRING",
-		"DEFAULT" => "item",
+		"DEFAULT" => "h3",
 	),
 	"LAZY_LOAD" => Array(
 		"PARENT" => "LIST_SETTINGS",
@@ -89,6 +111,12 @@ $arTemplateParameters = array(
 		"NAME" => "Бесконечная ленивая загрузка",
 		"TYPE" => "CHECKBOX",
 		"DEFAULT" => "N",
+	),
+	"DETAIL_TEMPLATE" => Array(
+		"PARENT" => "DETAIL_SETTINGS",
+		"NAME" => 'Свой дизайн детальной страницы',
+		"TYPE" => "STRING",
+		"DEFAULT" => "",
 	),
 	"DETAIL_DISPLAY_NAME" => Array(
 		"PARENT" => "DETAIL_SETTINGS",

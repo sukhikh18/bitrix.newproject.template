@@ -11,6 +11,8 @@ $strNavQueryStringFull = ($arResult['NavQueryString'] != '' ? '?'.$arResult['Nav
 ob_start();
 ?>
 <div class="pagenav">
+    <div class="pagenav__label">Страницы</div>
+    <div class="pagenav__body">
     <?if ($arResult["NavPageNomer"] > 1) {?>
         <!-- <a class="pagenav__item" href="<?=$arResult["sUrlPath"]?><?=$strNavQueryStringFull?>">Начало</a> -->
         <?if ($arResult["NavPageNomer"] > 2) {?>
@@ -23,17 +25,16 @@ ob_start();
         <span class="pagenav__item pagenav__prev">Предыдущая</span>
     <?}?>
     <?$page = $arResult["nStartPage"]?>
-    <?$i = 0;
-    while($page <= $arResult["nEndPage"]) {?>
+    <?while($page <= $arResult["nEndPage"]) {?>
         <?php
         ?>
         <?if ($page == $arResult["NavPageNomer"]) {?>
             <span class="pagenav__item pagenav__item_num pagenav__item_current"><?=$page?></span>
         <?} else {?>
             <a class="pagenav__item pagenav__item_num" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$page?>"><?=$page?></a>
-            <?if($page == $arResult["NavPageCount"] - 1):?>
+            <?/*if($page == $arResult["NavPageCount"] - 1):?>
             <a class="pagenav__item pagenav__item_num" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$page+1?>"><?=$page+1?></a>
-            <?endif;?>
+            <?endif;*/?>
         <?}?>
         <?$page++?>
     <?}?>
@@ -48,10 +49,11 @@ ob_start();
         <span class="pagenav__item pagenav__next">Следующая</span>
         <!-- <span class="pagenav__item">Конец</span> -->
     <?}?>
+    </div>
 </div>
 <?php
 $paging = ob_get_contents();
-$paging = preg_replace_callback('/href="([^"]+)"/is', function($matches) {
+/*$paging = preg_replace_callback('/href="([^"]+)"/is', function($matches) {
     $url = $matches[1];
     $newUrl = '';
     if ($arUrl = parse_url($url)) {
@@ -65,9 +67,7 @@ $paging = preg_replace_callback('/href="([^"]+)"/is', function($matches) {
             if (in_array($k, array('SECTION_CODE'))) {
                 unset($arQuery[$k]);
             } elseif (substr($k, 0, 5)=='PAGEN') {
-                /**
-                 * @link https://dev.1c-bitrix.ru/community/webdev/user/11948/blog/7428/
-                 */
+                // @link https://dev.1c-bitrix.ru/community/webdev/user/11948/blog/7428/
                 // $newUrl .= 'pagen'.intval($v).'/';
                 $arQuery['page'] = intval($v);
                 unset($arQuery[$k]);
@@ -79,6 +79,6 @@ $paging = preg_replace_callback('/href="([^"]+)"/is', function($matches) {
         }
     }
     return 'href="'.$newUrl.'"';
-}, $paging);
+}, $paging);*/
 ob_end_clean();
 echo $paging;

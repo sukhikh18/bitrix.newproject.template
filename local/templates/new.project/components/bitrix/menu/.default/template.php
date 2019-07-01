@@ -23,8 +23,9 @@ if( !empty( $arResult ) ) {
             echo str_repeat("</ul></li>", ($previousLevel - $arItem["DEPTH_LEVEL"]));
         }
 
-        printf('<li class="%s"><a href="%s"%s>%s</a>',
+        printf('<li class="%s"><a class="%s" href="%s"%s>%s</a>',
             $arItem["CLASS"],
+            $arParams["LINK_CLASS"],
             $arItem["LINK"],
             $arItem["LINK_TITLE_ATTR"],
             $arItem["TEXT"] );

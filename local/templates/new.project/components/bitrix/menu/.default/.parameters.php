@@ -5,6 +5,11 @@ $arTemplateParameters = array(
 	"LIST_CLASS" => Array(
 		"NAME" => 'Класс списка',
 		"TYPE" => "TEXT",
-		"DEFAULT" => "unstyled",
+		"DEFAULT" => "inline",
 	),
+    "LINK_CLASS" => Array(
+        "NAME" => 'Класс ссылки',
+        "TYPE" => "TEXT",
+        "DEFAULT" => "list-inline__link",
+    ),
 );

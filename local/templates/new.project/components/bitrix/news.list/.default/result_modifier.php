@@ -60,7 +60,7 @@ foreach ($arResult["ITEMS"] as &$arItem)
     }
 
     $arItem['DETAIL_PAGE_URL'] = "N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] ||
-        ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"]) ? $arItem["DETAIL_PAGE_URL"] : false;
+        ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"]) ? $arItem["DETAIL_PAGE_URL"] : '';
 
     /** @var string */
     $arItem['COLUMN_CLASS'] = $arParams['ITEM_CLASS'].'--column '.$arParams['COLUMN_CLASS'];
@@ -77,7 +77,8 @@ foreach ($arResult["ITEMS"] as &$arItem)
      * Fill HTML entities
      * Add picture link
      */
-    if( isset($arParams['SORT_ELEMENTS']['PICT']) && !empty($arItem["PREVIEW_PICTURE"]["SRC"]) ) {
+    if( !empty($arItem["PREVIEW_PICTURE"]["SRC"]) &&
+        'HORIZONTAL' == $arParams['ITEM_DIRECTION'] || isset($arParams['SORT_ELEMENTS']['PICT']) ) {
         $arItem['COLUMN_CLASS'] .= ' has-picture';
 
         $arItem["HTML"]["PICT"] = sprintf('<img src="%s" alt="%s">',
@@ -141,10 +142,10 @@ foreach ($arResult["ITEMS"] as &$arItem)
     //     $arItem['MORE_LINK_TEXT'] = 'читать в источнике';
     // }
 
-    if( $arItem['DETAIL_PAGE_URL'] && !empty($arItem["MORE_LINK_TEXT"]) ) {
-        $arItem["HTML"]["MORE"] = sprintf('<a class="%__more" href="%s">%s</a>',
+    if( !empty($arItem["MORE_LINK_TEXT"]) ) { // $arItem['DETAIL_PAGE_URL'] &&
+        $arItem["HTML"]["MORE"] = sprintf('<a class="%s__more" href="%s">%s</a>',
             $arParams['ITEM_CLASS'],
-            $arItem['DETAIL_PAGE_URL'],
+            $arItem['DETAIL_PAGE_URL'] ? $arItem['DETAIL_PAGE_URL'] : '#',
             $arItem["MORE_LINK_TEXT"]
         );
     }

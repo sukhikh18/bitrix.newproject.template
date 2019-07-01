@@ -121,7 +121,8 @@ $this->setFrameMode(true);
             "ROW_CLASS" => $arParams["ROW_CLASS"],
             "ITEM_CLASS" => $arParams["ITEM_CLASS"],
             "NAME_TAG" => $arParams["LIST_NAME_TAG"],
-            // "ITEM_DIRECTION" => "VERTICAL",
+            "ITEM_DIRECTION" => $arParams["ITEM_DIRECTION"],
+            "USE_GLOBAL_LINK" => $arParams["USE_GLOBAL_LINK"],
             "LAZY_LOAD" => $arParams["LAZY_LOAD"],
             "INFINITY_SCROLL" => $arParams["INFINITY_SCROLL"],
 

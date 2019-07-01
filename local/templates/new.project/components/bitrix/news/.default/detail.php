@@ -1,4 +1,7 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+
+use \Bitrix\Main;
+
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
@@ -11,12 +14,19 @@
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
+
+$assets = Main\Page\Asset::getInstance();
+$min = ("Y" !== Main\Config\Option::get("main", "use_minified_assets")) ? '' : '.min';
+
+$path = rtrim('/css' . $arResult["FOLDER"], '/') . $min . '.css';
+if( file_exists(THEME . $path) ) $assets->addCss(TPL . $path);
+
 ?>
 <section class="news news--detail component component--news">
 	<section class="news__detail component--news-detail">
 	<?$ElementID = $APPLICATION->IncludeComponent(
 		"bitrix:news.detail",
-		"",
+		$arParams["DETAIL_TEMPLATE"],
 		Array(
 			"DISPLAY_DATE" => $arParams["DISPLAY_DATE"],
 			"DISPLAY_NAME" => $arParams["DISPLAY_NAME"],
@@ -76,9 +86,19 @@ $this->setFrameMode(true);
 			"STRICT_SECTION_CHECK" => $arParams["STRICT_SECTION_CHECK"],
 		),
 		$component
-	);?>
+	);
+
+	if( !defined('DETAIL_ELEMENT_ID') ) define('DETAIL_ELEMENT_ID', $ElementID);
+	?>
 	</section>
-	<p class="news__backlink"><a href="<?=$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["news"]?>"><?=GetMessage("T_NEWS_DETAIL_BACK")?></a></p>
+
+	<?if($arParams['BACKLINK_TEXT']):?>
+	<div class="container news__backlink--wrap">
+		<p class="news__backlink">
+			<a class="btn btn-primary" href="<?=$arResult["FOLDER"].$arResult["URL_TEMPLATES"]["news"]?>"><?= $arParams['BACKLINK_TEXT']?></a>
+		</p>
+	</div>
+	<?endif?>
 
 <?if($arParams["USE_CATEGORIES"]=="Y" && $ElementID):?>
 	<section class="news__categories component--news-list">
