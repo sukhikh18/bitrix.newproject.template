@@ -5,6 +5,8 @@
 * @global CUser $USER
 */
 
+include realpath(__DIR__ . '../functions.php');
+
 if( function_exists('find_section') ) {
     if( $sidebar = find_section('sidebar') ) {
         $APPLICATION->SetPageProperty('content-class', 'col-10');
@@ -18,12 +20,20 @@ if( function_exists('find_section') ) {
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title><? $APPLICATION->ShowTitle() ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <?php
+    enqueue_template_assets();
 
-    <?$APPLICATION->IncludeFile(
-        $APPLICATION->GetTemplatePath("include/head.php"),
-        array(),
-        array('SHOW_BORDER' => false)
-    );?>
+    // BITRIX ->ShowHead()
+    CJSCore::Init(array("fx"));
+
+    $APPLICATION->ShowMeta("robots", false);
+    $APPLICATION->ShowMeta("keywords", false);
+    $APPLICATION->ShowMeta("description", false);
+    $APPLICATION->ShowLink("canonical", null);
+    $APPLICATION->ShowCSS(true);
+    $APPLICATION->ShowHeadStrings();
+    $APPLICATION->ShowHeadScripts();
+    ?>
 
     <!-- IE compatibility -->
     <!--[if lt IE 9]>
@@ -97,11 +107,30 @@ if( function_exists('find_section') ) {
                     </button>
 
                     <div class="collapse navbar-collapse" id="site-nav">
-                        <?$APPLICATION->IncludeFile(
-                            $APPLICATION->GetTemplatePath("include/navbar.php"),
-                            array(),
-                            array('SHOW_BORDER' => false)
+                        <?$APPLICATION->IncludeComponent(
+                            "bitrix:menu",
+                            "bootstrap_multilevel",
+                            array(
+                                "COMPONENT_TEMPLATE" => "bootstrap_multilevel",
+                                "ROOT_MENU_TYPE" => "top",
+                                "MENU_CACHE_TYPE" => "N",
+                                "MENU_CACHE_TIME" => "3600",
+                                "MENU_CACHE_USE_GROUPS" => "Y",
+                                "MENU_CACHE_GET_VARS" => array(
+                                ),
+                                "MAX_LEVEL" => "1",
+                                "CHILD_MENU_TYPE" => "top",
+                                "USE_EXT" => "N",
+                                "DELAY" => "N",
+                                "ALLOW_MULTI_SELECT" => "N",
+                            ),
+                            false
                         );?>
+
+                        <form class="form-inline my-2 my-lg-0" action="/search/">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
                     </div>
                 </div>
             </nav>

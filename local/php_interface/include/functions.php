@@ -117,7 +117,7 @@ if( !function_exists('bx_check_invalid_utf8') ) {
     }
 }
 
-if( !function_exists('find_Section') ) {
+if( !function_exists('find_section') ) {
     function find_section($suffix = null, $recursive = true, $type = 'sect') {
         global $APPLICATION;
 
@@ -177,8 +177,8 @@ if( !function_exists('find_Section') ) {
     }
 }
 
-if( !function_exists('sectionExist') ) {
-    function sectionExists( $name = null ) {
+if( !function_exists('section_exists') ) {
+    function section_exists( $name = null ) {
         $filename = find_section($name);
         if( $filename && filesize($_SERVER['DOCUMENT_ROOT'].$filename) > 72 )
             return $filename;
@@ -227,7 +227,7 @@ if( ! function_exists('bx_parse_args') ) {
     }
 }
 
-if( !function_exists('getTermsListByID') ) {
+if( !function_exists('get_terms_list_by_ID') ) {
     /**
      * Обертка функции GetList для получения секций инфоблока по ID
      * @link https://dev.1c-bitrix.ru/api_help/iblock/classes/ciblockelement/getlist.php
@@ -237,7 +237,7 @@ if( !function_exists('getTermsListByID') ) {
      * @param  array  $arSelect  @see CIBlockSection::GetList
      * @return array for fetch @see CIBlockSection::GetList()->GetNext()
      */
-    function getTermsListByID( $iblock_id = null, $arFilter = array(), $arOrder = array(), $arSelect = array() ) {
+    function get_terms_list_by_ID( $iblock_id = null, $arFilter = array(), $arOrder = array(), $arSelect = array() ) {
         $arFilter = (array) bx_parse_args($arFilter, array(
             'ACTIVE' => 'Y',
             'GLOBAL_ACTIVE' => 'Y',
@@ -272,10 +272,8 @@ if( !function_exists('get_terms_hierarchical') ) {
         $arResult['ROOT'] = array();
         $sectionLinc[0] = &$arResult['ROOT'];
 
-        /**
-         * $rsSections = CIBlockSection::GetList()
-         */
-        $rsSections = getTermsListByID( $iblock_id, $arFilter, $arOrder, $arSelect );
+        /** @var $rsSections CIBlockResult */
+        $rsSections = get_terms_list_by_ID( $iblock_id, $arFilter, $arOrder, $arSelect );
 
         while($arSection = $rsSections->GetNext()) {
             $sectionLinc[intval($arSection['IBLOCK_SECTION_ID'])]['CHILD'][$arSection['ID']] = $arSection;
@@ -284,61 +282,5 @@ if( !function_exists('get_terms_hierarchical') ) {
 
         unset($sectionLinc);
         return (array) $arResult['ROOT']['CHILD'];
-    }
-}
-
-if( !function_exists('recursiveTermsUList') ) {
-    /**
-     * Рекурсивно получить ненумерованный(UL) список секций
-     * @param Array  $arSections  Масив обработанный по принципу @see get_terms_hierarchical
-     * @param Array   $params     Список параметров
-     * @param object  $tpl        Экземпляр шаблона компанента CBitrixComponentTemplate
-     *                            В случае, если нужно установить сссылки на редактирование и удаление
-     */
-    function recursiveTermsUList( $arSections, Array $params, $tpl = false ) {
-        if( empty($arSections) || !is_array($arSections) )
-            return false;
-
-        $params = bx_parse_args( $params, array(
-            'level' => 0,
-            'list_class' => 'unstyled',
-            'item_class' => 'item',
-            'link_class' => 'item__link',
-            'count_elements' => false,
-        ) );
-        $params['level'] = 1;
-
-        printf('<ul class="list-%s%s">',
-            $params['list_class'],
-            (1 > $params['level']) ? ' sub-list level-' . $params['level'] : '');
-
-        foreach ($arSections as $arSection) {
-            if( $tpl ) {
-                $tpl->AddEditAction($arSection['ID'], $arSection['EDIT_LINK'],
-                    CIBlock::GetArrayByID($arSection["IBLOCK_ID"], "SECTION_EDIT"));
-                $tpl->AddDeleteAction($arSection['ID'], $arSection['DELETE_LINK'],
-                    CIBlock::GetArrayByID($arSection["IBLOCK_ID"], "SECTION_DELETE"),
-                    array("CONFIRM" => GetMessage('CT_BCSL_ELEMENT_DELETE_CONFIRM')));
-
-                printf('<li class="%s" id="%s">', $params['item_class'], $tpl->GetEditAreaId($arSection['ID']) );
-            }
-            else {
-                printf('<li class="%s">', $params['item_class']);
-            }
-
-            printf('<a class="%s" href="%s">%s</a>%s',
-                $params['link_class'],
-                $arSection['SECTION_PAGE_URL'],
-                $arSection['NAME'],
-                $params["count_elements"] ?
-                    sprintf('<small>(%d)</small>', $arSection['ELEMENT_CNT']) : ''
-            );
-
-            if( isset($arSection['CHILD']) && is_array($arSection['CHILD']) )
-                recursiveTermsUList($arSection['CHILD'], $params);
-
-            echo "</li>";
-        }
-        printf('</ul><!-- .list-%s -->', $params['list_class']);
     }
 }
