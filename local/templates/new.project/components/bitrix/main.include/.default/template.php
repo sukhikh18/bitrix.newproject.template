@@ -15,8 +15,12 @@ $this->setFrameMode(true);
 
 $allow = true;
 
-// required is_front_page function
-$is_front = function_exists('is_front_page') && is_front_page();
+global $APPLICATION;
+
+$curDir = $APPLICATION->GetCurDir();
+$onRequest = empty($_SERVER['REQUEST_URI']) || in_array($_SERVER['REQUEST_URI'], array($curDir, '/index.php'));
+
+$is_front = $onRequest && '/' === $curDir;
 
 if( "Y" === $arParams['NOT_INCLUDE_FRONT'] && $is_front )
     $allow = false;
