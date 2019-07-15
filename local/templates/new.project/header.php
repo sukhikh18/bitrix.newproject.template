@@ -5,7 +5,7 @@
 * @global CUser $USER
 */
 
-include realpath(__DIR__ . '../functions.php');
+require realpath(__DIR__ . '/functions.php');
 
 if( function_exists('find_section') ) {
     if( $sidebar = find_section('sidebar') ) {

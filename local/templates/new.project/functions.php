@@ -40,8 +40,8 @@ if( !function_exists('enqueue_template_assets') ) {
         /**
          * Slick
          */
-        $assets->addCss(TPL . '/assets/slick/slick.css');
-        $assets->addJs( TPL . '/assets/slick/slick'.$min.'.js');
+        $Asset->addCss(TPL . '/assets/slick/slick.css');
+        $Asset->addJs( TPL . '/assets/slick/slick'.$min.'.js');
 
         /**
          * Fancybox
