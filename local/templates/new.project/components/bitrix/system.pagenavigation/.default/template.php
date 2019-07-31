@@ -1,56 +1,73 @@
-<? if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true)die();
+<? if ( ! defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+    die();
+}
 
-if(!$arResult['NavShowAlways']) {
+if ( ! $arResult['NavShowAlways']) {
     if ($arResult['NavRecordCount'] == 0 || ($arResult['NavPageCount'] == 1 && $arResult['NavShowAll'] == false)) {
         return;
     }
 }
 
-$strNavQueryString = ($arResult['NavQueryString'] != '' ? $arResult['NavQueryString'].'&amp;' : '');
-$strNavQueryStringFull = ($arResult['NavQueryString'] != '' ? '?'.$arResult['NavQueryString'] : '');
+$strNavQueryString     = ($arResult['NavQueryString'] != '' ? $arResult['NavQueryString'] . '&amp;' : '');
+$strNavQueryStringFull = ($arResult['NavQueryString'] != '' ? '?' . $arResult['NavQueryString'] : '');
 ob_start();
 ?>
-<div class="pagenav">
-    <div class="pagenav__label">Страницы</div>
-    <div class="pagenav__body">
-    <?if ($arResult["NavPageNomer"] > 1) {?>
-        <!-- <a class="pagenav__item" href="<?=$arResult["sUrlPath"]?><?=$strNavQueryStringFull?>">Начало</a> -->
-        <?if ($arResult["NavPageNomer"] > 2) {?>
-            <a class="pagenav__item pagenav__prev" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]-1)?>">Предыдущая</a>
-        <?} else {?>
-            <a class="pagenav__item pagenav__prev" href="<?=$arResult["sUrlPath"]?><?=$strNavQueryStringFull?>">Предыдущая</a>
-        <?}?>
-    <?} else { // Если страница первая?>
-        <!-- <span class="pagenav__item">Начало</span> -->
-        <span class="pagenav__item pagenav__prev">Предыдущая</span>
-    <?}?>
-    <?$page = $arResult["nStartPage"]?>
-    <?while($page <= $arResult["nEndPage"]) {?>
-        <?php
-        ?>
-        <?if ($page == $arResult["NavPageNomer"]) {?>
-            <span class="pagenav__item pagenav__item_num pagenav__item_current"><?=$page?></span>
-        <?} else {?>
-            <a class="pagenav__item pagenav__item_num" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$page?>"><?=$page?></a>
-            <?/*if($page == $arResult["NavPageCount"] - 1):?>
+    <div class="pagenav">
+        <div class="pagenav__label">Страницы</div>
+        <div class="pagenav__body">
+            <?
+            if ($arResult["NavPageNomer"] > 1) { ?>
+                <!-- <a class="pagenav__item" href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>">Начало</a> -->
+                <? if ($arResult["NavPageNomer"] > 2) { ?>
+                    <a class="pagenav__item pagenav__prev"
+                       href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= ($arResult["NavPageNomer"] - 1) ?>">Предыдущая</a>
+                <? } else { ?>
+                    <a class="pagenav__item pagenav__prev"
+                       href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>">Предыдущая</a>
+                <? } ?>
+            <? } else { // Если страница первая?>
+                <!-- <span class="pagenav__item">Начало</span> -->
+                <span class="pagenav__item pagenav__prev">Предыдущая</span>
+            <?
+            } ?>
+            <?
+            $page = $arResult["nStartPage"] ?>
+            <?
+            while ($page <= $arResult["nEndPage"]) { ?>
+                <?php
+                ?>
+                <?
+                if ($page == $arResult["NavPageNomer"]) { ?>
+                    <span class="pagenav__item pagenav__item_num pagenav__item_current"><?= $page ?></span>
+                <? } else { ?>
+                    <a class="pagenav__item pagenav__item_num"
+                       href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= $page ?>"><?= $page ?></a>
+                    <?/*if($page == $arResult["NavPageCount"] - 1):?>
             <a class="pagenav__item pagenav__item_num" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$page+1?>"><?=$page+1?></a>
-            <?endif;*/?>
-        <?}?>
-        <?$page++?>
-    <?}?>
-    <?if($arResult["NavPageNomer"] < $arResult["NavPageCount"]) {?>
-        <?if( $arResult["nEndPage"] + 1 < $arResult["NavPageCount"] ): ?>
-        <span class="pagenav__item pagenav__item_empty">...</span>
-        <a class="pagenav__item" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$arResult["NavPageCount"]?>"><?=$arResult["NavPageCount"];?></a>
-        <?endif;?>
-        <a class="pagenav__item pagenav__next" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]+1)?>">Следующая</a>
-        <!--  -->
-    <?} else { // Если страница последняя ?>
-        <span class="pagenav__item pagenav__next">Следующая</span>
-        <!-- <span class="pagenav__item">Конец</span> -->
-    <?}?>
+            <?endif;*/ ?>
+                <?
+                } ?>
+                <?
+                $page++ ?>
+            <?
+            } ?>
+            <?
+            if ($arResult["NavPageNomer"] < $arResult["NavPageCount"]) { ?>
+                <? if ($arResult["nEndPage"] + 1 < $arResult["NavPageCount"]): ?>
+                    <span class="pagenav__item pagenav__item_empty">...</span>
+                    <a class="pagenav__item"
+                       href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= $arResult["NavPageCount"] ?>"><?= $arResult["NavPageCount"]; ?></a>
+                <? endif; ?>
+                <a class="pagenav__item pagenav__next"
+                   href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= ($arResult["NavPageNomer"] + 1) ?>">Следующая</a>
+                <!--  -->
+            <? } else { // Если страница последняя ?>
+                <span class="pagenav__item pagenav__next">Следующая</span>
+                <!-- <span class="pagenav__item">Конец</span> -->
+            <?
+            } ?>
+        </div>
     </div>
-</div>
 <?php
 $paging = ob_get_contents();
 /*$paging = preg_replace_callback('/href="([^"]+)"/is', function($matches) {

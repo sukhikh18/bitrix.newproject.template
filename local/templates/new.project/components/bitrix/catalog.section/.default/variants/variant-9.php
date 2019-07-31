@@ -1,8 +1,7 @@
 <div class="col-12">
     <div class="row">
         <?
-        foreach ($rowItems as $item)
-        {
+        foreach ($rowItems as $item) {
             ?>
             <div class="col-12 product-item-line-card">
                 <?
@@ -11,15 +10,15 @@
                     '',
                     array(
                         'RESULT' => array(
-                            'ITEM' => $item,
-                            'AREA_ID' => $areaIds[$item['ID']],
-                            'TYPE' => $rowData['TYPE'],
-                            'BIG_LABEL' => 'N',
+                            'ITEM'                 => $item,
+                            'AREA_ID'              => $areaIds[$item['ID']],
+                            'TYPE'                 => $rowData['TYPE'],
+                            'BIG_LABEL'            => 'N',
                             'BIG_DISCOUNT_PERCENT' => 'N',
-                            'BIG_BUTTONS' => 'N'
+                            'BIG_BUTTONS'          => 'N'
                         ),
                         'PARAMS' => $generalParams
-                            + array('SKU_PROPS' => $arResult['SKU_PROPS'][$item['IBLOCK_ID']])
+                                    + array('SKU_PROPS' => $arResult['SKU_PROPS'][$item['IBLOCK_ID']])
                     ),
                     $component,
                     array('HIDE_ICONS' => 'Y')

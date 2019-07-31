@@ -1,5 +1,7 @@
 <?
-if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
+    die();
+}
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
@@ -17,19 +19,22 @@ $allow = true;
 
 global $APPLICATION;
 
-$curDir = $APPLICATION->GetCurDir();
+$curDir    = $APPLICATION->GetCurDir();
 $onRequest = empty($_SERVER['REQUEST_URI']) || in_array($_SERVER['REQUEST_URI'], array($curDir, '/index.php'));
 
 $is_front = $onRequest && '/' === $curDir;
 
-if( "Y" === $arParams['NOT_INCLUDE_FRONT'] && $is_front )
+if ("Y" === $arParams['NOT_INCLUDE_FRONT'] && $is_front) {
     $allow = false;
-
-if( "Y" === $arParams['EXCLUDE_FRONT_FILE'] && !$is_front ) {
-    $documentRoot = \Bitrix\Main\Application::getDocumentRoot();
-    if( 1 >= substr_count(str_replace($documentRoot, '', $arResult["FILE"]), '/') )
-        $allow = false;
 }
 
-if($arResult["FILE"] <> '' && $allow)
-	include($arResult["FILE"]);
+if ("Y" === $arParams['EXCLUDE_FRONT_FILE'] && ! $is_front) {
+    $documentRoot = \Bitrix\Main\Application::getDocumentRoot();
+    if (1 >= substr_count(str_replace($documentRoot, '', $arResult["FILE"]), '/')) {
+        $allow = false;
+    }
+}
+
+if ($arResult["FILE"] <> '' && $allow) {
+    include($arResult["FILE"]);
+}
