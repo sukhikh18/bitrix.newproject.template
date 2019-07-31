@@ -43,7 +43,7 @@ foreach ($arResult["QUESTIONS"] as $FIELD_SID => $arQuestion) {
 
         if (is_array($arResult["FORM_ERRORS"]) && array_key_exists($FIELD_SID, $arResult['FORM_ERRORS'])):?>
             <span class="error-fld" title="<?= htmlspecialcharsbx($arResult["FORM_ERRORS"][$FIELD_SID]) ?>"></span>
-        <?endif; ?>
+        <? endif; ?>
 
         <? // display field
         if ('checkbox' == $arQuestion['STRUCTURE'][0]['FIELD_TYPE']) {
@@ -52,7 +52,7 @@ foreach ($arResult["QUESTIONS"] as $FIELD_SID => $arQuestion) {
         <?
         if ($labelHTMLCode): ?>
             <label for="field_<?= $arQuestion['STRUCTURE'][0]['ID']; ?>"><?= $labelHTMLCode; ?></label>
-        <?endif; ?>
+        <? endif; ?>
         <?php // var_dump($arQuestion["HTML_CODE"]); ?>
         <?
         if ('checkbox' != $arQuestion['STRUCTURE'][0]['FIELD_TYPE']) {

@@ -92,7 +92,7 @@ $arSectionDeleteParams = array("CONFIRM" => GetMessage('CT_BCSL_ELEMENT_DELETE_C
                         );
                     }
                     ?>
-                    <li id="<? echo $this->GetEditAreaId($arSection['ID']); ?>">
+                <li id="<? echo $this->GetEditAreaId($arSection['ID']); ?>">
                     <a
                             href="<? echo $arSection['SECTION_PAGE_URL']; ?>"
                             class="bx_catalog_line_img"
@@ -121,7 +121,7 @@ $arSectionDeleteParams = array("CONFIRM" => GetMessage('CT_BCSL_ELEMENT_DELETE_C
                         $arSectionDeleteParams);
 
                     ?>
-                    <li id="<? echo $this->GetEditAreaId($arSection['ID']); ?>"><h2 class="bx_catalog_text_title"><a
+                <li id="<? echo $this->GetEditAreaId($arSection['ID']); ?>"><h2 class="bx_catalog_text_title"><a
                                 href="<? echo $arSection['SECTION_PAGE_URL']; ?>"><? echo $arSection['NAME']; ?></a><?
                         if ($arParams["COUNT_ELEMENTS"]) {
                             ?> <span>(<? echo $arSection['ELEMENT_CNT']; ?>)</span><?
@@ -152,7 +152,7 @@ $arSectionDeleteParams = array("CONFIRM" => GetMessage('CT_BCSL_ELEMENT_DELETE_C
                         );
                     }
                     ?>
-                    <li id="<? echo $this->GetEditAreaId($arSection['ID']); ?>">
+                <li id="<? echo $this->GetEditAreaId($arSection['ID']); ?>">
                 <a
                         href="<? echo $arSection['SECTION_PAGE_URL']; ?>"
                         class="bx_catalog_tile_img"

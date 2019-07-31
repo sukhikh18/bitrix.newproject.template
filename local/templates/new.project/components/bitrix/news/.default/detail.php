@@ -146,7 +146,7 @@ if (file_exists(THEME . $path)) {
                 );
                 ?>
                 <hr/><h3><?= GetMessage("CATEGORIES") ?></h3>
-                <? foreach ($arParams["CATEGORY_IBLOCK"] as $iblock_id):?>
+                <? foreach ($arParams["CATEGORY_IBLOCK"] as $iblock_id): ?>
                 <? $APPLICATION->IncludeComponent(
                     "bitrix:news.list",
                     $arParams["CATEGORY_THEME_" . $iblock_id],

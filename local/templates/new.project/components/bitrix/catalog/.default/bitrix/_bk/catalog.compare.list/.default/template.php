@@ -54,7 +54,7 @@ $style = ($itemCount == 0 ? ' style="display: none;"' : '');
             <tbody><?
             foreach ($arResult as $arElement) {
                 ?>
-                <tr id="<? echo $idCompareRow . $arElement['PARENT_ID']; ?>">
+            <tr id="<? echo $idCompareRow . $arElement['PARENT_ID']; ?>">
                 <td><a href="<?= $arElement["DETAIL_PAGE_URL"] ?>"><?= $arElement["NAME"] ?></a></td>
                 <td>
                     <noindex><a href="javascript:void(0);" data-id="<? echo $arElement['PARENT_ID']; ?>"

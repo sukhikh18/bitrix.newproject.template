@@ -40,7 +40,7 @@
         <a href="<?= $arItem["LINK"] ?>" class="<?= $linkClass; ?>" role="button"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $arItem["TEXT"] ?></a>
         <ul class="dropdown-menu">
-            <? else:?>
+            <? else: ?>
                 <li class="<?= $itemClass; ?>">
                     <a href="<?= $arItem["LINK"] ?>" class="<?= $linkClass; ?>"<? if ("D" > $arItem["PERMISSION"]) {
                         echo ' title="' . GetMessage("MENU_ITEM_ACCESS_DENIED") . '"';

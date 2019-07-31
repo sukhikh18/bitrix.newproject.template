@@ -28,7 +28,7 @@ ob_start();
             <? } else { // Если страница первая?>
                 <!-- <span class="pagenav__item">Начало</span> -->
                 <span class="pagenav__item pagenav__prev">Предыдущая</span>
-            <?
+                <?
             } ?>
             <?
             $page = $arResult["nStartPage"] ?>
@@ -42,14 +42,14 @@ ob_start();
                 <? } else { ?>
                     <a class="pagenav__item pagenav__item_num"
                        href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= $page ?>"><?= $page ?></a>
-                    <?/*if($page == $arResult["NavPageCount"] - 1):?>
+                    <? /*if($page == $arResult["NavPageCount"] - 1):?>
             <a class="pagenav__item pagenav__item_num" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$page+1?>"><?=$page+1?></a>
             <?endif;*/ ?>
-                <?
+                    <?
                 } ?>
                 <?
                 $page++ ?>
-            <?
+                <?
             } ?>
             <?
             if ($arResult["NavPageNomer"] < $arResult["NavPageCount"]) { ?>
@@ -64,7 +64,7 @@ ob_start();
             <? } else { // Если страница последняя ?>
                 <span class="pagenav__item pagenav__next">Следующая</span>
                 <!-- <span class="pagenav__item">Конец</span> -->
-            <?
+                <?
             } ?>
         </div>
     </div>

@@ -134,7 +134,7 @@ $templateData = array(
                                                              href="<?= $arElement["BUY_URL"] ?>"
                                                              rel="nofollow"><?= GetMessage("CATALOG_COMPARE_BUY"); ?></a>
                                             </noindex>
-                                        <? elseif ( ! empty($arResult["PRICES"]) || is_array($arElement["PRICE_MATRIX"])):?>
+                                        <? elseif ( ! empty($arResult["PRICES"]) || is_array($arElement["PRICE_MATRIX"])): ?>
                                             <br/><?= GetMessage("CATALOG_NOT_AVAILABLE") ?>
                                         <?endif;
                                         break;
@@ -225,8 +225,8 @@ $templateData = array(
                     } elseif ( ! empty($arElement['PRICE_MATRIX']) && is_array($arElement['PRICE_MATRIX'])) {
                         ?>
                         <td style="vertical-align: top;"><?
-                        $matrix = $arElement['PRICE_MATRIX'];
-                        $rows = $matrix['ROWS'];
+                        $matrix    = $arElement['PRICE_MATRIX'];
+                        $rows      = $matrix['ROWS'];
                         $rowsCount = count($rows);
                         if ($rowsCount > 0) {
                             ?>

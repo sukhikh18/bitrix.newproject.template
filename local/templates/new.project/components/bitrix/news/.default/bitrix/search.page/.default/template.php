@@ -120,7 +120,7 @@ $documentRoot = Main\Application::getDocumentRoot();
     <?
     $count = count($arResult["SEARCH"]);
     if ($arResult["REQUEST"]["QUERY"] === false && $arResult["REQUEST"]["TAGS"] === false):?>
-    <? elseif ($arResult["ERROR_CODE"] != 0):?>
+    <? elseif ($arResult["ERROR_CODE"] != 0): ?>
         <p><?= GetMessage("SEARCH_ERROR") ?></p>
         <? ShowError($arResult["ERROR_TEXT"]); ?>
         <p><?= GetMessage("SEARCH_CORRECT_AND_CONTINUE") ?></p>
@@ -153,7 +153,7 @@ $documentRoot = Main\Application::getDocumentRoot();
                 <td><?= GetMessage("SEARCH_BRACKETS_ALT") ?></td>
             </tr>
         </table>
-    <? elseif ($count > 0):?>
+    <? elseif ($count > 0): ?>
         <? if ($arParams["DISPLAY_TOP_PAGER"] != "N" && $arParams["PAGE_RESULT_COUNT"] <= count($arResult["SEARCH"]))
             echo $arResult["NAV_STRING"] ?>
         <?
@@ -171,7 +171,7 @@ $documentRoot = Main\Application::getDocumentRoot();
         <section
                 class="item-list item-list_type_<?= ! empty($arParams["IBLOCK_CODE"]) ? $arParams["IBLOCK_CODE"] : ''; ?>">
             <div class="<?= $arParams['ROW_CLASS'] ? $arParams['ROW_CLASS'] : 'row'; ?>">
-                <? foreach ($arResult["SEARCH"] as $arItem):?>
+                <? foreach ($arResult["SEARCH"] as $arItem): ?>
                     <?
                     $hasPicture = false;
                     // @todo replace to result modifier
@@ -248,7 +248,7 @@ $documentRoot = Main\Application::getDocumentRoot();
             <?endif;*/
             ?>
         </p>
-    <? else:?>
+    <? else: ?>
         <? ShowNote(GetMessage("SEARCH_NOTHING_TO_FOUND")); ?>
     <? endif; ?>
 </div>
