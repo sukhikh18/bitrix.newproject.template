@@ -46,10 +46,6 @@ if( function_exists('find_section') ) {
             document.createElement( "picture" );
             document.write('<script src="https:\/\/cdnjs.cloudflare.com\/ajax\/libs\/picturefill\/3.0.3\/picturefill.min.js" async><\/script>');
         }
-
-        // if( isIE || /Edge/.test(navigator.userAgent) ) {
-        //     document.write(\'<script src="\/assets\/polyfill-svg-uri\/polyfill-svg-uri.min.js" async><\/script>\');
-        // }
     </script>
 </head>
 <body <?php body_class(); ?>>

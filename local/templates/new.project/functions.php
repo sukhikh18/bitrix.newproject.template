@@ -25,61 +25,60 @@ if( !function_exists('enqueue_template_assets') ) {
 
         // \CJSCore::Init( array('jquery') );
         $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js');
-        // $Asset->addJs(TPL . '/assets/jquery.maskedinput.min.js');
-        $Asset->addString('<script>window.jQuery || document.write(\'<script src="'.
-            str_replace('/', '\/', TPL) .'\/assets\/jquery\/jquery.min.js"><\/script>\')</script>');
-
         $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js');
 
-        /**
-         * Bootstrap
-         */
-        $Asset->addCss(TPL . '/assets/bootstrap'.$min.'.css');
-        $Asset->addJs( TPL . '/assets/bootstrap'.$min.'.js');
+        $Asset->addString('<script>window.jQuery || document.write(\'<script src="'.
+            str_replace('/', '\/', TPL) .'\/assets\/vendor\/jquery\/jquery.min.js"><\/script>\')</script>');
 
         /**
-         * Slick
+         * Bootstrap framework
          */
-        $Asset->addCss(TPL . '/assets/slick/slick.css');
-        $Asset->addJs( TPL . '/assets/slick/slick'.$min.'.js');
+        $Asset->addCss(TPL . '/assets/vendor/bootstrap'.$min.'.css');
+        $Asset->addJs( TPL . '/assets/vendor/bootstrap'.$min.'.js');
 
         /**
-         * Fancybox
+         * Responsive mobile menu with animation
          */
-        $Asset->addCss(TPL . '/assets/fancybox/jquery.fancybox'.$min.'.css');
-        $Asset->addJs( TPL . '/assets/fancybox/jquery.fancybox'.$min.'.js');
+        $Asset->addCss(TPL . '/assets/vendor/hamburgers'.$min.'.css');
 
         /**
-         * Hamburgers (mobile menu style)
+         * Slick slider
          */
-        $Asset->addCss(TPL . '/assets/hamburgers'.$min.'.css');
+        $Asset->addCss(TPL . '/assets/vendor/slick/slick.css');
+        $Asset->addJs( TPL . '/assets/vendor/slick/slick'.$min.'.js');
 
-        // Sticky
-        // $Asset->addJs( TPL . '/assets/sticky/jquery.sticky'.$min.'.js');
+        /**
+         * Fancybox modal
+         */
+        $Asset->addCss(TPL . '/assets/vendor/fancybox/jquery.fancybox'.$min.'.css');
+        $Asset->addJs( TPL . '/assets/vendor/fancybox/jquery.fancybox'.$min.'.js');
 
-        // Masonry
-        // $Asset->addJs(TPL . '/assets/masonry/masonry.pkgd'.$min.'.js');
+        // Masked input
+        // $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.min.js');
 
         // VK Api
         // $Asset->addJs('https://vk.com/js/api/openapi.js?152');
 
-        // Font Awesome
-        // $Asset->addCss('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/assets/font-awesome.min.css');
+        // Font Awesome (Icons)
+        // $Asset->addCss('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css');
 
         // Animate
-        // $Asset->addCss(TPL . '/assets/animate'.$min.'.css');
+        // $Asset->addCss(TPL . '/assets/vendor/animate'.$min.'.css');
 
-        // Form's custom style
-        // $Asset->addCss(TPL . '/assets/jquery.formstyler.css');
-
-        $Asset->addCss(TPL . '/template'.$min.'.css');
         $Asset->addJs(TPL . '/assets/main'.$min.'.js');
+        $Asset->addCss(TPL . '/assets/template'.$min.'.css');
 
         // Add custom page style
         $curDir = is_front_page() ? '/index' : $APPLICATION->GetCurDir();
-        $path = rtrim('/pages' . $curDir, '/') . '/style'. $min .'.css';
-        if( file_exists(THEME . $path) ) {
-            $Asset->addCss(TPL . $path);
+
+        $scriptPath = rtrim('/pages' . $curDir, '/') . '/script'. $min .'.js';
+        if( file_exists(THEME . $scriptPath) ) {
+            $Asset->addJs(TPL . $scriptPath);
+        }
+
+        $stylePath = rtrim('/pages' . $curDir, '/') . '/style'. $min .'.css';
+        if( file_exists(THEME . $stylePath) ) {
+            $Asset->addCss(TPL . $stylePath);
         }
     }
 }
