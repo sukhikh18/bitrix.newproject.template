@@ -1,6 +1,6 @@
 <?php
 
-namespace Local\Handlers;
+namespace local\handlers;
 
 /**
  *

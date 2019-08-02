@@ -1,6 +1,6 @@
 <?php
 
-namespace Local\Handlers;
+namespace local\handlers\admin;
 
 class IBlockVisualEditorComponents
 {
@@ -10,24 +10,22 @@ class IBlockVisualEditorComponents
         \Bitrix\Main\Loader::includeModule('fileman');
         $arr_components = \CHTMLEditor::GetComponents([]);
 
-        $allowedItems = array('bitrix:main.include');
+        $allowedItems  = array('bitrix:main.include');
         $allowedGroups = array('include_area');
 
         $allowedComponents = array(
-            'items' => array(),
+            'items'  => array(),
             'groups' => array(),
         );
 
-        foreach ($arr_components['items'] as $item)
-        {
-            if( in_array($item['name'], $allowedItems) ) {
+        foreach ($arr_components['items'] as $item) {
+            if (in_array($item['name'], $allowedItems)) {
                 $allowedComponents['items'][] = $item;
             }
         }
 
-        foreach ($arr_components['groups'] as $group)
-        {
-            if( in_array($group['name'], $allowedGroups) ) {
+        foreach ($arr_components['groups'] as $group) {
+            if (in_array($group['name'], $allowedGroups)) {
                 $allowedComponents['groups'][] = $group;
             }
         }
@@ -58,9 +56,9 @@ class IBlockVisualEditorComponents
         }
 
         $requestedDir = $request->getRequestedPageDirectory();
-        $arr_path = ['/bitrix/', '/local/'];
+        $arr_path     = ['/bitrix/', '/local/'];
         foreach ($arr_path as $path) {
-            if($request->isAdminSection() && strripos($requestedDir, $path) !== false) {
+            if ($request->isAdminSection() && strripos($requestedDir, $path) !== false) {
                 return false;
             }
         }
@@ -68,13 +66,14 @@ class IBlockVisualEditorComponents
         $new_string = preg_replace_callback(
             '/<\?(php)?[\s+?\n?\s+]*(\$APPLICATION->IncludeComponent\(.*)\?>/Us', function ($matches) {
 
-                global $APPLICATION;
+            global $APPLICATION;
 
-                ob_start();
-                eval($matches[2]);
-                return ob_get_clean();
-            }, $buffer
+            ob_start();
+            eval($matches[2]);
+
+            return ob_get_clean();
+        }, $buffer
         );
-        $buffer = $new_string;
+        $buffer     = $new_string;
     }
 }

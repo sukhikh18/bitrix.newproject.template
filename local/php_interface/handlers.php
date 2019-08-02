@@ -4,6 +4,19 @@ use \Bitrix\Main\Loader;
 
 $eventManager = \Bitrix\Main\EventManager::getInstance();
 
+// ADMIN
+// Свойство чекбокс
+$eventManager->AddEventHandler('iblock', 'OnIBlockPropertyBuildList',
+	array('local\handlers\admin\IBlockPropertyCheckbox', 'GetUserTypeDescription'));
+// Пользовательское свойство "Связь с элементом"
+$eventManager->AddEventHandler('main', 'OnUserTypeBuildList',
+	array('local\handlers\admin\CUserTypeIBlockElement', 'GetUserTypeDescription'), 5000);
+// Компоненты в элементах инфоблока
+$eventManager->addEventHandler("fileman", "OnBeforeHTMLEditorScriptRuns", array(
+	"IBlockVisualEditorComponents", "beforeHTMLEditorScriptRuns"));
+$eventManager->addEventHandler("main", "onEndBufferContent", array(
+	"local\handlers\admin\IBlockVisualEditorComponents", "endBufferContent" ));
+
 // PAGE
 $eventManager->addEventHandler("main", "OnBeforeProlog", array("Local\Handlers\Page", "includeFunctions"));
 // $eventManager->addEventHandler("main", "OnPageStart", array("Local\Handlers\Page", "includeModules"), 1);
@@ -22,9 +35,3 @@ $eventManager->addEventHandler("main", "OnBeforeProlog", array("Local\Handlers\P
 // $eventManager->addEventHandler("main", "OnSendUserInfo", array("\Local\Handlers\User", "sendUserInfo"));
 // $eventManager->addEventHandler("main", "OnAfterUserAdd", array("\Local\Handlers\User", "afterAdd"));
 
-// ADMIN\IBlockVisualEditorComponents
-// $eventManager->addEventHandler("fileman", "OnBeforeHTMLEditorScriptRuns", array(
-//     "IBlockVisualEditorComponents", "beforeHTMLEditorScriptRuns"));
-
-// $eventManager->addEventHandler("main", "onEndBufferContent", array(
-//     "IBlockVisualEditorComponents", "endBufferContent" ));
