@@ -1,4 +1,7 @@
 <?
+
+namespace local\handlers\admin;
+
 /**
  *
  * Пользовательское свойство главного модуля "Связь с элементом"
@@ -11,8 +14,6 @@
 
 // Регистрируем обработчик события главного модуля OnUserTypeBuildList
 // Событие создается при построении списка типов пользовательских свойств
-AddEventHandler('main', 'OnUserTypeBuildList', array('CUserTypeIBlockElement', 'GetUserTypeDescription'), 5000);
-
 class CUserTypeIBlockElement
 {
     // ---------------------------------------------------------------------
@@ -78,7 +79,7 @@ class CUserTypeIBlockElement
             return $result;
         }
 
-        // текущие значения настроек 
+        // текущие значения настроек
         if ($bVarsFromForm) {
             $value = $GLOBALS[$arHtmlControl['NAME']]['IBLOCK_ID'];
         } elseif (is_array($arUserField)) {
@@ -187,7 +188,7 @@ class CUserTypeIBlockElement
         // добавляется один раз на странице
         if ( ! $bWasJs) {
             $bWasJs = true;
-            // здесь пляски с бубном из-за гениальности передачи данных 
+            // здесь пляски с бубном из-за гениальности передачи данных
             // из попап-окна /bitrix/admin/iblock_element_search.php на вызывающую страницу
             ob_start();
             ?>
@@ -243,14 +244,14 @@ class CUserTypeIBlockElement
         $iIBlockId  = intval($arUserField['SETTINGS']['IBLOCK_ID']);
         $arElements = CUserTypeIBlockElement::_getElements($arHtmlControl['VALUE']);
 
-        // поля редактирования значений свойства 
+        // поля редактирования значений свойства
         $sTableId = 'tb' . md5($arHtmlControl['NAME']);
         $sReturn  = '<table cellspacing="0" id="' . $sTableId . '">';
         foreach ($arHtmlControl['VALUE'] as $iKey => $iValue) {
             $sReturn .= '<tr><td><div>' . CUserTypeIBlockElement::_getItemFieldHTML($iValue, $iIBlockId, $arElements,
                     $arHtmlControl['NAME']) . '</div></td></tr>';
         }
-        // поле добавления нового значения свойства 
+        // поле добавления нового значения свойства
         $sReturn .= '<tr><td><div>' . CUserTypeIBlockElement::_getItemFieldHTML(0, $iIBlockId, array(),
                 $arHtmlControl['NAME']) . '</div></td></tr>';
 
@@ -291,7 +292,7 @@ class CUserTypeIBlockElement
     // @param int $iIBlockId - ID информационного блока для поиска элементов по умолчанию
     // @param array $arElements - массив элементов инфоблока с ключами = идентификаторам элементов инфоблока
     // @param string $sFieldName - имя для поля веб-формы
-    // @param string $sMulty - n|y - поэлементная (n) или множественная вставка значений 
+    // @param string $sMulty - n|y - поэлементная (n) или множественная вставка значений
     // @return string - HTML для вывода
     // @private
     function _getItemFieldHTML($iValue, $iIBlockId, $arElements, $sFieldName, $sMulty = 'n')

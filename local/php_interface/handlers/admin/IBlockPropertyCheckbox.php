@@ -1,11 +1,14 @@
 <?
+
+namespace local\handlers\admin;
+
 global $MESS;
 $MESS['IBLOCK_PROP_CHECKBOX_DESC'] = 'Флажок';
 $MESS['IBLOCK_PROP_CHECKBOX_YES']  = 'Да';
 $MESS['IBLOCK_PROP_CHECKBOX_NO']   = 'Нет';
 $MESS['IBLOCK_PROP_CHECKBOX_NA']   = '(любой)';
 
-class CIBlockPropertyCheckbox
+class IBlockPropertyCheckbox
 {
     function GetUserTypeDescription()
     {
@@ -84,5 +87,3 @@ class CIBlockPropertyCheckbox
         return 1;  //  checkbox is always filled
     }
 }
-
-AddEventHandler('iblock', 'OnIBlockPropertyBuildList', array('CIBlockPropertyCheckbox', 'GetUserTypeDescription'));
