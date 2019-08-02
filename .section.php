@@ -1,7 +1,7 @@
 <?
 $sSectionName = 'Главная';
 $arDirProperties = array(
-	'title' => 'Ингавирин ®',
+	'title' => 'Главная',
 	'description' => '',
 	'keywords' => '',
 	'robots' => 'index, follow'
