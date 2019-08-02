@@ -1,9 +1,10 @@
 
-.idea
 /.htaccess
 /.htaccess.restore
 /bitrix
 /upload
+
+.idea
 /*.txt
 /*.html
 ~*.php
@@ -24,7 +25,3 @@ ehthumbs.db
 Thumbs.db
 _config.yml
 *.lock
-package-lock.json
-
-node_modules/
-vendor/
