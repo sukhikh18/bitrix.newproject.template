@@ -18,20 +18,20 @@ $eventManager->addEventHandler("main", "onEndBufferContent", array(
 	"local\handlers\admin\IBlockVisualEditorComponents", "endBufferContent" ));
 
 // PAGE
-$eventManager->addEventHandler("main", "OnBeforeProlog", array("Local\Handlers\Page", "includeFunctions"));
-// $eventManager->addEventHandler("main", "OnPageStart", array("Local\Handlers\Page", "includeModules"), 1);
+$eventManager->addEventHandler("main", "OnBeforeProlog", array("local\handlers\Page", "includeFunctions"));
+// $eventManager->addEventHandler("main", "OnPageStart", array("local\handlers\Page", "includeModules"), 1);
 
 // BASKET
-// $eventManager->addEventHandler("sale", "OnBeforeBasketUpdate", array("Local\Handlers\Basket", "beforeUpdate"));
-// $eventManager->addEventHandler("sale", "OnBasketUpdate", array("Local\Handlers\Basket", "afterUpdate"));
+// $eventManager->addEventHandler("sale", "OnBeforeBasketUpdate", array("local\handlers\Basket", "beforeUpdate"));
+// $eventManager->addEventHandler("sale", "OnBasketUpdate", array("local\handlers\Basket", "afterUpdate"));
 
 // ORDER
-// $eventManager->addEventHandler("sale", "OnOrderAdd", array("Local\Handlers\Order", "afterAdd"));
-// $eventManager->addEventHandler("sale", "OnOrderUpdate", array("Local\Handlers\Order", "afterUpdate"));
+// $eventManager->addEventHandler("sale", "OnOrderAdd", array("local\handlers\Order", "afterAdd"));
+// $eventManager->addEventHandler("sale", "OnOrderUpdate", array("local\handlers\Order", "afterUpdate"));
 
 // USER
-// $eventManager->addEventHandler("main", "OnBeforeUserRegister", array("\Local\Handlers\User", "beforeRegister"));
-// $eventManager->addEventHandler("main", "OnAfterUserRegister", array("\Local\Handlers\User", "afterRegister"));
-// $eventManager->addEventHandler("main", "OnSendUserInfo", array("\Local\Handlers\User", "sendUserInfo"));
-// $eventManager->addEventHandler("main", "OnAfterUserAdd", array("\Local\Handlers\User", "afterAdd"));
+// $eventManager->addEventHandler("main", "OnBeforeUserRegister", array("\local\handlers\User", "beforeRegister"));
+// $eventManager->addEventHandler("main", "OnAfterUserRegister", array("\local\handlers\User", "afterRegister"));
+// $eventManager->addEventHandler("main", "OnSendUserInfo", array("\local\handlers\User", "sendUserInfo"));
+// $eventManager->addEventHandler("main", "OnAfterUserAdd", array("\local\handlers\User", "afterAdd"));
 
