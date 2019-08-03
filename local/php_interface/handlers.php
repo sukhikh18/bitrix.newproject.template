@@ -13,7 +13,7 @@ $eventManager->AddEventHandler('main', 'OnUserTypeBuildList',
 	array('local\handlers\admin\CUserTypeIBlockElement', 'GetUserTypeDescription'), 5000);
 // Компоненты в элементах инфоблока
 $eventManager->addEventHandler("fileman", "OnBeforeHTMLEditorScriptRuns", array(
-	"IBlockVisualEditorComponents", "beforeHTMLEditorScriptRuns"));
+	"local\handlers\admin\IBlockVisualEditorComponents", "beforeHTMLEditorScriptRuns"));
 $eventManager->addEventHandler("main", "onEndBufferContent", array(
 	"local\handlers\admin\IBlockVisualEditorComponents", "endBufferContent" ));
 
