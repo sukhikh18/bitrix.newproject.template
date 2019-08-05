@@ -8,29 +8,32 @@ class IBlockVisualEditorComponents
     {
         // Получаем список компонентов
         \Bitrix\Main\Loader::includeModule('fileman');
-        $arr_components = \CHTMLEditor::GetComponents([]);
+        $arComponents = \CHTMLEditor::GetComponents([]);
 
-        $allowedItems  = array('bitrix:main.include');
-        $allowedGroups = array('include_area');
+        /**
+         * @todo
+         */
+        // $allowedItems  = array('bitrix:main.include');
+        // $allowedGroups = array('include_area');
 
-        $allowedComponents = array(
-            'items'  => array(),
-            'groups' => array(),
-        );
+        // $allowedComponents = array(
+        //     'items'  => array(),
+        //     'groups' => array(),
+        // );
 
-        foreach ($arr_components['items'] as $item) {
-            if (in_array($item['name'], $allowedItems)) {
-                $allowedComponents['items'][] = $item;
-            }
-        }
+        // foreach ($arComponents['items'] as $item) {
+        //     if (in_array($item['name'], $allowedItems)) {
+        //         $allowedComponents['items'][] = $item;
+        //     }
+        // }
 
-        foreach ($arr_components['groups'] as $group) {
-            if (in_array($group['name'], $allowedGroups)) {
-                $allowedComponents['groups'][] = $group;
-            }
-        }
+        // foreach ($arComponents['groups'] as $group) {
+        //     if (in_array($group['name'], $allowedGroups)) {
+        //         $allowedComponents['groups'][] = $group;
+        //     }
+        // }
 
-        $js_ob = \CUtil::PhpToJSObject($allowedComponents);
+        $js_ob = \CUtil::PhpToJSObject($arComponents); // $allowedComponents
         \CComponentParamsManager::Init(); // инициализирует oBXComponentParamsManager
         ?>
         <script>
