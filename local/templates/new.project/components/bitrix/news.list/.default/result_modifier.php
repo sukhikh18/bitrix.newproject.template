@@ -97,10 +97,12 @@ foreach ($arResult["ITEMS"] as &$arItem) {
          'HORIZONTAL' == $arParams['ITEM_DIRECTION'] || isset($arParams['SORT_ELEMENTS']['PICT'])) {
         $arItem['COLUMN_CLASS'] .= ' has-picture';
 
-        $arItem["HTML"]["PICT"] = sprintf('<img src="%s" alt="%s">',
-            htmlspecialcharsEx($arItem["PREVIEW_PICTURE"]["SRC"]),
-            htmlspecialcharsEx($arItem["NAME"])
-        );
+        if( isset($arItem["PREVIEW_PICTURE"]) && !empty($arItem["PREVIEW_PICTURE"]['SRC']) ) {
+            $arItem["HTML"]["PICT"] = sprintf('<img src="%s" alt="%s">',
+                htmlspecialcharsEx($arItem["PREVIEW_PICTURE"]["SRC"]),
+                htmlspecialcharsEx($arItem["NAME"])
+            );
+        }
 
         if ("Y" === $arParams['PICTURE_DETAIL_URL']) {
             $arItem["HTML"]["PICT"] = sprintf('<a href="%s">%s</a>',
