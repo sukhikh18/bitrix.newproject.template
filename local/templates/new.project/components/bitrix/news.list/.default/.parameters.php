@@ -3,6 +3,8 @@ if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+use Bitrix\Main\Web\Json;
+
 $arTemplateParameters = array(
     "ROW_CLASS"          => Array(
         "NAME"    => GetMessage("T_IBLOCK_DESC_NEWS_ROW_CLASS"),
@@ -44,9 +46,18 @@ $arTemplateParameters = array(
         "DEFAULT" => "N",
     ),
     "SORT_ELEMENTS"      => Array(
+        "PARENT"  => "VISUAL",
         "NAME"    => 'Расположение элементов',
-        "TYPE"    => "TEXT",
+        "TYPE"    => "CUSTOM",
         "DEFAULT" => "PICT,NAME,DESC,MORE",
+        "JS_FILE" => "local/assets/dragdrop_order/script.min.js",
+        'JS_EVENT' => 'initDraggableOrderControl',
+        'JS_DATA'  => Json::encode(array(
+            'PICT' => 'Изображение',
+            'NAME' => 'Название',
+            'DESC' => 'Описание',
+            'MORE' => 'Подробнее',
+        )),
     ),
     "NAME_TAG"           => Array(
         "NAME"    => GetMessage("T_IBLOCK_DESC_NEWS_NAME_TAG"),
