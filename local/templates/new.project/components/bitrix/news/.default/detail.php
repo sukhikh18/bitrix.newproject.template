@@ -20,7 +20,7 @@ $this->setFrameMode(true);
 $assets = Main\Page\Asset::getInstance();
 $min    = ("Y" !== Main\Config\Option::get("main", "use_minified_assets")) ? '' : '.min';
 
-$path = rtrim('/css' . $arResult["FOLDER"], '/') . $min . '.css';
+$path = rtrim('/pages' . $arResult["FOLDER"], '/') . '/detail' . $min . '.css';
 if (file_exists(THEME . $path)) {
     $assets->addCss(TPL . $path);
 }
