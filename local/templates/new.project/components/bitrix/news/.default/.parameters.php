@@ -18,14 +18,22 @@ $arTemplateParameters = array(
         "HIDDEN" => 'Y',
     ),
 
-    "DISPLAY_NAME"                => Array(
+    "DISPLAY_NAME" => Array(
         "HIDDEN" => 'Y',
     ),
-    "SORT_ELEMENTS"               => Array(
-        "PARENT"  => "LIST_SETTINGS",
+    "SORT_ELEMENTS" => Array(
+        "PARENT"  => "VISUAL",
         "NAME"    => 'Расположение элементов',
-        "TYPE"    => "TEXT",
+        "TYPE"    => "CUSTOM",
         "DEFAULT" => "PICT,NAME,DESC,MORE",
+        "JS_FILE" => "local/assets/dragdrop_order/script.min.js",
+        'JS_EVENT' => 'initDraggableOrderControl',
+        'JS_DATA'  => Json::encode(array(
+            'PICT' => 'Изображение',
+            'NAME' => 'Название',
+            'DESC' => 'Описание',
+            'MORE' => 'Подробнее',
+        )),
     ),
     "ITEM_DIRECTION"              => Array(
         "PARENT"  => "LIST_SETTINGS",
