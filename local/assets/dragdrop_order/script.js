@@ -59,7 +59,8 @@ DragNDropOrderParameterControl.prototype =
 				{
 					result.push({
 						value: values[k],
-						message: items[values[k]]
+						message: items[values[k]],
+						disabled: false
 					});
 				}
 			}
@@ -71,7 +72,8 @@ DragNDropOrderParameterControl.prototype =
 			{
 				result.push({
 					value: k,
-					message: items[k]
+					message: items[k],
+					disabled: true
 				});
 			}
 		}
@@ -81,6 +83,7 @@ DragNDropOrderParameterControl.prototype =
 
 	buildNodes: function()
 	{
+		var self = this;
 		var baseNode = BX.create('DIV', {
 			props: {className: 'dnd-order-draggable-control-container', id: this.rootElementId}
 		});
@@ -91,11 +94,27 @@ DragNDropOrderParameterControl.prototype =
 			{
 				baseNode.appendChild(
 					BX.create('DIV', {
-						attrs: {'data-value': this.items[k].value},
-						props: {
-							className: 'dnd-order-draggable-control dnd-order-draggable-item ' + this.dragItemClassName
+						attrs: {
+							'data-value': this.items[k].value,
+							'data-disabled': this.items[k].disabled
 						},
-						text: this.items[k].message
+						props: {
+							className: 'dnd-order-draggable-control dnd-order-draggable-item ' + this.dragItemClassName,
+							title: 'Перетащите для сортировки или нажмите дважды для (де)активации',
+						},
+						text: this.items[k].message,
+						events: {
+							dblclick: function(e) {
+								if( !! this.getAttribute('data-disabled') ) {
+									this.removeAttribute('data-disabled');
+								}
+								else {
+									this.setAttribute('data-disabled', true);
+								}
+
+								self.saveData();
+							}
+						}
 					})
 				);
 			}
@@ -113,6 +132,7 @@ DragNDropOrderParameterControl.prototype =
 				dragItemControlClassName: 'dnd-order-draggable-control',
 				sortable: {rootElem: BX(this.rootElementId)},
 				dragEnd: BX.delegate(function(eventObj, dragElement, event){
+					eventObj.removeAttribute('data-disabled');
 					this.saveData();
 				}, this)
 			});
@@ -130,7 +150,7 @@ DragNDropOrderParameterControl.prototype =
 
 		for (var k in items)
 		{
-			if (items.hasOwnProperty(k))
+			if (items.hasOwnProperty(k) && !items[k].getAttribute('data-disabled'))
 			{
 				arr.push(items[k].getAttribute('data-value'));
 			}

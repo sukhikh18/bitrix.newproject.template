@@ -18,37 +18,44 @@
 	-o-animation: dnd-order-draggable-item .3s linear;
 	animation: dnd-order-draggable-item .3s linear;
 }
+
 .dnd-order-draggable-control-container div.dnd-order-draggable-item:active{
 	box-shadow: inset 0 0 15px 0 rgba(0,0,0,.2);
 	border-style:dashed
 }
+
+.dnd-order-draggable-control-container div.dnd-order-draggable-item[data-disabled="true"] {
+	opacity: 0.5;
+}
+
 @-webkit-keyframes dnd-order-draggable-item {
 	0%,100%{ background: transparent;}
 	50%{ background: #cee28c;}
 	0%{-webkit-transform: translateX(75px); opacity: 0;}
 	100%{-webkit-transform: translateX(0); opacity: 1;}
 }
+
 @-moz-keyframes dnd-order-draggable-item {
 	0%,100%{ background: transparent;}
 	50%{ background: #cee28c;}
 	0%{-moz-transform: translateX(75px); opacity: 0;}
 	100%{-moz-transform: translateX(0); opacity: 1;}
-
 }
+
 @-ms-keyframes dnd-order-draggable-item {
 	0%,100%{ background: transparent;}
 	50%{ background: #cee28c;}
 	0%{-ms-transform: translateX(75px); opacity: 0;}
 	100%{-ms-transform: translateX(0); opacity: 1;}
-
 }
+
 @-o-keyframes dnd-order-draggable-item {
 	0%,100%{ background: transparent;}
 	50%{ background: #cee28c;}
 	0%{-o-transform: translateX(75px); opacity: 0;}
 	100%{-o-transform: translateX(0); opacity: 1;}
-
 }
+
 @keyframes dnd-order-draggable-item {
 	0%,100%{ background: transparent;}
 	50%{ background: #cee28c;}
