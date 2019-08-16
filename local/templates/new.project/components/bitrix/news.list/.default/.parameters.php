@@ -45,12 +45,12 @@ $arTemplateParameters = array(
         "TYPE"    => "CHECKBOX",
         "DEFAULT" => "N",
     ),
-    "SORT_ELEMENTS"      => Array(
+    "SORT_ELEMENTS" => Array(
         "PARENT"  => "VISUAL",
         "NAME"    => 'Расположение элементов',
         "TYPE"    => "CUSTOM",
         "DEFAULT" => "PICT,NAME,DESC,MORE",
-        "JS_FILE" => "/local/assets/dragdrop_order/script.min.js",
+        "JS_FILE" => "/local/assets/dragdrop_order/script.js",
         'JS_EVENT' => 'initDraggableOrderControl',
         'JS_DATA'  => Json::encode(array(
             'PICT' => 'Изображение',
