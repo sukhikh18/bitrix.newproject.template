@@ -114,6 +114,7 @@ $this->setFrameMode(true);
                     "LIST_ACTIVE_DATE_FORMAT" => "d.m.Y",
                     "COLUMNS"                 => $arParams["LIST_COLUMNS"],
 
+                    "THUMBNAIL_POSITION" => $arParams["THUMBNAIL_POSITION"],
                     "SORT_ELEMENTS"   => $arParams["SORT_ELEMENTS"],
                     // "DISPLAY_DATE" => $arParams["LIST_DISPLAY_DATE"],
                     // "DISPLAY_NAME" => $arParams["LIST_DISPLAY_NAME"],

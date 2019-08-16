@@ -21,15 +21,6 @@ $arTemplateParameters = array(
         "TYPE"    => "TEXT",
         "DEFAULT" => "1",
     ),
-    "ITEM_DIRECTION"     => Array(
-        "NAME"    => "Положение элемента",
-        "TYPE"    => "LIST",
-        "DEFAULT" => "VERTICAL",
-        "VALUES"  => array(
-            "VERTICAL"   => "Вертикальное",
-            "HORIZONTAL" => "Горизонтальное",
-        )
-    ),
     "USE_GLOBAL_LINK"    => Array(
         "NAME"    => "Добавить ссылку в конце элемента",
         "TYPE"    => "CHECKBOX",
@@ -45,6 +36,19 @@ $arTemplateParameters = array(
         "TYPE"    => "CHECKBOX",
         "DEFAULT" => "N",
     ),
+    "THUMBNAIL_POSITION" => Array(
+        "PARENT"  => "VISUAL",
+        "NAME"    => "Расположение изображения",
+        "TYPE"    => "LIST",
+        "DEFAULT" => "",
+        "VALUES"  => array(
+            ""        => "По умолчанию",
+            "LEFT"    => "Слева",
+            "RIGHT"   => "Справа",
+            "FLOAT_L" => "Обтекание слева",
+            "FLOAT_R" => "Обтекание справа",
+        )
+    ),
     "SORT_ELEMENTS" => Array(
         "PARENT"  => "VISUAL",
         "NAME"    => 'Расположение элементов',
@@ -57,6 +61,7 @@ $arTemplateParameters = array(
             'NAME' => 'Название',
             'DESC' => 'Описание',
             'MORE' => 'Подробнее',
+            'DATE' => 'Дата',
         )),
     ),
     "NAME_TAG"           => Array(

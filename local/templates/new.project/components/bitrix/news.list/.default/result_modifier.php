@@ -3,62 +3,83 @@ if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-$res = CIBlock::GetByID($arParams['IBLOCK_ID']);
-if ($ar_res = $res->GetNext()) {
-    $arParams['IBLOCK_CODE'] = $ar_res['CODE'];
+if(!function_exists('esc_attr')) {
+    function esc_attr($value) {
+        return htmlspecialcharsEx($value);
+    }
 }
 
-if (empty($arParams['COLUMNS'])) {
-    $arParams['COLUMNS'] = 1;
-}
-
-$SECTION_CLASS = array('news-list');
-if ( ! empty($arParams['ITEM_CLASS'])) {
-    $SECTION_CLASS[] = $arParams['ITEM_CLASS'] . "-list";
-}
-if ( ! empty($arParams['IBLOCK_CODE'])) {
-    $SECTION_CLASS[] = "news-list_type_" . $arParams['IBLOCK_CODE'];
-}
-if ( ! empty($arParams['IBLOCK_ID'])) {
-    $SECTION_CLASS[] = "news-list_id_" . $arParams['IBLOCK_ID'];
-}
-$arResult['SECTION_CLASS'] = implode(' ', $SECTION_CLASS);
-
-$arParams['COLUMN_CLASS'] = function_exists('get_column_class') ?
-    get_column_class($arParams['COLUMNS']) : 'columns-' . $arParams['COLUMNS'];
-
-if (empty($arParams['SORT_ELEMENTS'])) {
-    $arParams['SORT_ELEMENTS'] = 'PICT,NAME,DESC,MORE';
-}
-
-$sanitizeSort = function ($value) {
-    $value = trim($value);
-    $value = function_exists('mb_strtoupper') ? mb_strtoupper($value) : strtoupper($value);
-
-    return $value;
-};
-
-$arParams['SORT_ELEMENTS'] = array_map($sanitizeSort, explode(',', $arParams['SORT_ELEMENTS']));
-$arParams['SORT_ELEMENTS'] = array_flip($arParams['SORT_ELEMENTS']);
-
-if ('HORIZONTAL' == $arParams['ITEM_DIRECTION']) {
-    unset($arParams['SORT_ELEMENTS']['PICT']);
-//     if (($key = array_search('PICT', $arParams['SORT_ELEMENTS'])) !== false) {
-//         unset($arParams['SORT_ELEMENTS'][$key]);
-//     }
+if(!function_exists('esc_url')) {
+    function esc_url($value) {
+        return htmlspecialcharsEx($value);
+    }
 }
 
 /**
- * Set defaults html attrs
+ * Required?
  */
-if (empty($arParams['ROW_CLASS'])) {
-    $arParams['ROW_CLASS'] = 'row';
+if(!function_exists('__esc_html')) {
+    function __esc_html($value) {
+        return $value;
+    }
 }
-if (empty($arParams['ITEM_CLASS'])) {
-    $arParams['ITEM_CLASS'] = 'item';
+
+if(!function_exists('prepare_item_link')) {
+    /**
+     * @param  array  &$arItem  [description]
+     * @param  array  $arParams [description]
+     * @return void
+     */
+    function prepare_item_link(&$arItem, $arParams) {
+        // disable access if link is empty
+        if(strlen($arItem["DETAIL_PAGE_URL"]) <= 1) {
+            $arItem["USER_HAVE_ACCESS"] = false;
+        }
+
+        $arItem['DETAIL_PAGE_URL'] = $arItem["USER_HAVE_ACCESS"] &&
+            ("N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || $arItem["DETAIL_TEXT"])
+            ? esc_url($arItem["DETAIL_PAGE_URL"]) : '';
+    }
 }
-if (empty($arParams["NAME_TAG"])) {
-    $arParams["NAME_TAG"] = 'h3';
+
+/**
+ * @todo INSERT TO PARAMS
+ */
+$arParams['PICTURE_URL'] = 'DETAIL_PAGE'; // || "" || DETAIL_PICTURE;
+
+// define iblock code
+$res = CIBlock::GetByID($arParams['IBLOCK_ID']);
+if ($ar_res = $res->GetNext()) $arParams['IBLOCK_CODE'] = $ar_res['CODE'];
+
+// define empty variables
+if (empty($arParams['COLUMNS'])) $arParams['COLUMNS'] = 1;
+if (empty($arParams['SORT_ELEMENTS'])) $arParams['SORT_ELEMENTS'] = 'PICT,NAME,DESC,MORE';
+if (empty($arParams['ROW_CLASS'])) $arParams['ROW_CLASS'] = 'row';
+if (empty($arParams['ITEM_CLASS'])) $arParams['ITEM_CLASS'] = 'item';
+if (empty($arParams["NAME_TAG"])) $arParams["NAME_TAG"] = 'h3';
+
+// define list class
+$SECTION_CLASS = array('news-list');
+if ( ! empty($arParams['ITEM_CLASS'])) $SECTION_CLASS[] = $arParams['ITEM_CLASS'] . "-list";
+if ( ! empty($arParams['IBLOCK_CODE'])) $SECTION_CLASS[] = "news-list_type_" . $arParams['IBLOCK_CODE'];
+if ( ! empty($arParams['IBLOCK_ID'])) $SECTION_CLASS[] = "news-list_id_" . $arParams['IBLOCK_ID'];
+
+$arResult['SECTION_CLASS'] = implode(' ', $SECTION_CLASS);
+
+// define item column class
+$arParams['COLUMN_CLASS'] = function_exists('get_column_class') ?
+    get_column_class($arParams['COLUMNS']) : 'columns-' . $arParams['COLUMNS'];
+
+// prepare sort elements string
+$arParams['SORT_ELEMENTS'] = array_flip(array_map(function ($value) {
+    $value = function_exists('mb_strtoupper') ? mb_strtoupper($value) : strtoupper($value);
+
+    return trim($value);
+}, explode(',', $arParams['SORT_ELEMENTS'])));
+
+// insert in template on custom position
+if ($arParams['THUMBNAIL_POSITION']) {
+    unset($arParams['SORT_ELEMENTS']['PICT']);
 }
 
 // Transfer to epilogue
@@ -70,17 +91,13 @@ if ($cp = $this->__component) {
 }
 
 foreach ($arResult["ITEMS"] as &$arItem) {
-    // disable access if is link empty (not exists)
-    if ( ! $arItem["DETAIL_PAGE_URL"] || 2 >= strlen($arItem["DETAIL_PAGE_URL"])) {
-        $arResult["USER_HAVE_ACCESS"] = false;
-    }
-
-    $arItem['DETAIL_PAGE_URL'] = "N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] ||
-                                 ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"]) ? $arItem["DETAIL_PAGE_URL"] : '';
+    /** @var string Y | N */
+    $arItem["USER_HAVE_ACCESS"] = $arResult["USER_HAVE_ACCESS"];
 
     /** @var string */
     $arItem['COLUMN_CLASS'] = $arParams['ITEM_CLASS'] . '--column ' . $arParams['COLUMN_CLASS'];
 
+    /** @var array HTML entities */
     $arItem["HTML"] = array(
         'PICT' => '',
         'NAME' => '',
@@ -89,39 +106,61 @@ foreach ($arResult["ITEMS"] as &$arItem) {
         'MORE' => '',
     );
 
+    prepare_item_link($arItem, $arParams);
+
     /**
-     * Fill HTML entities
-     * Add picture link
+     * Thumbnail with link maybe
      */
-    if ( ! empty($arItem["PREVIEW_PICTURE"]["SRC"]) &&
-         'HORIZONTAL' == $arParams['ITEM_DIRECTION'] || isset($arParams['SORT_ELEMENTS']['PICT'])) {
-        $arItem['COLUMN_CLASS'] .= ' has-picture';
+    if (isset($arParams['SORT_ELEMENTS']['PICT']) || $arParams['THUMBNAIL_POSITION']) {
 
-        if( isset($arItem["PREVIEW_PICTURE"]) && !empty($arItem["PREVIEW_PICTURE"]['SRC']) ) {
+        if ( ! empty($arItem["PREVIEW_PICTURE"]["SRC"])) {
+            $arItem['COLUMN_CLASS'] .= ' has-picture';
+
+            // create img element
             $arItem["HTML"]["PICT"] = sprintf('<img src="%s" alt="%s">',
-                htmlspecialcharsEx($arItem["PREVIEW_PICTURE"]["SRC"]),
-                htmlspecialcharsEx($arItem["NAME"])
+                esc_url($arItem["PREVIEW_PICTURE"]["SRC"]),
+                esc_attr($arItem["NAME"])
             );
+
+            // wrap to link
+            if($arParams['PICTURE_URL']) {
+                $arItem["HTML"]["PICT"] = sprintf('<a href="%s">%s</a>',
+                    "DETAIL_PICTURE" === $arParams['PICTURE_URL'] ?
+                        esc_url($arItem["DETAIL_PICTURE"]["SRC"]) : $arItem['DETAIL_PAGE_URL'],
+                    $arItem["HTML"]["PICT"]
+                );
+            }
         }
 
-        if ("Y" === $arParams['PICTURE_DETAIL_URL']) {
-            $arItem["HTML"]["PICT"] = sprintf('<a href="%s">%s</a>',
-                htmlspecialcharsEx($arItem["DETAIL_PICTURE"]["SRC"]),
-                $arItem["HTML"]["PICT"]
-            );
+        $imageClass = esc_attr($arParams['ITEM_CLASS']) . '__pict';
+
+        switch ($arParams['THUMBNAIL_POSITION']) {
+            case 'RIGHT':
+            case 'FLOAT_R':
+                $imageClass = 'alignright ' . $imageClass;
+                break;
+
+            case 'LEFT':
+            case 'FLOAT_L':
+                $imageClass = 'alignleft ' . $imageClass;
+                break;
         }
 
-        $arItem["HTML"]["PICT"] = sprintf('<div class="%s__pict">%s</div>',
-            $arParams['ITEM_CLASS'],
+        // wrap to module box
+        $arItem["HTML"]["PICT"] = sprintf('<div class="%s">%s</div>',
+            $imageClass,
             $arItem["HTML"]["PICT"]
         );
     }
 
     /**
-     * Item name
+     * Name
      */
-    if (isset($arParams['SORT_ELEMENTS']['NAME']) && $arItem["NAME"]) {
-        $arItem["HTML"]["NAME"] = $arItem["NAME"];
+    if (isset($arParams['SORT_ELEMENTS']['NAME'])) {
+
+        if( $arItem["NAME"] ) {
+            $arItem["HTML"]["NAME"] = __esc_html($arItem["NAME"]);
+        }
 
         if ($arItem['DETAIL_PAGE_URL']) {
             $arItem["HTML"]["NAME"] = sprintf('<a href="%s">%s</a>',
@@ -130,39 +169,53 @@ foreach ($arResult["ITEMS"] as &$arItem) {
             );
         }
 
+        // wrap to module box
         $arItem["HTML"]["NAME"] = sprintf('<%1$s class="%3$s">%2$s</%1$s>',
-            $arParams["NAME_TAG"],
+            esc_attr($arParams["NAME_TAG"]),
             $arItem["HTML"]["NAME"],
-            $arParams['ITEM_CLASS'] . '__name'
+            esc_attr($arParams['ITEM_CLASS'] . '__name')
         );
     }
 
-    if (isset($arParams['SORT_ELEMENTS']['DATE']) && $arItem["DISPLAY_ACTIVE_FROM"]) {
+    if (isset($arParams['SORT_ELEMENTS']['DATE'])) {
+
+        if($arItem["DISPLAY_ACTIVE_FROM"]) {
+            $arItem["HTML"]["DATE"] = __esc_html($arItem["DISPLAY_ACTIVE_FROM"]);
+        }
+
+        // wrap to module box
         $arItem["HTML"]["DATE"] = sprintf('<div class="%s__date">%s</div>',
-            $arParams['ITEM_CLASS'],
-            $arItem["DISPLAY_ACTIVE_FROM"]
+            esc_attr($arParams['ITEM_CLASS']),
+            $arItem["HTML"]["DATE"]
         );
     }
 
-    if (isset($arParams['SORT_ELEMENTS']['DESC']) && $arItem["PREVIEW_TEXT"]) {
+    if (isset($arParams['SORT_ELEMENTS']['DESC'])) {
+
+        if($arItem["PREVIEW_TEXT"]) {
+            $arItem["HTML"]["DESC"] = $arItem["PREVIEW_TEXT"];
+        }
+
         $arItem["HTML"]["DESC"] = sprintf('<div class="%s__desc">%s</div>',
-            $arParams['ITEM_CLASS'],
-            $arItem["PREVIEW_TEXT"]
+            esc_attr($arParams['ITEM_CLASS']),
+            $arItem["HTML"]["DESC"]
         );
     }
 
     /**
-     * @todo
+     * @todo in future
      */
     $arItem['MORE_LINK_TEXT'] = $arParams["MORE_LINK_TEXT"];
     // if( !empty($arItem['PROPERTIES'][ $arParams['EXTERNAL_LINK_PROPERTY'] ]['VALUE']) ) {
     //     $arItem['DETAIL_PAGE_URL'] = $arItem['PROPERTIES'][ $arParams['EXTERNAL_LINK_PROPERTY'] ]['VALUE'];
-    //     $arItem['MORE_LINK_TEXT'] = 'читать в источнике';
+    //     $arItem['MORE_LINK_TEXT'] = 'Читать в источнике';
     // }
 
-    if ( ! empty($arItem["MORE_LINK_TEXT"])) { // $arItem['DETAIL_PAGE_URL'] &&
+    if ( isset($arParams['SORT_ELEMENTS']['MORE']) && ! empty($arItem["MORE_LINK_TEXT"]) &&
+        ("N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || $arItem["DETAIL_TEXT"])) {
+
         $arItem["HTML"]["MORE"] = sprintf('<a class="%s__more" href="%s">%s</a>',
-            $arParams['ITEM_CLASS'],
+            esc_attr($arParams['ITEM_CLASS']),
             $arItem['DETAIL_PAGE_URL'] ? $arItem['DETAIL_PAGE_URL'] : '#',
             $arItem["MORE_LINK_TEXT"]
         );
@@ -172,6 +225,8 @@ foreach ($arResult["ITEMS"] as &$arItem) {
 $arParams['SORT_ELEMENTS'] = array_flip($arParams['SORT_ELEMENTS']);
 
 /**
+ * Lazy load || Infinity scroll
+ *
  * @fix it if is change SEO_URL
  */
 $paramName  = 'PAGEN_' . $arResult['NAV_RESULT']->NavNum;

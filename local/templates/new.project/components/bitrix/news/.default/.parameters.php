@@ -21,6 +21,19 @@ $arTemplateParameters = array(
     "DISPLAY_NAME" => Array(
         "HIDDEN" => 'Y',
     ),
+    "THUMBNAIL_POSITION" => Array(
+        "PARENT"  => "VISUAL",
+        "NAME"    => "Расположение изображения",
+        "TYPE"    => "LIST",
+        "DEFAULT" => "",
+        "VALUES"  => array(
+            ""        => "По умолчанию",
+            "LEFT"    => "Слева",
+            "RIGHT"   => "Справа",
+            "FLOAT_L" => "Обтекание слева",
+            "FLOAT_R" => "Обтекание справа",
+        )
+    ),
     "SORT_ELEMENTS" => Array(
         "PARENT"  => "VISUAL",
         "NAME"    => 'Расположение элементов',
@@ -33,17 +46,8 @@ $arTemplateParameters = array(
             'NAME' => 'Название',
             'DESC' => 'Описание',
             'MORE' => 'Подробнее',
+            'DATE' => 'Дата',
         )),
-    ),
-    "ITEM_DIRECTION"              => Array(
-        "PARENT"  => "LIST_SETTINGS",
-        "NAME"    => "Положение элемента",
-        "TYPE"    => "LIST",
-        "DEFAULT" => "VERTICAL",
-        "VALUES"  => array(
-            "VERTICAL"   => "Вертикальное",
-            "HORIZONTAL" => "Горизонтальное",
-        )
     ),
     "USE_GLOBAL_LINK"             => Array(
         "PARENT"  => "LIST_SETTINGS",
