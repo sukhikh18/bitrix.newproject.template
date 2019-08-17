@@ -149,7 +149,7 @@ if (file_exists(THEME . $path)) {
                 <? foreach ($arParams["CATEGORY_IBLOCK"] as $iblock_id): ?>
                 <? $APPLICATION->IncludeComponent(
                     "bitrix:news.list",
-                    $arParams["CATEGORY_THEME_" . $iblock_id],
+                    $arParams["LIST_TEMPLATE"],
                     Array(
                         "IBLOCK_ID"                 => $iblock_id,
                         "NEWS_COUNT"                => $arParams["CATEGORY_ITEMS_COUNT"],

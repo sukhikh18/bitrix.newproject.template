@@ -65,7 +65,7 @@ $this->setFrameMode(true);
     <section class="news__list component--news-list">
         <? $APPLICATION->IncludeComponent(
             "bitrix:news.list",
-            "",
+            $arParams["LIST_TEMPLATE"],
             Array(
                 "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
                 "IBLOCK_ID"   => $arParams["IBLOCK_ID"],

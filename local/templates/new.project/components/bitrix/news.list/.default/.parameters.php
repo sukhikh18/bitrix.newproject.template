@@ -71,7 +71,7 @@ $arTemplateParameters = array(
             "FLOAT_R" => "Обтекание справа",
         )
     ),
-    "SORT_ELEMENTS" => Array(
+    "SORT_ELEMENTS"      => Array(
         "PARENT"  => "VISUAL",
         "NAME"    => 'Расположение элементов',
         "TYPE"    => "CUSTOM",
