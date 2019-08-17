@@ -5,6 +5,28 @@ if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 
 use Bitrix\Main\Web\Json;
 
+CModule::IncludeModule("iblock");
+
+$arProperties = array();
+$resProperties = CIBlockProperty::getList(array(
+    'select' => array('ID', 'NAME', 'CODE'),
+    'filter' => array('IBLOCK_ID' => $arCurrentValues['IBLOCK_ID']),
+));
+
+while ($arProp = $resProperties->getNext()) {
+    if( $arProp['CODE'] && in_array($arProp['CODE'], $arCurrentValues['PROPERTY_CODE']) ) {
+        $arProperties[ $arProp['CODE'] ] = $arProp['NAME'];
+    }
+}
+
+$sortElements = array_merge($arProperties, array(
+    'PICT' => 'Изображение',
+    'NAME' => 'Название',
+    'DESC' => 'Описание',
+    'MORE' => 'Подробнее',
+    'DATE' => 'Дата',
+));
+
 $arTemplateParameters = array(
     "ROW_CLASS"          => Array(
         "NAME"    => GetMessage("T_IBLOCK_DESC_NEWS_ROW_CLASS"),
@@ -56,13 +78,7 @@ $arTemplateParameters = array(
         "DEFAULT" => "PICT,NAME,DESC,MORE",
         "JS_FILE" => "/local/assets/dragdrop_order/script.js",
         'JS_EVENT' => 'initDraggableOrderControl',
-        'JS_DATA'  => Json::encode(array(
-            'PICT' => 'Изображение',
-            'NAME' => 'Название',
-            'DESC' => 'Описание',
-            'MORE' => 'Подробнее',
-            'DATE' => 'Дата',
-        )),
+        'JS_DATA'  => Json::encode($sortElements),
     ),
     "NAME_TAG"           => Array(
         "NAME"    => GetMessage("T_IBLOCK_DESC_NEWS_NAME_TAG"),

@@ -20,6 +20,7 @@ if(!function_exists('esc_url')) {
  */
 if(!function_exists('__esc_html')) {
     function __esc_html($value) {
+        // return htmlspecialcharsEx($value);
         return $value;
     }
 }
@@ -177,6 +178,9 @@ foreach ($arResult["ITEMS"] as &$arItem) {
         );
     }
 
+    /**
+     * Date
+     */
     if (isset($arParams['SORT_ELEMENTS']['DATE'])) {
 
         if($arItem["DISPLAY_ACTIVE_FROM"]) {
@@ -190,6 +194,9 @@ foreach ($arResult["ITEMS"] as &$arItem) {
         );
     }
 
+    /**
+     * Desc
+     */
     if (isset($arParams['SORT_ELEMENTS']['DESC'])) {
 
         if($arItem["PREVIEW_TEXT"]) {
@@ -203,6 +210,26 @@ foreach ($arResult["ITEMS"] as &$arItem) {
     }
 
     /**
+     * Section name
+     */
+    if (isset($arParams['SORT_ELEMENTS']['SECT'])) {
+        // Get section name by id
+        $arSection = \Bitrix\Iblock\SectionTable::getList(array(
+            'select' => array('ID', 'NAME'),
+            'filter' => array('=ID' => $arItem['IBLOCK_SECTION_ID']),
+        ))->fetch();
+
+        if($arItem["PREVIEW_TEXT"]) {
+            $arItem["HTML"]["SECT"] = $arSection['NAME'];
+        }
+
+        $arItem["HTML"]["SECT"] = sprintf('<div class="%s__sect">%s</div>',
+            esc_attr($arParams['ITEM_CLASS']),
+            $arItem["HTML"]["SECT"]
+        );
+    }
+
+    /**
      * @todo in future
      */
     $arItem['MORE_LINK_TEXT'] = $arParams["MORE_LINK_TEXT"];
@@ -211,7 +238,10 @@ foreach ($arResult["ITEMS"] as &$arItem) {
     //     $arItem['MORE_LINK_TEXT'] = 'Читать в источнике';
     // }
 
-    if ( isset($arParams['SORT_ELEMENTS']['MORE']) && ! empty($arItem["MORE_LINK_TEXT"]) &&
+    /**
+     * More button
+     */
+    if (isset($arParams['SORT_ELEMENTS']['MORE']) && ! empty($arItem["MORE_LINK_TEXT"]) &&
         ("N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || $arItem["DETAIL_TEXT"])) {
 
         $arItem["HTML"]["MORE"] = sprintf('<a class="%s__more" href="%s">%s</a>',
@@ -219,6 +249,28 @@ foreach ($arResult["ITEMS"] as &$arItem) {
             $arItem['DETAIL_PAGE_URL'] ? $arItem['DETAIL_PAGE_URL'] : '#',
             $arItem["MORE_LINK_TEXT"]
         );
+    }
+
+    /**
+     * Properties
+     */
+    foreach ($arItem['DISPLAY_PROPERTIES'] as $propCode => $arProperty) {
+        if(isset($arParams['SORT_ELEMENTS'][$propCode])) {
+
+            if( is_array($arProperty['VALUE']) ) {
+                $arProperty['VALUE'] = implode(', ', $arProperty['VALUE']);
+            }
+
+            if($arItem["PREVIEW_TEXT"]) {
+                $arItem["HTML"][ $propCode ] = $arProperty['VALUE'];
+            }
+
+            $arItem["HTML"][ $propCode ] = sprintf('<div class="%1$s__prop %1$s-prop %1$s-prop__%2$s">%3$s</div>',
+                esc_attr($arParams['ITEM_CLASS']),
+                esc_attr(strtolower($propCode)),
+                $arItem["HTML"][ $propCode ]
+            );
+        }
     }
 }
 
