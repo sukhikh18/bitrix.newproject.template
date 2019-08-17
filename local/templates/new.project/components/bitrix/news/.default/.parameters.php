@@ -15,7 +15,7 @@ $resProperties = CIBlockProperty::getList(array(
 
 while ($arProp = $resProperties->getNext()) {
     if( $arProp['CODE'] && in_array($arProp['CODE'], $arCurrentValues['LIST_PROPERTY_CODE']) ) {
-        $arProperties[ $arProp['CODE'] ] = $arProp['NAME'];
+        $arProperties[ 'PROP_' . $arProp['CODE'] ] = $arProp['NAME'];
     }
 }
 
@@ -25,6 +25,7 @@ $sortElements = array_merge($arProperties, array(
     'DESC' => 'Описание',
     'MORE' => 'Подробнее',
     'DATE' => 'Дата',
+    'SECT' => 'Название секции',
 ));
 
 $arTemplateParameters = array(

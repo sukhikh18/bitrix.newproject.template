@@ -25,6 +25,7 @@ $sortElements = array_merge($arProperties, array(
     'DESC' => 'Описание',
     'MORE' => 'Подробнее',
     'DATE' => 'Дата',
+    'SECT' => 'Название секции',
 ));
 
 $arTemplateParameters = array(
