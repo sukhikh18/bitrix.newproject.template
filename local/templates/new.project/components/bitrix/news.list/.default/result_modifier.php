@@ -255,20 +255,20 @@ foreach ($arResult["ITEMS"] as &$arItem) {
      * Properties
      */
     foreach ($arItem['DISPLAY_PROPERTIES'] as $propCode => $arProperty) {
-        if(isset($arParams['SORT_ELEMENTS'][$propCode])) {
+        if(isset($arParams['SORT_ELEMENTS']['PROP_' . $propCode])) {
 
             if( is_array($arProperty['VALUE']) ) {
                 $arProperty['VALUE'] = implode(', ', $arProperty['VALUE']);
             }
 
             if($arItem["PREVIEW_TEXT"]) {
-                $arItem["HTML"][ $propCode ] = $arProperty['VALUE'];
+                $arItem["HTML"]['PROP_' . $propCode] = $arProperty['VALUE'];
             }
 
-            $arItem["HTML"][ $propCode ] = sprintf('<div class="%1$s__prop %1$s-prop %1$s-prop__%2$s">%3$s</div>',
+            $arItem["HTML"]['PROP_' . $propCode] = sprintf('<div class="%1$s__prop %1$s-prop %1$s-prop__%2$s">%3$s</div>',
                 esc_attr($arParams['ITEM_CLASS']),
                 esc_attr(strtolower($propCode)),
-                $arItem["HTML"][ $propCode ]
+                $arItem["HTML"]['PROP_' . $propCode]
             );
         }
     }
