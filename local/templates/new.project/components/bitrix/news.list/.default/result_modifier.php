@@ -125,11 +125,15 @@ foreach ($arResult["ITEMS"] as &$arItem) {
 
             // wrap to link
             if($arParams['PICTURE_URL']) {
-                $arItem["HTML"]["PICT"] = sprintf('<a href="%s">%s</a>',
-                    "DETAIL_PICTURE" === $arParams['PICTURE_URL'] ?
-                        esc_url($arItem["DETAIL_PICTURE"]["SRC"]) : $arItem['DETAIL_PAGE_URL'],
-                    $arItem["HTML"]["PICT"]
-                );
+                $pictureUrl = "DETAIL_PICTURE" === $arParams['PICTURE_URL'] ?
+                    esc_url($arItem["DETAIL_PICTURE"]["SRC"]) : $arItem['DETAIL_PAGE_URL'];
+
+                if( $pictureUrl ) {
+                    $arItem["HTML"]["PICT"] = sprintf('<a href="%s">%s</a>',
+                        $pictureUrl,
+                        $arItem["HTML"]["PICT"]
+                    );
+                }
             }
         }
 
