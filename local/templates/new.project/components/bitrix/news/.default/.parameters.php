@@ -7,6 +7,25 @@ use Bitrix\Main\Web\Json;
 
 CModule::IncludeModule("iblock");
 
+$arSections = array("" => "Всех категорий");
+$resSections = CIBlockSection::getList(array(
+    'select' => array('ID', 'NAME', 'IBLOCK_ID'),
+    // why this do not work?
+    'filter' => array('IBLOCK_ID' => $arCurrentValues['IBLOCK_ID']),
+));
+
+while ($arSection = $resSections->getNext()) {
+    if( $arCurrentValues['IBLOCK_ID'] != $arSection['IBLOCK_ID'] ) {
+        continue;
+    }
+
+    $sectID = intval($arSection['ID']);
+
+    if( $sectID > 0 ) {
+        $arSections[ $sectID ] = $arSection['NAME'] ? $arSection['NAME'] : $sectID;
+    }
+}
+
 $arProperties = array();
 $resProperties = CIBlockProperty::getList(array(
     'select' => array('ID', 'NAME', 'CODE'),
@@ -43,6 +62,13 @@ $arTemplateParameters = array(
     ),
     "DISPLAY_NAME"                => array(
         "HIDDEN" => 'Y',
+    ),
+    "PARENT_SECTION"              => array(
+        "PARENT"  => "DATA_SOURCE",
+        "NAME"    => 'На странице новостей показывать записи из',
+        "TYPE"    => "LIST",
+        "DEFAULT" => "",
+        "VALUES"  => $arSections,
     ),
     "LIST_TEMPLATE"               => array(
         "PARENT"  => "LIST_SETTINGS",

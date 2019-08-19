@@ -107,9 +107,9 @@ $this->setFrameMode(true);
                     "ADD_SECTIONS_CHAIN"        => "N",
                     "HIDE_LINK_WHEN_NO_DETAIL"  => $arParams["HIDE_LINK_WHEN_NO_DETAIL"],
 
-                    "PARENT_SECTION"      => "",
+                    "PARENT_SECTION"      => $arParams["PARENT_SECTION"],
                     "PARENT_SECTION_CODE" => "",
-                    "INCLUDE_SUBSECTIONS" => "Y",
+                    "INCLUDE_SUBSECTIONS" => $arParams["PARENT_SECTION"] ? "Y" : "N",
 
                     "LIST_ACTIVE_DATE_FORMAT" => "d.m.Y",
                     "COLUMNS"                 => $arParams["LIST_COLUMNS"],
