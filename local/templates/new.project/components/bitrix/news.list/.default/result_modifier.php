@@ -248,7 +248,7 @@ foreach ($arResult["ITEMS"] as &$arItem) {
     if (isset($arParams['SORT_ELEMENTS']['MORE']) && ! empty($arItem["MORE_LINK_TEXT"]) &&
         ("N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || $arItem["DETAIL_TEXT"])) {
 
-        $arItem["HTML"]["MORE"] = sprintf('<a class="%s__more" href="%s">%s</a>',
+        $arItem["HTML"]["MORE"] = sprintf('<div class="%s__more"><a href="%s">%s</a></div>',
             esc_attr($arParams['ITEM_CLASS']),
             $arItem['DETAIL_PAGE_URL'] ? $arItem['DETAIL_PAGE_URL'] : '#',
             $arItem["MORE_LINK_TEXT"]
