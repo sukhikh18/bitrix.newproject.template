@@ -70,11 +70,6 @@ $arTemplateParameters = array(
         "TYPE"    => "TEXT",
         "DEFAULT" => "1",
     ),
-    "USE_GLOBAL_LINK"    => Array(
-        "NAME"    => "Добавить ссылку в конце элемента",
-        "TYPE"    => "CHECKBOX",
-        "DEFAULT" => "N",
-    ),
     "DISPLAY_PICTURE"    => Array(
         "NAME"    => GetMessage("T_IBLOCK_DESC_NEWS_DISPLAY_PICTURE"),
         "TYPE"    => "CHECKBOX",
@@ -112,10 +107,26 @@ $arTemplateParameters = array(
         "TYPE"    => "TEXT",
         "DEFAULT" => "h3",
     ),
+    "USE_GLOBAL_LINK"    => Array(
+        "NAME"    => "Добавить ссылку в конце элемента",
+        "TYPE"    => "CHECKBOX",
+        "DEFAULT" => "N",
+    ),
     "MORE_LINK_TEXT"     => Array(
         "NAME"    => GetMessage("T_IBLOCK_DESC_NEWS_MORE_LINK_TEXT"),
         "TYPE"    => "TEXT",
         "DEFAULT" => GetMessage("T_IBLOCK_VALUE_NEWS_MORE_LINK_TEXT"),
+    ),
+    "LINK_BY_PROPERTY" => Array(
+        "NAME"    => "Установить ссылку из свойства",
+        "TYPE"    => "LIST",
+        "DEFAULT" => "",
+        "VALUES"  => array_merge(array('' => '(пусто)'), $arProperties),
+    ),
+    "USE_DETAIL_IS_PROP_EMPTY"    => Array(
+        "NAME"    => 'Использовать детальную ссылку если нет значения свойства',
+        "TYPE"    => "CHECKBOX",
+        "DEFAULT" => "Y",
     ),
     "LAZY_LOAD"          => Array(
         "NAME"    => 'Ленивая подгрузка',
