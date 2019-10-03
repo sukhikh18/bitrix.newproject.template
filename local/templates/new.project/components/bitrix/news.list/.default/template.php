@@ -19,12 +19,13 @@ extract( $arResult['VAR'] );
 
 ?>
 <section class='<?= $SECTION_CLASS ?>'>
-    <?= $BEFORE_ROW ?>
+    <?= $arResult['ACTION']['BEFORE_ROW'] ?>
+
     <div class="<?= $ROW_CLASS ?>">
         <?php foreach ($arResult["ITEMS"] as $arItem): extract($arItem['VAR']) ?>
             <div class="<?= $COLUMN_CLASS ?>" id="<?= $COLUMN_ID ?>">
                 <article class="<?= $ARTICLE_CLASS ?>">
-                    <?= $BEFORE_ARTICLE_BODY ?>
+                    <?= $arItem['ACTION']['BEFORE_ARTICLE_BODY'] ?>
                     <div class="media-body <?= $arParams['ITEM_CLASS'] ?>__body">
                         <?php
 
@@ -36,10 +37,11 @@ extract( $arResult['VAR'] );
 
                         ?>
                     </div>
-                    <?= $AFTER_ARTICLE_BODY ?>
+                    <?= $arItem['ACTION']['AFTER_ARTICLE_BODY'] ?>
                 </article>
             </div>
         <? endforeach ?>
     </div><!-- .<?= $ROW_CLASS ?> -->
-    <?= $AFTER_ROW ?>
+
+    <?= $arResult['ACTION']['AFTER_ROW'] ?>
 </section>

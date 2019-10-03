@@ -15,9 +15,7 @@ if(!function_exists('esc_url')) {
     }
 }
 
-/**
- * @todo INSERT TO PARAMS
- */
+// @TODO: replace to parameters
 $arParams['PICTURE_URL'] = 'DETAIL_PAGE'; // || "" || DETAIL_PICTURE;
 
 // define iblock code
@@ -32,12 +30,12 @@ if (empty($arParams['ITEM_CLASS'])) $arParams['ITEM_CLASS'] = 'item';
 if (empty($arParams["NAME_TAG"])) $arParams["NAME_TAG"] = 'h3';
 
 // define list class
-$SectionClass = array('news-list');
-if ( ! empty($arParams['ITEM_CLASS']))  $SectionClass[] = $arParams['ITEM_CLASS'] . "-list";
-if ( ! empty($arParams['IBLOCK_CODE'])) $SectionClass[] = "news-list_type_" . $arParams['IBLOCK_CODE'];
-if ( ! empty($arParams['IBLOCK_ID']))   $SectionClass[] = "news-list_id_" . $arParams['IBLOCK_ID'];
+$arSectionClass = array('news-list');
+if ( ! empty($arParams['ITEM_CLASS']))  $arSectionClass[] = $arParams['ITEM_CLASS'] . "-list";
+if ( ! empty($arParams['IBLOCK_CODE'])) $arSectionClass[] = "news-list_type_" . $arParams['IBLOCK_CODE'];
+if ( ! empty($arParams['IBLOCK_ID']))   $arSectionClass[] = "news-list_id_" . $arParams['IBLOCK_ID'];
 
-$arResult['VAR']['SECTION_CLASS'] = implode(' ', $SectionClass);
+$arResult['VAR']['SECTION_CLASS'] = implode(' ', $arSectionClass);
 
 // define item column base attributes
 $arParams['COLUMN_CLASS'] = function_exists('get_column_class') ?
@@ -72,20 +70,13 @@ foreach ($arResult["ITEMS"] as &$arItem) {
             "CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')
         ));
 
-    /** @var string Y | N */
-    $arItem["USER_HAVE_ACCESS"] = $arResult["USER_HAVE_ACCESS"];
-
     /** @var string */
     $arItem['COLUMN_CLASS'] = $arParams['ITEM_CLASS'] . '--column ' . $arParams['COLUMN_CLASS'];
 
-    /** @var array HTML entities */
-    $arItem["VAR"] = array(
-        'PICT' => '',
-        'NAME' => '',
-        'DATE' => '',
-        'DESC' => '',
-        'MORE' => '',
-    );
+    $arItem['LINK_ATTRS'] = '';
+
+    /** @var string Y | N */
+    $arItem["USER_HAVE_ACCESS"] = $arResult["USER_HAVE_ACCESS"];
 
     // disable access if link is empty
     if(strlen($arItem["DETAIL_PAGE_URL"]) <= 1) {
@@ -96,6 +87,7 @@ foreach ($arResult["ITEMS"] as &$arItem) {
         ("N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || $arItem["DETAIL_TEXT"])
         ? esc_url($arItem["DETAIL_PAGE_URL"]) : '#';
 
+    // insert link from custom property
     if( !empty($arParams['LINK_BY_PROPERTY']) ) {
         if( "Y" !== $arParams['USE_DETAIL_IS_PROP_EMPTY'] &&
             empty($arItem['PROPERTIES'][ $arParams['LINK_BY_PROPERTY'] ]['VALUE']) ) {
@@ -103,164 +95,169 @@ foreach ($arResult["ITEMS"] as &$arItem) {
         }
         else {
             $arItem['DETAIL_PAGE_URL'] = $arItem['PROPERTIES'][ $arParams['LINK_BY_PROPERTY'] ]['VALUE'];
+            $arItem['LINK_ATTRS'] .= ' target="_blank"';
+            $arItem['LINK_ATTRS'] .= ' rel="nofollow"';
         }
     }
 
-    /**
-     * Thumbnail with link maybe
-     */
-    if (isset($arParams['SORT_ELEMENTS']['PICT']) || $arParams['THUMBNAIL_POSITION']) {
+    /** @var array HTML entities */
+    $arItem['VAR'] = array(
+        'COLUMN_ID' => $this->GetEditAreaId($arItem['ID']),
 
-        if ( ! empty($arItem["PREVIEW_PICTURE"]["SRC"])) {
-            $arItem['COLUMN_CLASS'] .= ' has-picture';
+        'COLUMN_CLASS' => $arItem['COLUMN_CLASS'],
 
-            // create img element
-            $arItem["VAR"]["PICT"] = sprintf('<img src="%s" alt="%s">',
-                esc_url($arItem["PREVIEW_PICTURE"]["SRC"]),
-                esc_attr($arItem["NAME"])
-            );
+        'ARTICLE_CLASS' => call_user_func(function() use ($arParams, $arItem) {
+            if(in_array($arParams['THUMBNAIL_POSITION'], array('LEFT', 'RIGHT'))) {
+                return 'media ' . $arParams['ITEM_CLASS'];
+            }
 
-            // wrap to link
-            if($arParams['PICTURE_URL']) {
-                $pictureUrl = "DETAIL_PICTURE" === $arParams['PICTURE_URL'] ?
-                    esc_url($arItem["DETAIL_PICTURE"]["SRC"]) : $arItem['DETAIL_PAGE_URL'];
+            return $arParams['ITEM_CLASS'];
+        }),
+        // @var array &$arItem change COLUMN_CLASS if picture is exists
+        'PICT' => call_user_func(function() use ($arParams, &$arItem) {
+            if(!isset($arParams['SORT_ELEMENTS']['PICT'])) return '';
+            // if(!$arParams['THUMBNAIL_POSITION']) return '';
 
-                if( $pictureUrl ) {
-<<<<<<< Updated upstream
-                    $arItem["HTML"]["PICT"] = sprintf('<a href="%s">%s</a>',
-                        $pictureUrl,
-                        $arItem["HTML"]["PICT"]
-=======
-                    $arItem["VAR"]["PICT"] = sprintf('<a href="%s">%s</a>',
-                        $pictureUrl,
-                        $arItem["VAR"]["PICT"]
->>>>>>> Stashed changes
+            $strPict = '';
+            $strPictURL = isset($arParams['PICTURE_URL']) && "DETAIL_PICTURE" === $arParams['PICTURE_URL'] ?
+                esc_url($arItem["DETAIL_PICTURE"]["SRC"]) : $arItem['DETAIL_PAGE_URL'];
+            $strPictClass = esc_attr($arParams['ITEM_CLASS']) . '__pict';
+            switch ($arParams['THUMBNAIL_POSITION']) {
+                case 'RIGHT':
+                case 'FLOAT_R':
+                    $strPictClass = 'alignright ' . $strPictClass;
+                    break;
+
+                case 'LEFT':
+                case 'FLOAT_L':
+                    $strPictClass = 'alignleft ' . $strPictClass;
+                    break;
+            }
+
+            if ( ! empty($arItem["PREVIEW_PICTURE"]["SRC"])) {
+                $arItem['COLUMN_CLASS'] .= ' has-picture';
+
+                // create img element
+                $strPict = sprintf('<img src="%s" alt="%s">',
+                    esc_url($arItem["PREVIEW_PICTURE"]["SRC"]),
+                    esc_attr($arItem["NAME"])
+                );
+
+                if( strlen($strPictURL) > 2 ) {
+                    // wrap to link
+                    $strPict = sprintf('<a href="%s"%s>%s</a>',
+                        $strPictURL,
+                        "DETAIL_PICTURE" !== $arParams['PICTURE_URL'] ? $arItem['LINK_ATTRS'] : '',
+                        $strPict
                     );
                 }
             }
-        }
 
-        $imageClass = esc_attr($arParams['ITEM_CLASS']) . '__pict';
-
-        switch ($arParams['THUMBNAIL_POSITION']) {
-            case 'RIGHT':
-            case 'FLOAT_R':
-                $imageClass = 'alignright ' . $imageClass;
-                break;
-
-            case 'LEFT':
-            case 'FLOAT_L':
-                $imageClass = 'alignleft ' . $imageClass;
-                break;
-        }
-
-        // wrap to module box
-        $arItem["VAR"]["PICT"] = sprintf('<div class="%s">%s</div>',
-            $imageClass,
-            $arItem["VAR"]["PICT"]
-        );
-    }
-
-    /**
-     * Name
-     */
-    if (isset($arParams['SORT_ELEMENTS']['NAME'])) {
-
-        if( $arItem["NAME"] ) {
-            $arItem["VAR"]["NAME"] = $arItem["NAME"]; // strip_tags?
-        }
-
-        if ($arItem['DETAIL_PAGE_URL']) {
-            $arItem["VAR"]["NAME"] = sprintf('<a href="%s">%s</a>',
-                $arItem['DETAIL_PAGE_URL'],
-                $arItem["VAR"]["NAME"]
+            // wrap to module box
+            return sprintf('<div class="%s">%s</div>',
+                $strPictClass,
+                $strPict
             );
-        }
+        }),
 
-        // wrap to module box
-        $arItem["VAR"]["NAME"] = sprintf('<%1$s class="%3$s">%2$s</%1$s>',
-            esc_attr($arParams["NAME_TAG"]),
-            $arItem["VAR"]["NAME"],
-            esc_attr($arParams['ITEM_CLASS'] . '__name')
-        );
-    }
+        'NAME' => call_user_func(function() use ($arParams, $arItem) {
+            if( !isset($arParams['SORT_ELEMENTS']['NAME']) ) return '';
 
-    /**
-     * Date
-     */
-    if (isset($arParams['SORT_ELEMENTS']['DATE'])) {
+            $strNameClass = $arParams['ITEM_CLASS'] . '__name';
 
-        if($arItem["DISPLAY_ACTIVE_FROM"]) {
-            $arItem["VAR"]["DATE"] = strip_tags($arItem["DISPLAY_ACTIVE_FROM"]);
-        }
+            if( strlen($arItem['DETAIL_PAGE_URL']) > 2 ) {
+                // wrap to module with link
+                return sprintf('<a href="%4$s" class="%3$s d-block"%5$s><%1$s>%2$s</%1$s></a>',
+                    esc_attr($arParams["NAME_TAG"]),
+                    $arItem["NAME"], // strip_tags?
+                    esc_attr($strNameClass),
+                    $arItem['DETAIL_PAGE_URL'],
+                    $arItem['LINK_ATTRS']
+                );
+            }
+            else {
+                // wrap to module box
+                return sprintf('<%1$s class="%3$s">%2$s</%1$s>',
+                    esc_attr($arParams["NAME_TAG"]),
+                    $arItem["NAME"], // strip_tags?
+                    esc_attr($arParams['ITEM_CLASS'] . '__name')
+                );
+            }
+        }),
 
-        // wrap to module box
-        $arItem["VAR"]["DATE"] = sprintf('<div class="%s__date">%s</div>',
-            esc_attr($arParams['ITEM_CLASS']),
-            $arItem["VAR"]["DATE"]
-        );
-    }
+        'DATE' => call_user_func(function() use ($arParams, $arItem) {
+            if (!isset($arParams['SORT_ELEMENTS']['DATE'])) return '';
 
-    /**
-     * Desc
-     */
-    if (isset($arParams['SORT_ELEMENTS']['DESC'])) {
+            $date = $arItem["DISPLAY_ACTIVE_FROM"] ? strip_tags($arItem["DISPLAY_ACTIVE_FROM"]) : '';
 
-        if($arItem["PREVIEW_TEXT"]) {
-            $arItem["VAR"]["DESC"] = $arItem["PREVIEW_TEXT"];
-        }
+            // wrap to module box
+            return sprintf('<div class="%s__date">%s</div>',
+                esc_attr($arParams['ITEM_CLASS']),
+                $date
+            );
+        }),
 
-        $arItem["VAR"]["DESC"] = sprintf('<div class="%s__desc">%s</div>',
-            esc_attr($arParams['ITEM_CLASS']),
-            $arItem["VAR"]["DESC"]
-        );
-    }
+        'DESC' => call_user_func(function() use ($arParams, $arItem) {
+            if (!isset($arParams['SORT_ELEMENTS']['DESC'])) return '';
 
-    /**
-     * Section name
-     */
-    if (isset($arParams['SORT_ELEMENTS']['SECT'])) {
-        // Get section name by id
-        $arSection = \Bitrix\Iblock\SectionTable::getList(array(
-            'select' => array('ID', 'NAME'),
-            'filter' => array('=ID' => $arItem['IBLOCK_SECTION_ID']),
-        ))->fetch();
+            $text = $arItem["PREVIEW_TEXT"] ? $arItem["PREVIEW_TEXT"] : '';
 
-        if($arItem["PREVIEW_TEXT"]) {
-            $arItem["VAR"]["SECT"] = $arSection['NAME'];
-        }
+            // wrap to module box
+            return sprintf('<div class="%s__desc">%s</div>',
+                esc_attr($arParams['ITEM_CLASS']),
+                $text
+            );
+        }),
+        // @TODO: check element class
+        'MORE' => call_user_func(function() use ($arParams, $arItem) {
+            /**
+             * @todo in future
+             */
+            $arItem['MORE_LINK_TEXT'] = $arParams["MORE_LINK_TEXT"];
+            // if( !empty($arItem['PROPERTIES'][ $arParams['EXTERNAL_LINK_PROPERTY'] ]['VALUE']) ) {
+            //     $arItem['DETAIL_PAGE_URL'] = $arItem['PROPERTIES'][ $arParams['EXTERNAL_LINK_PROPERTY'] ]['VALUE'];
+            //     $arItem['MORE_LINK_TEXT'] = 'Читать в источнике';
+            // }
 
-        $arItem["VAR"]["SECT"] = sprintf('<div class="%s__sect">%s</div>',
-            esc_attr($arParams['ITEM_CLASS']),
-            $arItem["VAR"]["SECT"]
-        );
-    }
+            if( !isset($arParams['SORT_ELEMENTS']['MORE']) ) return '';
+            if( empty($arItem["MORE_LINK_TEXT"]) ) return '';
+            if( "Y" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || empty($arItem["DETAIL_TEXT"]) ) return '';
 
-    /**
-     * @todo in future
-     */
-    $arItem['MORE_LINK_TEXT'] = $arParams["MORE_LINK_TEXT"];
-    // if( !empty($arItem['PROPERTIES'][ $arParams['EXTERNAL_LINK_PROPERTY'] ]['VALUE']) ) {
-    //     $arItem['DETAIL_PAGE_URL'] = $arItem['PROPERTIES'][ $arParams['EXTERNAL_LINK_PROPERTY'] ]['VALUE'];
-    //     $arItem['MORE_LINK_TEXT'] = 'Читать в источнике';
-    // }
+            if( strlen($arItem['DETAIL_PAGE_URL']) > 2 ) {
+                return sprintf('<div class="%s__more"><a class="btn" href="%s"%s>%s</a></div>',
+                    esc_attr($arParams['ITEM_CLASS']),
+                    $arItem['LINK_ATTRS'],
+                    $arItem['DETAIL_PAGE_URL'],
+                    $arItem["MORE_LINK_TEXT"]
+                );
+            }
 
-    /**
-     * More button
-     */
-    if (isset($arParams['SORT_ELEMENTS']['MORE']) && ! empty($arItem["MORE_LINK_TEXT"]) &&
-        ("Y" !== $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || $arItem["DETAIL_TEXT"])) {
+            return '';
+        }),
 
-<<<<<<< Updated upstream
-        $arItem["HTML"]["MORE"] = sprintf('<div class="%s__more"><a href="%s">%s</a></div>',
-=======
-        $arItem["VAR"]["MORE"] = sprintf('<div class="%s__more"><a class="btn" href="%s">%s</a></div>',
->>>>>>> Stashed changes
-            esc_attr($arParams['ITEM_CLASS']),
-            $arItem['DETAIL_PAGE_URL'] ? $arItem['DETAIL_PAGE_URL'] : '#',
-            $arItem["MORE_LINK_TEXT"]
-        );
-    }
+        'SECT' => call_user_func(function() use ($arParams, $arItem) {
+            if (!isset($arParams['SORT_ELEMENTS']['SECT'])) return '';
+            if (empty($arItem['IBLOCK_SECTION_ID'])) return '';
+
+            // Get section name by id
+            $arSection = \Bitrix\Iblock\SectionTable::getList(array(
+                'select' => array('ID', 'NAME'),
+                'filter' => array('=ID' => $arItem['IBLOCK_SECTION_ID']),
+            ))->fetch();
+
+            $strSectName = $arSection['NAME'] ? strip_tags($arSection['NAME']) : '';
+
+            return sprintf('<div class="%s__sect">%s</div>',
+                esc_attr($arParams['ITEM_CLASS']),
+                $strSectName
+            );
+        }),
+        // @TODO:
+        'PROPERTIES' => call_user_func(function() use ($arParams, $arItem) {
+            $properties = array();
+            return $properties;
+        }),
+    );
 
     /**
      * Properties
@@ -284,27 +281,24 @@ foreach ($arResult["ITEMS"] as &$arItem) {
         }
     }
 
-    $arItem['VAR']['COLUMN_ID'] = $this->GetEditAreaId($arItem['ID']);
-    $arItem['VAR']['COLUMN_CLASS'] = $arItem['COLUMN_CLASS'];
+    $arItem['ACTION']['BEFORE_ARTICLE_BODY'] = in_array($arParams['THUMBNAIL_POSITION'],
+        array('LEFT', 'FLOAT_L')) ? $arItem['VAR']['PICT'] : '';
 
-    $arItem['VAR']['ARTICLE_CLASS'] = $arParams['ITEM_CLASS'];
-    if(in_array($arParams['THUMBNAIL_POSITION'], array('LEFT', 'RIGHT'))) {
-        $arItem['VAR']['ARTICLE_CLASS'] = 'media ' . $arItem['VAR']['ARTICLE_CLASS'];
-    }
+    $arItem['ACTION']['AFTER_ARTICLE_BODY'] = in_array($arParams['THUMBNAIL_POSITION'],
+        array('RIGHT', 'FLOAT_R')) ? $arItem['VAR']['PICT'] : '';
 
-    $arResult['VAR']['BEFORE_ARTICLE_BODY'] = in_array($arParams['THUMBNAIL_POSITION'],
-        array('LEFT', 'FLOAT_L', 'FLOAT_R')) ? $arItem['VAR']['PICT'] : '';
-
-    $arResult['VAR']['AFTER_ARTICLE_BODY'] = 'RIGHT' == $arParams['THUMBNAIL_POSITION'] ?
-        $arItem['VAR']['PICT'] : '';
-
-    if ($arItem['DETAIL_PAGE_URL'] && $arParams['USE_GLOBAL_LINK']) {
-        $AFTER_ARTICLE_BODY .= "\r\n<a href=\"{$arItem['DETAIL_PAGE_URL']}\"></a>";
+    if (strlen($arItem['DETAIL_PAGE_URL']) > 2 && $arParams['USE_GLOBAL_LINK']) {
+        $arItem['ACTION']['AFTER_ARTICLE_BODY'] .= "\r\n"
+          . sprintf('<a href="%s" class="global-link"%s></a>',
+                $arItem['DETAIL_PAGE_URL'],
+                $arItem['LINK_ATTRS']
+            );
     }
 }
 
+$sort = array_flip( $arParams['SORT_ELEMENTS'] );
+
 foreach ($arResult["ITEMS"] as &$arItem) {
-    $sort = array_flip( $arParams['SORT_ELEMENTS'] );
     $arItem['VAR']['SHOW_ELEMENTS'] = function() use ($sort, $arItem) {
         foreach ($sort as $elem) {
             if (isset($arItem['VAR'][$elem])) echo $arItem['VAR'][$elem];
@@ -334,19 +328,19 @@ if ($arResult['NAV_RESULT']->NavPageCount <= 1) {
 }
 
 if ("Y" == $arParams['LAZY_LOAD'] && ! empty($_GET['LAZY_LOAD'])) {
-    $arResult['VAR']['BEFORE_ROW'] = "<!--RestartBuffer-->";
+    $arResult['ACTION']['BEFORE_ROW'] = "<!--RestartBuffer-->";
 }
-elseif( $arParams["DISPLAY_TOP_PAGER"] ) {
-    $arResult['VAR']['BEFORE_ROW'] = sprintf('<div class="%1$s_%2$s__pager %1$s_%2$__pager_top">%3$s</div>',
-        $arParams['IBLOCK_CODE'],
-        $arParams['ITEM_CLASS'],
-        $arResult["NAV_STRING"]
-    );
-}
+// elseif( $arParams["DISPLAY_TOP_PAGER"] ) {
+//     $arResult['ACTION']['BEFORE_ROW'] = sprintf('<div class="%1$s_%2$s__pager %1$s_%2$__pager_top">%3$s</div>',
+//         $arParams['IBLOCK_CODE'],
+//         $arParams['ITEM_CLASS'],
+//         $arResult["NAV_STRING"]
+//     );
+// }
 
-$arResult['VAR']['AFTER_ROW'] = '';
+$arResult['ACTION']['AFTER_ROW'] = '';
 if ($arParams["DISPLAY_BOTTOM_PAGER"]) {
-    $arResult['VAR']['AFTER_ROW'] = sprintf('<div class="%1$s_%2$s__pager %1$s_%2$__pager_bottom">%3$s</div>',
+    $arResult['ACTION']['AFTER_ROW'] = sprintf('<div class="%1$s_%2$s__pager %1$s_%2$__pager_bottom">%3$s</div>',
         $arParams['IBLOCK_CODE'],
         $arParams['ITEM_CLASS'],
         $arResult["NAV_STRING"]
@@ -354,12 +348,12 @@ if ($arParams["DISPLAY_BOTTOM_PAGER"]) {
 }
 
 if ($arResult['MORE_ITEMS_LINK'] && "Y" == $arParams['LAZY_LOAD']) {
-    $arResult['VAR']['AFTER_ROW'].= '
+    $arResult['ACTION']['AFTER_ROW'].= '
     <div class="ajax-pager-wrap">
         <a class="more-items-link btn btn-red" href="'.$arResult['MORE_ITEMS_LINK'].'">больше<br> статей</a>
     </div>';
 }
 
 if ("Y" == $arParams['LAZY_LOAD'] && ! empty($_GET['LAZY_LOAD'])) {
-    $arResult['VAR']['AFTER_ROW'].= '<!--RestartBuffer-->';
+    $arResult['ACTION']['AFTER_ROW'].= '<!--RestartBuffer-->';
 }
