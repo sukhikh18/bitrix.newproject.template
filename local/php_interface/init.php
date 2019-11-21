@@ -17,5 +17,6 @@ CModule::AddAutoloadClasses(
 );
 
 require_once $_SERVER["DOCUMENT_ROOT"] . $php_interface . "/constants.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . $php_interface . "/assets.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . $php_interface . "/functions.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . $php_interface . "/handlers.php";

@@ -23,7 +23,9 @@ if (function_exists('find_section')) {
     <title><? $APPLICATION->ShowTitle() ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php
+    enqueue_assets();
     enqueue_template_assets();
+    enqueue_page_assets();
 
     // BITRIX ->ShowHead()
     CJSCore::Init(array("fx"));
