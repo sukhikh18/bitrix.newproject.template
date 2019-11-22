@@ -177,11 +177,11 @@ h1 {
 
 @media screen and (min-width: 576.02px) {
   h1 {
-    font-size: calc(22px + 18 * (100vw - 576px) / 1104);
+    font-size: calc( 22px + 18 * (100vw - 576px) / 1104);
   }
 
   .sidebar__title {
-    font-size: calc(18px + 4 * (100vw - 576px) / 1104);
+    font-size: calc( 18px + 4 * (100vw - 576px) / 1104);
   }
 }
 
