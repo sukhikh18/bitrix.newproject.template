@@ -16,7 +16,7 @@ if( !function_exists('is_catalog') ) {
     function is_catalog() {
         global $APPLICATION;
 
-        return '/catalog/' === $APPLICATION->GetCurDir();
+        return PATH_TO_CATALOG === $APPLICATION->GetCurDir();
     }
 }
 
@@ -45,8 +45,7 @@ if( !function_exists('get_column_class') ) {
      * @return String
      */
     function get_column_class( $columns = 0, $less = false, $responsive = null ) {
-        if( null === $responsive )
-            $responsive = (defined( 'TPL_RESPONSIVE' ) && TPL_RESPONSIVE);
+        if( null === $responsive ) $responsive = (defined( 'TPL_RESPONSIVE' ) && TPL_RESPONSIVE);
 
         if( $responsive ) {
             switch ( strval($columns) ) {
@@ -104,11 +103,11 @@ if( !function_exists('find_section') ) {
         }
 
         if( "page" == $type ) {
-            $sFileName = "index_".$suffix.".php";
+            $sFileName = "index_$suffix.php";
         }
         else //if("sect" == $type)
         {
-            $sFileName = $type."_".$suffix.".php";
+            $sFileName = "$type_$suffix.php";
         }
 
         $path = $sFilePath.$sFileName;
