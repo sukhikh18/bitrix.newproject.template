@@ -5,8 +5,7 @@ use \Bitrix\Main\Config\Option;
 if( !defined('LOG_FILENAME') ) define("LOG_FILENAME", $_SERVER["DOCUMENT_ROOT"]."/debug.log");
 if( !defined('TPL_RESPONSIVE') ) define("TPL_RESPONSIVE", true);
 if( !defined('DEFAULT_CACHE_TIME') ) define('DEFAULT_CACHE_TIME', '36000000');
-if( !defined('SCRIPT_DEBUG') ) define('SCRIPT_DEBUG', "Y" === Option::get("main", "use_minified_assets"));
-
+if( !defined('SCRIPT_DEBUG') ) define('SCRIPT_DEBUG', "N" === Option::get("main", "use_minified_assets"));
 
 /**
  * IBLOCK IDs
