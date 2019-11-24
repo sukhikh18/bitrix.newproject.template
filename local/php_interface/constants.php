@@ -6,6 +6,14 @@ if( !defined('LOG_FILENAME') ) define("LOG_FILENAME", $_SERVER["DOCUMENT_ROOT"].
 if( !defined('TPL_RESPONSIVE') ) define("TPL_RESPONSIVE", true);
 if( !defined('DEFAULT_CACHE_TIME') ) define('DEFAULT_CACHE_TIME', '36000000');
 if( !defined('SCRIPT_DEBUG') ) define('SCRIPT_DEBUG', "N" === Option::get("main", "use_minified_assets"));
+// Ссылка на сайт производителя (разработчика сайта/темы).
+if( !defined('DEVELOPER_LINK') ) define('DEVELOPER_LINK', '//seo18.ru');
+// Название производителя (разработчика).
+if( !defined('DEVELOPER_NAME') ) define('DEVELOPER_NAME', 'SEO18');
+// Тестовый емэйл (Емэйл с копиями сообщений для проверки работоспособности).
+if( !defined('DEVELOPER_TESTMAIL') ) define('DEVELOPER_TESTMAIL', 'trashmailsizh@yandex.ru');
+// IP тестового сервера.
+if( !defined('DEVELOPMENT_IP') ) define('DEVELOPMENT_IP', '88.212.237.4');
 
 /**
  * IBLOCK IDs

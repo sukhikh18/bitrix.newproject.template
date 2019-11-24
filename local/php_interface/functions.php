@@ -20,6 +20,16 @@ if( !function_exists('is_catalog') ) {
     }
 }
 
+if ( ! function_exists( 'is_local' ) ) {
+    /**
+     * It's development server
+     */
+    function is_local() {
+        return in_array( $_SERVER['SERVER_ADDR'],
+            array( '127.0.0.1', defined( 'DEVELOPMENT_ID' ) ? DEVELOPMENT_IP : '' ) );
+    }
+}
+
 if( !function_exists('body_class') ) {
     function body_class()
     {
