@@ -102,7 +102,7 @@ if( ! function_exists('enqueue_page_assets')) {
 		$scriptPath = "$curDir/script{$min}.js";
 		if (file_exists(THEME . $scriptPath)) $Asset->addJs(TPL . $scriptPath);
 
-		$stylePath = "$curDir/style{$min}.js";
+		$stylePath = "$curDir/style{$min}.css";
 		if (file_exists(THEME . $stylePath)) $Asset->addCss(TPL . $stylePath);
 	}
 }
