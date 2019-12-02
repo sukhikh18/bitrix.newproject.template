@@ -52,16 +52,18 @@ $arSectionDeleteParams = array("CONFIRM" => GetMessage('CT_BCSL_ELEMENT_DELETE_C
             $count = $arParams["COUNT_ELEMENTS"] ? "<span>{$arSection['ELEMENT_CNT']}</span>" : '';
         ?>
 
-        <div class="section-item" id="<?= $this->GetEditAreaId($arSection['ID']); ?>">
-            <div class="section-item__prev">
-                <img src="<?= $arSection['PICTURE']['SRC'] ?>" alt="<?= $arSection['PICTURE']['ALT'] ?>">
+        <div class="section-item--column" id="<?= $this->GetEditAreaId($arSection['ID']); ?>">
+            <div class="section-item">
+                <div class="section-item__prev">
+                    <img src="<?= $arSection['PICTURE']['SRC'] ?>" alt="<?= $arSection['PICTURE']['ALT'] ?>">
+                </div>
+
+                <?php if ('Y' != $arParams['HIDE_SECTION_NAME']): ?>
+                    <h5 class="section-item__name"><?= $arSection['NAME']; ?><?= $count ?></h5>
+                <?php endif; ?>
+
+                <a href="<? echo $arSection['SECTION_PAGE_URL']; ?>" class="section-item__link"></a>
             </div>
-
-            <?php if ('Y' != $arParams['HIDE_SECTION_NAME']): ?>
-            <h5 class="section-item__name"><?= $arSection['NAME']; ?><?= $count ?></h5>
-            <?php endif; ?>
-
-            <a href="<? echo $arSection['SECTION_PAGE_URL']; ?>" class="section-item__link"></a>
         </div>
 
         <?php endforeach; unset($arSection); ?>

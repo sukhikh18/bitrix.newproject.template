@@ -1,0 +1,10 @@
+.breadcrumb--list {
+	display: flex;
+	overflow: auto;
+	white-space: nowrap;
+	margin-bottom: 1rem;
+}
+
+.breadcrumb__item {
+	margin-right: 0.3em;
+}
