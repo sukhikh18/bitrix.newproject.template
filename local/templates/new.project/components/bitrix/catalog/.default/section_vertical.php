@@ -78,9 +78,9 @@ if ($isFilter || $isSidebar): ?>
 		<?endif?>
 	</div>
 <?endif?>
-<div class="<?=(($isFilter || $isSidebar) ? "col-md-9 col-sm-8 col-sm-pull-4 col-md-pull-3" : "col-xs-12")?>">
+<div class="<?=(($isFilter || $isSidebar) ? "col-md-9 col-sm-8 col-sm-pull-4 col-md-pull-3" : "col-12")?>">
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-12">
 			<? /*
 			if (ModuleManager::isModuleInstalled("sale"))
 			{
@@ -201,7 +201,7 @@ if ($isFilter || $isSidebar): ?>
 			}
 			*/ ?>
 		</div>
-		<div class="col-xs-12">
+		<div class="col-12">
 			<?
 			$APPLICATION->IncludeComponent(
 				"bitrix:catalog.section.list",
@@ -387,7 +387,7 @@ if ($isFilter || $isSidebar): ?>
 				if (!isset($arParams['USE_BIG_DATA']) || $arParams['USE_BIG_DATA'] != 'N')
 				{
 					?>
-					<div class="col-xs-12" data-entity="parent-container">
+					<div class="col-12" data-entity="parent-container">
 						<div class="catalog-block-header" data-entity="header" data-showed="false" style="display: none; opacity: 0;">
 							<?=GetMessage('CATALOG_PERSONAL_RECOM')?>
 						</div>

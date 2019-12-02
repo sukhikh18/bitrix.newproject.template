@@ -21,7 +21,7 @@ if (isset($templateData['TEMPLATE_THEME']))
 {
 	$this->addExternalCss($templateData['TEMPLATE_THEME']);
 }
-$this->addExternalCss("/bitrix/css/main/bootstrap.css");
+// $this->addExternalCss("/bitrix/css/main/bootstrap.css");
 $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 ?>
 <div class="bx-filter <?=$templateData["TEMPLATE_CLASS"]?> <?if ($arParams["FILTER_VIEW_MODE"] == "HORIZONTAL") echo "bx-filter-horizontal"?>">
@@ -65,7 +65,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 							<div class="bx-filter-parameters-box-title" onclick="smartFilter.hideFilterProps(this)"><span><?=$arItem["NAME"]?> <i data-role="prop_angle" class="fa fa-angle-<?if ($arItem["DISPLAY_EXPANDED"]== "Y"):?>up<?else:?>down<?endif?>"></i></span></div>
 							<div class="bx-filter-block" data-role="bx_filter_block">
 								<div class="row bx-filter-parameters-box-container">
-									<div class="col-xs-6 bx-filter-parameters-box-container-block bx-left">
+									<div class="col-6 bx-filter-parameters-box-container-block bx-left">
 										<i class="bx-ft-sub"><?=GetMessage("CT_BCSF_FILTER_FROM")?></i>
 										<div class="bx-filter-input-container">
 											<input
@@ -79,7 +79,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 											/>
 										</div>
 									</div>
-									<div class="col-xs-6 bx-filter-parameters-box-container-block bx-right">
+									<div class="col-6 bx-filter-parameters-box-container-block bx-right">
 										<i class="bx-ft-sub"><?=GetMessage("CT_BCSF_FILTER_TO")?></i>
 										<div class="bx-filter-input-container">
 											<input
@@ -94,7 +94,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 										</div>
 									</div>
 
-									<div class="col-xs-10 col-xs-offset-1 bx-ui-slider-track-container">
+									<div class="col-10 col-offset-1 bx-ui-slider-track-container">
 										<div class="bx-ui-slider-track" id="drag_track_<?=$key?>">
 											<?for($i = 0; $i <= $step_num; $i++):?>
 											<div class="bx-ui-slider-part p<?=$i+1?>"><span><?=$prices[$i]?></span></div>
@@ -187,7 +187,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 							{
 								case "A"://NUMBERS_WITH_SLIDER
 									?>
-									<div class="col-xs-6 bx-filter-parameters-box-container-block bx-left">
+									<div class="col-6 bx-filter-parameters-box-container-block bx-left">
 										<i class="bx-ft-sub"><?=GetMessage("CT_BCSF_FILTER_FROM")?></i>
 										<div class="bx-filter-input-container">
 											<input
@@ -201,7 +201,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 											/>
 										</div>
 									</div>
-									<div class="col-xs-6 bx-filter-parameters-box-container-block bx-right">
+									<div class="col-6 bx-filter-parameters-box-container-block bx-right">
 										<i class="bx-ft-sub"><?=GetMessage("CT_BCSF_FILTER_TO")?></i>
 										<div class="bx-filter-input-container">
 											<input
@@ -216,7 +216,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 										</div>
 									</div>
 
-									<div class="col-xs-10 col-xs-offset-1 bx-ui-slider-track-container">
+									<div class="col-10 col-offset-1 bx-ui-slider-track-container">
 										<div class="bx-ui-slider-track" id="drag_track_<?=$key?>">
 											<?
 											$precision = $arItem["DECIMALS"]? $arItem["DECIMALS"]: 0;
@@ -271,7 +271,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 									break;
 								case "B"://NUMBERS
 									?>
-									<div class="col-xs-6 bx-filter-parameters-box-container-block bx-left">
+									<div class="col-6 bx-filter-parameters-box-container-block bx-left">
 										<i class="bx-ft-sub"><?=GetMessage("CT_BCSF_FILTER_FROM")?></i>
 										<div class="bx-filter-input-container">
 											<input
@@ -285,7 +285,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 												/>
 										</div>
 									</div>
-									<div class="col-xs-6 bx-filter-parameters-box-container-block bx-right">
+									<div class="col-6 bx-filter-parameters-box-container-block bx-right">
 										<i class="bx-ft-sub"><?=GetMessage("CT_BCSF_FILTER_TO")?></i>
 										<div class="bx-filter-input-container">
 											<input
@@ -303,7 +303,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 									break;
 								case "G"://CHECKBOXES_WITH_PICTURES
 									?>
-									<div class="col-xs-12">
+									<div class="col-12">
 										<div class="bx-filter-param-btn-inline">
 										<?foreach ($arItem["VALUES"] as $val => $ar):?>
 											<input
@@ -335,7 +335,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 									break;
 								case "H"://CHECKBOXES_WITH_PICTURES_AND_LABELS
 									?>
-									<div class="col-xs-12">
+									<div class="col-12">
 										<div class="bx-filter-param-btn-block">
 										<?foreach ($arItem["VALUES"] as $val => $ar):?>
 											<input
@@ -372,7 +372,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 								case "P"://DROPDOWN
 									$checkedItemExist = false;
 									?>
-									<div class="col-xs-12">
+									<div class="col-12">
 										<div class="bx-filter-select-container">
 											<div class="bx-filter-select-block" onclick="smartFilter.showDropDownPopup(this, '<?=CUtil::JSEscape($key)?>')">
 												<div class="bx-filter-select-text" data-role="currentOption">
@@ -437,7 +437,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 									break;
 								case "R"://DROPDOWN_WITH_PICTURES_AND_LABELS
 									?>
-									<div class="col-xs-12">
+									<div class="col-12">
 										<div class="bx-filter-select-container">
 											<div class="bx-filter-select-block" onclick="smartFilter.showDropDownPopup(this, '<?=CUtil::JSEscape($key)?>')">
 												<div class="bx-filter-select-text fix" data-role="currentOption">
@@ -518,7 +518,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 									break;
 								case "K"://RADIO_BUTTONS
 									?>
-									<div class="col-xs-12">
+									<div class="col-12">
 										<div class="radio">
 											<label class="bx-filter-param-label" for="<? echo "all_".$arCur["CONTROL_ID"] ?>">
 												<span class="bx-filter-input-checkbox">
@@ -558,7 +558,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 									break;
 								case "U"://CALENDAR
 									?>
-									<div class="col-xs-12">
+									<div class="col-12">
 										<div class="bx-filter-parameters-box-container-block"><div class="bx-filter-input-container bx-filter-calendar-container">
 											<?$APPLICATION->IncludeComponent(
 												'bitrix:main.calendar',
@@ -598,7 +598,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 									break;
 								default://CHECKBOXES
 									?>
-									<div class="col-xs-12">
+									<div class="col-12">
 										<?foreach($arItem["VALUES"] as $val => $ar):?>
 											<div class="checkbox">
 												<label data-role="label_<?=$ar["CONTROL_ID"]?>" class="bx-filter-param-label <? echo $ar["DISABLED"] ? 'disabled': '' ?>" for="<? echo $ar["CONTROL_ID"] ?>">
@@ -632,7 +632,7 @@ $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 				?>
 			</div><!--//row-->
 			<div class="row">
-				<div class="col-xs-12 bx-filter-button-box">
+				<div class="col-12 bx-filter-button-box">
 					<div class="bx-filter-block">
 						<div class="bx-filter-parameters-box-container">
 							<input

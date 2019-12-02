@@ -25,39 +25,43 @@ use \Bitrix\Main\Localization\Loc;
 ?>
 
 <div class="product-item">
-    <div class="product-item__image" id="<?= $itemIds['PICT'] ?>">
-        <a
+    <div class="product-item__preview">
+        <div class="product-item__image" id="<?= $itemIds['PICT'] ?>">
+            <a
                 class="product-item__image-link"
                 href="<?= $item['DETAIL_PAGE_URL'] ?>"
                 title="<?= $imgTitle ?>"
                 data-entity="image-wrapper">
-            <?php printf('<img src="%s" alt="">', $item['PREVIEW_PICTURE']['SRC']); ?>
-        </a>
+                <img src="<?= $item['PREVIEW_PICTURE']['SRC'] ?>">
+            </a>
+        </div>
+
+        <?php if ($item['SECOND_PICT']): $src = !empty($item['PREVIEW_PICTURE_SECOND']) ?
+                $item['PREVIEW_PICTURE_SECOND']['SRC'] : $item['PREVIEW_PICTURE']['SRC']; ?>
+        <div class="product-item__image second" id="<?= $itemIds['SECOND_PICT'] ?>">
+            <a
+                class="product-item__image-link"
+                href="<?= $item['DETAIL_PAGE_URL'] ?>"
+                title="<?= $imgTitle ?>"
+                data-entity="image-wrapper">
+                <img src="<?= $src ?>">
+            </a>
+        </div>
+        <?php endif; ?>
     </div>
 
     <div class="product-item__content">
-
-        <? /*
-	if ($item['SECOND_PICT'])
-	{
-		$bgImage = !empty($item['PREVIEW_PICTURE_SECOND']) ?
-			$item['PREVIEW_PICTURE_SECOND']['SRC'] : $item['PREVIEW_PICTURE']['SRC'];
-		?>
-		<span class="product-item-image-alternative" id="<?=$itemIds['SECOND_PICT']?>"
-			style="background-image: url('<?=$bgImage?>'); display: <?=($showSlider ? 'none' : '')?>;">
-		</span>
-		<?
-	}*/
+        <?
 
         if ($arParams['SHOW_DISCOUNT_PERCENT'] === 'Y') {
             ?>
             <div
-                    class="product-item_label-ring <?= $discountPositionClass ?>"
-                    id="<?= $itemIds['DSC_PERC'] ?>"
-                    style="display: <?= ($price['PERCENT'] > 0 ? '' : 'none') ?>;">
+                class="product-item_label-ring <?= $discountPositionClass ?>"
+                id="<?= $itemIds['DSC_PERC'] ?>"
+                style="display: <?= ($price['PERCENT'] > 0 ? '' : 'none') ?>;">
                 <span><?= -$price['PERCENT'] ?>%</span>
             </div>
-            <?
+            <?php
         }
 
         if ($item['LABEL']) {
@@ -75,7 +79,7 @@ use \Bitrix\Main\Localization\Loc;
                 }
                 ?>
             </div>
-            <?
+            <?php
         }
         ?>
 
@@ -83,8 +87,8 @@ use \Bitrix\Main\Localization\Loc;
             <a href="<?= $item['DETAIL_PAGE_URL'] ?>" title="<?= $productTitle ?>"><?= $productTitle ?></a>
         </h4>
 
-        <?
-        if (false && ! empty($arParams['PRODUCT_BLOCKS_ORDER'])) {
+        <?php
+        if ( ! empty($arParams['PRODUCT_BLOCKS_ORDER'])) {
             foreach ($arParams['PRODUCT_BLOCKS_ORDER'] as $blockName) {
                 switch ($blockName) {
                     case 'price': ?>
@@ -242,7 +246,7 @@ use \Bitrix\Main\Localization\Loc;
                                 if ($actualItem['CAN_BUY']) {
                                     ?>
                                     <div class="product-item-button-container" id="<?= $itemIds['BASKET_ACTIONS'] ?>">
-                                        <a class="btn btn-default <?= $buttonSizeClass ?>"
+                                        <a class="btn btn-primary <?= $buttonSizeClass ?>"
                                            id="<?= $itemIds['BUY_LINK'] ?>"
                                            href="javascript:void(0)" rel="nofollow">
                                             <?= ($arParams['ADD_TO_BASKET_ACTION'] === 'BUY' ? $arParams['MESS_BTN_BUY'] : $arParams['MESS_BTN_ADD_TO_BASKET']) ?>
@@ -260,7 +264,7 @@ use \Bitrix\Main\Localization\Loc;
                                                 array(
                                                     'PRODUCT_ID'         => $actualItem['ID'],
                                                     'BUTTON_ID'          => $itemIds['SUBSCRIBE_LINK'],
-                                                    'BUTTON_CLASS'       => 'btn btn-default ' . $buttonSizeClass,
+                                                    'BUTTON_CLASS'       => 'btn btn-primary ' . $buttonSizeClass,
                                                     'DEFAULT_DISPLAY'    => true,
                                                     'MESS_BTN_SUBSCRIBE' => $arParams['~MESS_BTN_SUBSCRIBE'],
                                                 ),
@@ -289,7 +293,7 @@ use \Bitrix\Main\Localization\Loc;
                                                 array(
                                                     'PRODUCT_ID'         => $item['ID'],
                                                     'BUTTON_ID'          => $itemIds['SUBSCRIBE_LINK'],
-                                                    'BUTTON_CLASS'       => 'btn btn-default ' . $buttonSizeClass,
+                                                    'BUTTON_CLASS'       => 'btn btn-primary ' . $buttonSizeClass,
                                                     'DEFAULT_DISPLAY'    => ! $actualItem['CAN_BUY'],
                                                     'MESS_BTN_SUBSCRIBE' => $arParams['~MESS_BTN_SUBSCRIBE'],
                                                 ),
@@ -306,7 +310,7 @@ use \Bitrix\Main\Localization\Loc;
                                         </a>
                                         <div id="<?= $itemIds['BASKET_ACTIONS'] ?>"
                                              style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
-                                            <a class="btn btn-default <?= $buttonSizeClass ?>"
+                                            <a class="btn btn-primary <?= $buttonSizeClass ?>"
                                                id="<?= $itemIds['BUY_LINK'] ?>"
                                                href="javascript:void(0)" rel="nofollow">
                                                 <?= ($arParams['ADD_TO_BASKET_ACTION'] === 'BUY' ? $arParams['MESS_BTN_BUY'] : $arParams['MESS_BTN_ADD_TO_BASKET']) ?>
@@ -317,7 +321,7 @@ use \Bitrix\Main\Localization\Loc;
                                 } else {
                                     ?>
                                     <div class="product-item-button-container">
-                                        <a class="btn btn-default <?= $buttonSizeClass ?>"
+                                        <a class="btn btn-primary <?= $buttonSizeClass ?>"
                                            href="<?= $item['DETAIL_PAGE_URL'] ?>">
                                             <?= $arParams['MESS_BTN_DETAIL'] ?>
                                         </a>
