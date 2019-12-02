@@ -16,5 +16,10 @@
 
 .product-item__title, .product-item__title a {
 	font-size: 1rem;
+}
+
+.product-item__title {
+	overflow: auto;
+	height: 2.75em;
 	padding: 0.25em 0;
 }
