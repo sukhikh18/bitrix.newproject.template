@@ -14,7 +14,7 @@ use \Bitrix\Main\Localization\Loc;
  */
 
 $this->setFrameMode(true);
-$this->addExternalCss('/bitrix/css/main/bootstrap.css');
+// $this->addExternalCss('/bitrix/css/main/bootstrap.css');
 
 $templateLibrary = array('popup', 'fx');
 $currencyList = '';
@@ -165,7 +165,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 		{
 			?>
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-12">
 					<h1 class="bx-title"><?=$name?></h1>
 				</div>
 			</div>
@@ -748,7 +748,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-12">
 				<?
 				if ($haveOffers)
 				{
@@ -816,7 +816,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 		<div class="row">
 			<div class="col-sm-8 col-md-9">
 				<div class="row" id="<?=$itemIds['TABS_ID']?>">
-					<div class="col-xs-12">
+					<div class="col-12">
 						<div class="product-item-detail-tabs-container">
 							<ul class="product-item-detail-tabs-list">
 								<?
@@ -858,7 +858,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 					</div>
 				</div>
 				<div class="row" id="<?=$itemIds['TAB_CONTAINERS_ID']?>">
-					<div class="col-xs-12">
+					<div class="col-12">
 						<?
 						if ($showDescription)
 						{
@@ -1012,7 +1012,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-12">
 				<?
 				if ($arResult['CATALOG'] && $actualItem['CAN_BUY'] && \Bitrix\Main\ModuleManager::isModuleInstalled('sale'))
 				{

@@ -29,10 +29,10 @@ else
 $isSidebar = ($arParams['SIDEBAR_DETAIL_SHOW'] == 'Y' && !empty($arParams['SIDEBAR_PATH']));
 ?>
 <div class='row'>
-	<div class='<?=($isSidebar ? 'col-md-9 col-sm-8' : 'col-xs-12')?>'>
+	<div class='<?=($isSidebar ? 'col-md-9 col-sm-8' : 'col-12')?>'>
 		<?
 		if ($arParams["USE_COMPARE"] === "Y")
-		{
+		{/*
 			$APPLICATION->IncludeComponent(
 				"bitrix:catalog.compare.list",
 				"",
@@ -50,7 +50,7 @@ $isSidebar = ($arParams['SIDEBAR_DETAIL_SHOW'] == 'Y' && !empty($arParams['SIDEB
 				$component,
 				array("HIDE_ICONS" => "Y")
 			);
-		}
+		*/}
 
 		$componentElementParams = array(
 			'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
@@ -327,10 +327,10 @@ $isSidebar = ($arParams['SIDEBAR_DETAIL_SHOW'] == 'Y' && !empty($arParams['SIDEB
 			if (!empty($recommendedData))
 			{
 				if (!empty($recommendedData['IBLOCK_LINK']) || !empty($recommendedData['ALL_LINK']))
-				{
+				{/*
 					?>
 					<div class='row'>
-						<div class='col-xs-12' data-entity="parent-container">
+						<div class='col-12' data-entity="parent-container">
 							<div class="catalog-block-header" data-entity="header" data-showed="false" style="display: none; opacity: 0;">
 								<?=GetMessage('CATALOG_RECOMMENDED_BY_LINK')?>
 							</div>
@@ -429,13 +429,13 @@ $isSidebar = ($arParams['SIDEBAR_DETAIL_SHOW'] == 'Y' && !empty($arParams['SIDEB
 						</div>
 					</div>
 					<?
-				}
+				*/}
 
 				if (!isset($arParams['DETAIL_SHOW_POPULAR']) || $arParams['DETAIL_SHOW_POPULAR'] != 'N')
 				{
 					?>
 					<div class='row'>
-						<div class='col-xs-12' data-entity="parent-container">
+						<div class='col-12' data-entity="parent-container">
 							<div class="catalog-block-header" data-entity="header" data-showed="false" style="display: none; opacity: 0;">
 								<?=GetMessage('CATALOG_POPULAR_IN_SECTION')?>
 							</div>
@@ -568,7 +568,7 @@ $isSidebar = ($arParams['SIDEBAR_DETAIL_SHOW'] == 'Y' && !empty($arParams['SIDEB
 				{
 					?>
 					<div class='row'>
-						<div class='col-xs-12' data-entity="parent-container">
+						<div class='col-12' data-entity="parent-container">
 							<div class="catalog-block-header" data-entity="header" data-showed="false" style="display: none; opacity: 0;">
 								<?=GetMessage('CATALOG_VIEWED')?>
 							</div>
