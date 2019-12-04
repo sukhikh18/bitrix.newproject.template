@@ -14,11 +14,12 @@
 	object-position: center;
 }
 
-.product-item__title, .product-item__title a {
+.product-item__name, .product-item__name a {
 	font-size: 1rem;
+	color: #000;
 }
 
-.product-item__title {
+.product-item__name {
 	overflow: auto;
 	height: 2.75em;
 	padding: 0.25em 0;

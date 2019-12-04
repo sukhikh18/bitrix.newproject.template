@@ -83,7 +83,7 @@ use \Bitrix\Main\Localization\Loc;
         }
         ?>
 
-        <h4 class="product-item__title">
+        <h4 class="product-item__name">
             <a href="<?= $item['DETAIL_PAGE_URL'] ?>" title="<?= $productTitle ?>"><?= $productTitle ?></a>
         </h4>
 
