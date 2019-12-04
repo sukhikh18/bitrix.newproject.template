@@ -37,7 +37,7 @@ $rowItemsCount = count($rowItems);
 		for ($i = 0; $i < $rowItemsCount - 1; $i++)
 		{
 			?>
-			<div class="col-xs-6">
+			<div class="col-6">
 				<?
 				$APPLICATION->IncludeComponent(
 					'bitrix:catalog.item',

@@ -37,12 +37,12 @@ if ($haveOffers) {
 ?>
 
 <div class="row product-item">
-    <div class="col-xs-12">
+    <div class="col-12">
         <div class="product-item-title">
             <a href="<?= $item['DETAIL_PAGE_URL'] ?>" title="<?= $productTitle ?>"><?= $productTitle ?></a>
         </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2">
+    <div class="col-12 col-sm-6 col-md-3 col-lg-2">
         <a class="product-item-image-wrapper" href="<?= $item['DETAIL_PAGE_URL'] ?>" title="<?= $imgTitle ?>"
            data-entity="image-wrapper">
 			<span class="product-item-image-slider-slide-container slide" id="<?= $itemIds['PICT_SLIDER'] ?>"
@@ -129,7 +129,7 @@ if ($haveOffers) {
     if ( ! $haveOffers) {
         if ($showPropsBlock) {
             ?>
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-7">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-7">
                 <?
                 if ($showDisplayProps) {
                     ?>
@@ -230,7 +230,7 @@ if ($haveOffers) {
     } else {
         if ($showPropsBlock) {
             ?>
-            <div class="col-xs-12 col-sm-6 <?= ($showSkuBlock ? 'col-md-4 col-lg-5' : 'col-md-6 col-lg-7') ?>">
+            <div class="col-12 col-sm-6 <?= ($showSkuBlock ? 'col-md-4 col-lg-5' : 'col-md-6 col-lg-7') ?>">
                 <div class="product-item-info-container" data-entity="props-block">
                     <dl class="product-item-properties">
                         <?
@@ -263,7 +263,7 @@ if ($haveOffers) {
 
         if ($showSkuBlock) {
             ?>
-            <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2<?= ($showPropsBlock ? '' : ' col-md-offset-4 col-lg-offset-5') ?>">
+            <div class="col-12 col-sm-6 col-md-2 col-lg-2<?= ($showPropsBlock ? '' : ' col-md-offset-4 col-lg-offset-5') ?>">
                 <div id="<?= $itemIds['PROP_DIV'] ?>">
                     <?
                     foreach ($arParams['SKU_PROPS'] as $skuProperty) {
@@ -364,7 +364,7 @@ if ($haveOffers) {
         }
     }
     ?>
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3<?= ($showPropsBlock || $showSkuBlock ? '' : ' col-md-offset-6 col-lg-offset-7') ?>">
+    <div class="col-12 col-sm-6 col-md-3 col-lg-3<?= ($showPropsBlock || $showSkuBlock ? '' : ' col-md-offset-6 col-lg-offset-7') ?>">
         <div class="product-line-item-info-right-container">
             <?
             foreach ($arParams['PRODUCT_BLOCKS_ORDER'] as $blockName) {

@@ -1,4 +1,4 @@
-<div class="col-xs-12 product-item-small-card">
+<div class="col-12 product-item-small-card">
 	<div class="row">
 		<?
 		foreach ($rowItems as $item)

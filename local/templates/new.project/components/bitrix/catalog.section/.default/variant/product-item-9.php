@@ -1,10 +1,10 @@
-<div class="col-xs-12">
+<div class="col-12">
 	<div class="row">
 		<?
 		foreach ($rowItems as $item)
 		{
 			?>
-			<div class="col-xs-12 product-item-line-card">
+			<div class="col-12 product-item-line-card">
 				<?
 				$APPLICATION->IncludeComponent(
 					'bitrix:catalog.item',

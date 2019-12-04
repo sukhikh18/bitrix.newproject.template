@@ -1,10 +1,10 @@
-<div class="col-xs-12 product-item-small-card">
+<div class="col-12 product-item-small-card">
 	<div class="row">
 		<?
 		foreach ($rowItems as $item)
 		{
 			?>
-			<div class="col-xs-6 product-item-big-card">
+			<div class="col-6 product-item-big-card">
 				<div class="row">
 					<div class="col-md-12">
 						<?
