@@ -165,14 +165,6 @@ if ($showTopPager)
 	<?
 }
 
-if ($arParams['HIDE_SECTION_DESCRIPTION'] !== 'Y')
-{
-	?>
-	<div class="bx-section-desc bx-<?=$arParams['TEMPLATE_THEME']?>">
-		<p class="bx-section-desc-post"><?=$arResult['DESCRIPTION']?></p>
-	</div>
-	<?
-}
 ?>
 
 <div class="catalog-section bx-<?=$arParams['TEMPLATE_THEME']?>" data-entity="<?=$containerName?>">
@@ -223,7 +215,17 @@ if ($arParams['HIDE_SECTION_DESCRIPTION'] !== 'Y')
 	}
 	?>
 </div>
-<?
+<?php
+
+if ($arParams['HIDE_SECTION_DESCRIPTION'] !== 'Y')
+{
+	?>
+	<div class="bx-section-desc bx-<?=$arParams['TEMPLATE_THEME']?>">
+		<p class="bx-section-desc-post"><?=$arResult['DESCRIPTION']?></p>
+	</div>
+	<?
+}
+
 if ($showLazyLoad)
 {
 	?>
