@@ -25,8 +25,9 @@ if (isset($templateData['TEMPLATE_THEME']))
 $this->addExternalCss("/bitrix/css/main/font-awesome.css");
 ?>
 <div class="bx-filter <?=$templateData["TEMPLATE_CLASS"]?> <?if ($arParams["FILTER_VIEW_MODE"] == "HORIZONTAL") echo "bx-filter-horizontal"?>">
-	<div class="bx-filter-section container-fluid">
-		<div class="row"><div class="<?if ($arParams["FILTER_VIEW_MODE"] == "HORIZONTAL"):?>col-sm-6 col-md-4<?else:?>col-lg-12<?endif?> bx-filter-title"><?echo GetMessage("CT_BCSF_FILTER_TITLE")?></div></div>
+	<div class="bx-filter-section">
+		<div class="bx-filter-title"><?= GetMessage("CT_BCSF_FILTER_TITLE")?></div>
+
 		<form name="<?echo $arResult["FILTER_NAME"]."_form"?>" action="<?echo $arResult["FORM_ACTION"]?>" method="get" class="smartfilter">
 			<?foreach($arResult["HIDDEN"] as $arItem):?>
 			<input type="hidden" name="<?echo $arItem["CONTROL_NAME"]?>" id="<?echo $arItem["CONTROL_ID"]?>" value="<?echo $arItem["HTML_VALUE"]?>" />
