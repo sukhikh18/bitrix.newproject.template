@@ -12,20 +12,9 @@
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
 
-$templateData = array(
-	'TEMPLATE_THEME' => $this->GetFolder().'/themes/'.$arParams['TEMPLATE_THEME'].'/colors.css',
-	'TEMPLATE_CLASS' => 'bx-'.$arParams['TEMPLATE_THEME']
-);
-
-if (isset($templateData['TEMPLATE_THEME']))
-{
-	$this->addExternalCss($templateData['TEMPLATE_THEME']);
-}
-// $this->addExternalCss("/bitrix/css/main/bootstrap.css");
-$this->addExternalCss("/bitrix/css/main/font-awesome.css");
 ?>
-<div class="bx-filter <?=$templateData["TEMPLATE_CLASS"]?> <?if ($arParams["FILTER_VIEW_MODE"] == "HORIZONTAL") echo "bx-filter-horizontal"?>">
-	<div class="bx-filter-section">
+<div class="bx-filter<?if ($arParams["FILTER_VIEW_MODE"] == "HORIZONTAL") echo " bx-filter-horizontal"?>">
+	<div class="bx-filter-section container-fluid">
 		<div class="bx-filter-title"><?= GetMessage("CT_BCSF_FILTER_TITLE")?></div>
 
 		<form name="<?echo $arResult["FILTER_NAME"]."_form"?>" action="<?echo $arResult["FORM_ACTION"]?>" method="get" class="smartfilter">
