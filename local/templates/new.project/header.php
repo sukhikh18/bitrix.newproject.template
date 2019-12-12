@@ -157,12 +157,8 @@ if (function_exists('find_section')) {
         </section>
     <? endif ?>
 
-    <div id="content" class="site-content <?
-    $APPLICATION->ShowProperty("container-class", "container");
-    if (is_front_page()) {
-        echo '-fluid';
-    }
+    <div id="content" class="site-content <?php
+        if ( ! is_front_page()) {
+            $APPLICATION->ShowProperty("container-class", "container");
+        }
     ?>">
-        <div class="row">
-            <main id="primary" class="main content <? $APPLICATION->ShowProperty("content-class", 'col-12'); ?>"
-                  role="main">
