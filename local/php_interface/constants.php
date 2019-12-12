@@ -2,9 +2,9 @@
 
 use \Bitrix\Main\Config\Option;
 
+// Куда сохранять лог ошибок функцией AddMessage2Log (D7: Bitrix\Main\Diag\Debug::dumpToFile).
 if( !defined('LOG_FILENAME') ) define("LOG_FILENAME", $_SERVER["DOCUMENT_ROOT"]."/debug.log");
-if( !defined('TPL_RESPONSIVE') ) define("TPL_RESPONSIVE", true);
-if( !defined('DEFAULT_CACHE_TIME') ) define('DEFAULT_CACHE_TIME', '36000000');
+// Подключать полные версии стилей и скриптов вместо сжатых.
 if( !defined('SCRIPT_DEBUG') ) define('SCRIPT_DEBUG', "N" === Option::get("main", "use_minified_assets"));
 // Ссылка на сайт производителя (разработчика сайта/темы).
 if( !defined('DEVELOPER_LINK') ) define('DEVELOPER_LINK', '//seo18.ru');
@@ -16,16 +16,15 @@ if( !defined('DEVELOPER_TESTMAIL') ) define('DEVELOPER_TESTMAIL', 'trashmailsizh
 if( !defined('DEVELOPMENT_IP') ) define('DEVELOPMENT_IP', '88.212.237.4');
 
 /**
- * IBLOCK IDs
+ * IBlocks
  */
 define("IBLOCK_ID__NEWS", 1);
-define("IBLOCK_ID__ARTICLES", 2);
-define("IBLOCK_TYPE__CATALOG", 'catalog');
+define("IBLOCK_ID__CATALOG", 2);
 
 /**
- * PATHS
+ * PATHS (Не использовать в SEF настройках компонентов, испортит .urlrewrite)
  */
-define('PATH_TO_CATALOG', '/catalog/');
+define('PATH_TO_CATALOG', '/shop/');
 
 define('PATH_TO_AUTH',            '/auth/');
 define('PATH_TO_REGISTER',        PATH_TO_AUTH . '?register=yes');
