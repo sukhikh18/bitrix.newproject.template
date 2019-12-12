@@ -18,16 +18,15 @@ $strSectionDelete      = CIBlock::GetArrayByID($arParams["IBLOCK_ID"], "SECTION_
 $arSectionDeleteParams = array("CONFIRM" => GetMessage('CT_BCSL_ELEMENT_DELETE_CONFIRM'));
 
 ?>
-<div class="catalog-section-list">
+<section class="catalog-section-list">
     <?php // parent name.
     if ('Y' == $arParams['SHOW_PARENT_NAME'] && 0 < $arResult['SECTION']['ID']) :
         $this->AddEditAction($arResult['SECTION']['ID'], $arResult['SECTION']['EDIT_LINK'], $strSectionEdit);
         $this->AddDeleteAction($arResult['SECTION']['ID'], $arResult['SECTION']['DELETE_LINK'], $strSectionDelete,
             $arSectionDeleteParams);
         ?>
-        <h1 class="catalog-section-list__title" id="<? echo $this->GetEditAreaId($arResult['SECTION']['ID']); ?>">
-            <a href="<? echo $arResult['SECTION']['SECTION_PAGE_URL']; ?>"><?= $arResult['PARENT_SECTION_NAME'] ?></a>
-        </h1>
+        <?php // link himself: <!-- <a href="<? echo $arResult['SECTION']['SECTION_PAGE_URL']; ? >"></a> --> ?>
+        <h1 class="catalog-section-list__title" id="<? echo $this->GetEditAreaId($arResult['SECTION']['ID']); ?>"><?= $arResult['PARENT_SECTION_NAME'] ?></h1>
     <?php endif; ?>
 
     <?php if (0 < $arResult["SECTIONS_COUNT"]): ?>
@@ -69,4 +68,4 @@ $arSectionDeleteParams = array("CONFIRM" => GetMessage('CT_BCSL_ELEMENT_DELETE_C
         <?php endforeach; unset($arSection); ?>
     </div>
     <? endif; ?>
-</div>
+</section><!-- .catalog-section-list -->

@@ -452,11 +452,11 @@
 
 .bx-touch .product-item-title,
 .product-item-container.hover .product-item-title {
-	overflow: auto;
+	overflow: visible;
 	white-space: normal;
 }
 
-.product-item-title a {
+.product-item-title a, .product-item-title a:hover, .product-item-title a:focus {
 	color: #3f3f3f;
 	text-decoration: none;
 	transition: 250ms linear all;
@@ -467,9 +467,7 @@
 	text-align: left;
 }
 
-.product-item-big-card .product-item-title a { font-size: 21px; }
-
-.product-item-line-card .product-item-title a { font-size: 20px; }
+.product-item-big-card .product-item-title a { font-size: 1.125rem; }
 
 @media (max-width: 1199px) {
 	.product-item-big-card .product-item-title a { font-size: 18px; }

@@ -12,6 +12,7 @@
 
 .section-item {
 	position: relative;
+	border: 2px solid #ccc;
 }
 
 .section-item__prev img {
@@ -63,6 +64,12 @@
 		max-width: 25%;
 	}
 
+	/** With sidebar */
+	.bx-sidebar-block + .bx-main-block .row > .section-item--column {
+		flex: 1 1 33.3332%;
+		max-width: 33.3332%;
+	}
+
 	.section-item__prev img {
 		height: 200px;
 	}
@@ -71,3 +78,4 @@
 		font-size: 1.25rem;
 	}
 }
+
