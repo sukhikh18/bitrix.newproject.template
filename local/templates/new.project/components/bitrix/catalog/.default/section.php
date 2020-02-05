@@ -75,6 +75,17 @@ else
 	$basketAction = isset($arParams['SECTION_ADD_TO_BASKET_ACTION']) ? $arParams['SECTION_ADD_TO_BASKET_ACTION'] : '';
 }
 
+$arResult['CURRENT_SECTION'] = SectionTable::getList(array(
+	'select' => array('ID', 'NAME'),
+	"filter" => array(
+		"IBLOCK_ID" => $arParams['IBLOCK_ID'],
+		"IBLOCK_SECTION_ID" => $arResult['VARIABLES']['SECTION_ID'],
+	)
+))->fetch();
+
+?>
+<h1 class="current-section-title"><?= $arResult['CURRENT_SECTION']['NAME'] ?></h1>
+
 ?>
 <div class="row">
 	<?php if ($isFilter || $isSidebar): ?>
