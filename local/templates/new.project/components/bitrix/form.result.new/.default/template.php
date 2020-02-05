@@ -3,10 +3,14 @@
 use Bitrix\Main\Context;
 
 $isAjax = function() use ( $arParams ) {
+    $context = Context::getCurrent();
     /** @var Bitrix\Main\Server */
-    $server = Context::getCurrent()->getServer();
+    $server = $context->getServer();
+    /** @var Bitrix\Main\Request */
+    $request = $context->getRequest();
 
     if( 'xmlhttprequest' === strtolower( $server->get( 'HTTP_X_REQUESTED_WITH' ) ) ) return true;
+    if('Y' === $request->get('is_ajax')) return true;
     if( isset($arParams['IS_AJAX']) && 'Y' == $arParams['IS_AJAX'] ) return true;
 
     return false;
@@ -24,8 +28,15 @@ elseif( !empty($_REQUEST['formresult']) && 'addok' === $_REQUEST['formresult'] )
     $message = '<div class="success-msg"><p class="text-success">' . $arParams['SUCCESS_MESSAGE'] . '</p></div>';
 }
 
-echo $message;
-if( $message && $isAjax() ) return;
+if( $message && $isAjax() ) {
+    $APPLICATION->RestartBuffer();
+    echo $message;
+    $APPLICATION->FinalActions();
+    die();
+}
+else {
+    echo '<div class="messages">' . $message . '</div>';
+}
 
 ?>
 <? if ($arResult["isFormImage"] == "Y"): ?>
@@ -94,3 +105,58 @@ if ('BOTTOM' == $arParams['SHOW_DESCRIPTION']) {
 }
 ?>
 <?= $arResult["FORM_FOOTER"]; ?>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        /**
+         * Serialize form data with files
+         *
+         * @param  [jQueryObject] $form form for serialize.
+         * @return [FormData]
+         */
+        var serializeForm = function( $form ) {
+            var formData = new FormData();
+
+            // Append form data.
+            var params = $form.serializeArray();
+            $.each(params, function (i, val) {
+                formData.append(val.name, val.value);
+            });
+
+            // Append files.
+            $.each($form.find("input[type='file']"), function(i, tag) {
+                $.each($(tag)[0].files, function(i, file) {
+                    formData.append(tag.name, file);
+                });
+            });
+
+            // Append is ajax mark.
+            formData.append('is_ajax', 'Y');
+
+            return formData;
+        };
+
+        var $form = $('form[name="<?= $arResult['arForm']['SID'] ?>"]'),
+            $messages = $form.find('.messages');
+
+        $form.on('submit', function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $form.attr('action'),
+                type: $form.attr('method'),
+                dataType: 'HTML',
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: serializeForm($form)
+            })
+                .done(function(response) {
+                    $messages.html( response );
+                })
+                .fail(function(response) {
+                    console.log( response );
+                })
+        });
+    });
+</script>
