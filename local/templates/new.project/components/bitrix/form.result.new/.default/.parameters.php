@@ -20,4 +20,9 @@ $arTemplateParameters = array(
         "TYPE"    => "CHECKBOX",
         "DEFAULT" => "Y",
     ),
+    "SUCCESS_MESSAGE" => Array(
+        "NAME" => "Сообщение принятой заявки",
+        "TYPE" => "STRING",
+        "DEFAULT" => "Спасибо. Ваша заявка принята.",
+    ),
 );

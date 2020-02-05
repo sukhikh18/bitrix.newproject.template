@@ -1,17 +1,32 @@
-<?
-if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
-    die();
+<? if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
+use Bitrix\Main\Context;
+
+$isAjax = function() use ( $arParams ) {
+    /** @var Bitrix\Main\Server */
+    $server = Context::getCurrent()->getServer();
+
+    if( 'xmlhttprequest' === strtolower( $server->get( 'HTTP_X_REQUESTED_WITH' ) ) ) return true;
+    if( isset($arParams['IS_AJAX']) && 'Y' == $arParams['IS_AJAX'] ) return true;
+
+    return false;
+};
+
+$message = '';
+
+if ("Y" == $arResult["isFormErrors"]) {
+    $message = '<div class="fail-msg"><p class="text-danger">' . $arResult["FORM_ERRORS_TEXT"] . '</p></div>';
+}
+elseif ("Y" == $arResult["isFormNote"]) {
+    $message = '<div class="note-msg">' . $arResult["FORM_NOTE"] . '</div>';
+}
+elseif( !empty($_REQUEST['formresult']) && 'addok' === $_REQUEST['formresult'] ) {
+    $message = '<div class="success-msg"><p class="text-success">' . $arParams['SUCCESS_MESSAGE'] . '</p></div>';
 }
 
-if ($arResult["isFormErrors"] == "Y") {
-    echo $arResult["FORM_ERRORS_TEXT"];
-}
+echo $message;
+if( $message && $isAjax() ) return;
 
-echo $arResult["FORM_NOTE"];
-
-if ("Y" == $arResult["isFormNote"]) {
-    return;
-}
 ?>
 <? if ($arResult["isFormImage"] == "Y"): ?>
     <a href="<?= $arResult["FORM_IMAGE"]["URL"] ?>" target="_blank" alt="<?= GetMessage("FORM_ENLARGE") ?>"><img
@@ -19,7 +34,6 @@ if ("Y" == $arResult["isFormNote"]) {
                 <? if ($arResult["FORM_IMAGE"]["WIDTH"] > 300): ?>width="300"
                 <? elseif ($arResult["FORM_IMAGE"]["HEIGHT"] > 200): ?>height="200"<? else: ?><?= $arResult["FORM_IMAGE"]["ATTR"] ?><? endif; ?>
                 hspace="3" vscape="3" border="0"/></a>
-    <? //=$arResult["FORM_IMAGE"]["HTML_CODE"]?>
 <? endif; ?>
 
 <? if ($arResult["isFormTitle"]): ?><h4><?= $arResult["FORM_TITLE"] ?></h4><? endif; ?>
@@ -30,36 +44,28 @@ if ('TOP' == $arParams['SHOW_DESCRIPTION']) {
 
 echo $arResult["FORM_HEADER"];
 foreach ($arResult["QUESTIONS"] as $FIELD_SID => $arQuestion) {
-    if ('hidden' == $arQuestion['STRUCTURE'][0]['FIELD_TYPE']) {
+    if( 'hidden' == $arQuestion['STRUCTURE'][0]['FIELD_TYPE'] ) {
         echo $arQuestion["HTML_CODE"];
-    } else {
-        $labelHTMLCode = ("Y" == $arParams['SHOW_CAPTION']) ? trim($arQuestion["CAPTION"]) : '';
-        if ($labelHTMLCode && "Y" == $arQuestion["REQUIRED"]) {
-            $labelHTMLCode .= $arResult["REQUIRED_SIGN"];
-        }
-        if ($labelHTMLCode && "Y" == $arQuestion["IS_INPUT_CAPTION_IMAGE"]) {
-            $labelHTMLCode .= $arQuestion["IMAGE"]["HTML_CODE"];
-        }
-
-        if (is_array($arResult["FORM_ERRORS"]) && array_key_exists($FIELD_SID, $arResult['FORM_ERRORS'])):?>
-            <span class="error-fld" title="<?= htmlspecialcharsbx($arResult["FORM_ERRORS"][$FIELD_SID]) ?>"></span>
-        <? endif; ?>
-
-        <? // display field
-        if ('checkbox' == $arQuestion['STRUCTURE'][0]['FIELD_TYPE']) {
-            echo $arQuestion["HTML_CODE"];
-        } ?>
-        <?
-        if ($labelHTMLCode): ?>
-            <label for="field_<?= $arQuestion['STRUCTURE'][0]['ID']; ?>"><?= $labelHTMLCode; ?></label>
-        <? endif; ?>
-        <?php // var_dump($arQuestion["HTML_CODE"]); ?>
-        <?
-        if ('checkbox' != $arQuestion['STRUCTURE'][0]['FIELD_TYPE']) {
-            echo $arQuestion["HTML_CODE"];
-        } ?>
-        <?
+        continue;
     }
+
+    if (is_array($arResult["FORM_ERRORS"]) && array_key_exists($FIELD_SID, $arResult['FORM_ERRORS'])) {
+        printf('<span class="error-fld" title="%s"></span>', htmlspecialcharsbx($arResult["FORM_ERRORS"][$FIELD_SID]));
+    }
+
+    echo '<div class="form-group">';
+
+    switch ($arQuestion['STRUCTURE'][0]['FIELD_TYPE']) {
+        case 'checkbox':
+            echo $arQuestion["HTML_CODE"], $arQuestion['LABEL'];
+            break;
+
+        default:
+            echo $arQuestion['LABEL'], $arQuestion["HTML_CODE"];
+            break;
+    }
+
+    echo '</div>';
 }
 
 if ($arResult["isUseCaptcha"] == "Y") {
@@ -81,7 +87,7 @@ if ('BEFORE_SUBMIT' == $arParams['SHOW_DESCRIPTION']) {
     <input <?= (intval($arResult["F_RIGHT"]) < 10 ? "disabled=\"disabled\"" : ""); ?> type="submit"
                                                                                       name="web_form_submit"
                                                                                       value="<?= htmlspecialcharsbx(strlen(trim($arResult["arForm"]["BUTTON"])) <= 0 ? GetMessage("FORM_ADD") : $arResult["arForm"]["BUTTON"]); ?>"
-                                                                                      class="btn-outline-white"/>
+                                                                                      class="btn btn-primary"/>
 <?
 if ('BOTTOM' == $arParams['SHOW_DESCRIPTION']) {
     echo '<div class="description">' . $arResult["FORM_DESCRIPTION"] . '</div>';
