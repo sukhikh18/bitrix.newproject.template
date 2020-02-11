@@ -1,7 +1,6 @@
-<?
-if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
-    die();
-}
+<? if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
+$arResult["FORM_HEADER"] = str_replace('<form', '<form class="form-result-new"', $arResult["FORM_HEADER"]);
 
 foreach ($arResult["QUESTIONS"] as $FIELD_SID => &$arQuestion) {
     // Keep hidden as hidden.
