@@ -112,6 +112,10 @@ h1 {
   font-size: 22px;
 }
 
+.site-header {
+  padding: .5rem 0;
+}
+
 .site-footer {
   margin-top: 4rem;
 }
@@ -136,18 +140,6 @@ h1 {
 .site-navigation .navbar .nav-link:hover,
 .site-navigation .navbar .nav-link:focus {
   text-decoration: none;
-}
-
-.site-navigation .non-responsive .navbar-brand {
-  display: none !important;
-}
-
-.site-navigation .non-responsive .navbar-nav {
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
 }
 
 .site-navigation .navbar-toggler {
@@ -177,11 +169,11 @@ h1 {
 
 @media screen and (min-width: 576.02px) {
   h1 {
-    font-size: calc( 22px + 18 * (100vw - 576px) / 1104);
+    font-size: calc( 22px + 18 * (100vw - 576px) / 1104);
   }
 
   .sidebar__title {
-    font-size: calc( 18px + 4 * (100vw - 576px) / 1104);
+    font-size: calc( 18px + 4 * (100vw - 576px) / 1104);
   }
 }
 

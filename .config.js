@@ -7,16 +7,23 @@ var main = module.exports = {
     dest: 'local/templates/new.project/',
 };
 
-var paths = module.exports.paths = {
-    assets: 'assets/',
-    module: 'assets/module/',
+const assets = 'assets/';
 
-    html: false, // index.raw.html
-    pug: 'index.pug',
+var paths = module.exports.paths = {
+    assets: assets,
+    module: assets + 'module/',
+
+    markup: '**/*.html',
 
     styles: {
-        src:  'assets/scss/',
-        dest: 'assets/',
+        settings: assets + 'scss/_site-settings.scss',
+        src:  assets + 'scss/',
+        dest: assets,
+    },
+
+    scripts: {
+        src: assets + 'js/',
+        dest: assets,
     },
 
     images: {
@@ -24,26 +31,20 @@ var paths = module.exports.paths = {
         dest: 'img/',
     },
 
-    blocks: {
-        src: 'assets/pages/',
+    pages: {
+        src: assets + 'pages/',
         dest: 'pages/',
     },
 
     vendor: {
-        src:  'assets/vendor/_source/',
-        dest: 'assets/vendor/',
-    },
-
-    webpack: {
-        // how can i compile page's scripts?
-        src:  ['assets/babel/*.js', 'assets/vendor/_source/*.js'],
-        dest: 'assets/',
+        src:  assets + 'vendor/_source/',
+        dest: assets + 'vendor/',
     },
 };
 
 var webpack = module.exports.webpack = {
     entry: {
-        main: paths.assets + 'babel/main',
+        main: paths.scripts.src + 'main',
         bootstrap: paths.vendor.src + 'bootstrap'
     },
     output: {

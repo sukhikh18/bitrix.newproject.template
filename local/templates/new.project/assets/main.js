@@ -81,51 +81,39 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./public_html/local/templates/new.project/assets/babel/main.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./public_html/assets/js/main.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./public_html/local/templates/new.project/assets/babel/main.js":
-/*!**********************************************************************!*\
-  !*** ./public_html/local/templates/new.project/assets/babel/main.js ***!
-  \**********************************************************************/
+/***/ "./public_html/assets/js/main.js":
+/*!***************************************!*\
+  !*** ./public_html/assets/js/main.js ***!
+  \***************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _parts_scrollTo_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./parts/_scrollTo.js */ "./public_html/local/templates/new.project/assets/babel/parts/_scrollTo.js");
-// for smooth scrool to object
- // init and destroy slider on resize
-// import responsiveSlider from "./parts/_responsiveSlider.js";
+/* harmony import */ var _parts_lazy_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./parts/_lazy.js */ "./public_html/assets/js/parts/_lazy.js");
+/* harmony import */ var _parts_lazy_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_parts_lazy_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _parts_scrollTo_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./parts/_scrollTo.js */ "./public_html/assets/js/parts/_scrollTo.js");
+/* harmony import */ var _parts_preloader_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./parts/_preloader.js */ "./public_html/assets/js/parts/_preloader.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+ // for smooth scrool to object
+
+
 
 jQuery(document).ready(function ($) {
   $(document).on('click', '[href^="#"]', function (event) {
     event.preventDefault();
-    var isScrolled = Object(_parts_scrollTo_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this.getAttribute("href"));
-  }); // $('.slider').ResponsiveSlider({
-  //     maxWidth: 992,
-  //     init: function($slider) {
-  //         $slider.slick({
-  //             infinite: true,
-  //             autoplay: false,
-  //             autoplaySpeed: 4000,
-  //             arrows: true,
-  //             dots: false,
-  //             slidesToShow: 4,
-  //             slidesToScroll: 1,
-  //             responsive: [{
-  //                 breakpoint: 576,
-  //                 settings: {
-  //                     autoplay: true,
-  //                     slidesToShow: 1,
-  //                 }
-  //             }]
-  //         }); // or this.$slider.owlCarousel( thisconfig..opts );
-  //     }
-  // });
-
+    Object(_parts_scrollTo_js__WEBPACK_IMPORTED_MODULE_1__["default"])(this.getAttribute("href"));
+  });
+  new Cleave('[type="tel"]', {
+    phone: true,
+    phoneRegionCode: 'RU'
+  });
   /**
    * Set event when DOM element in appearance
    * @param  Int (in piexels) | String (in percents) | callable  offset
@@ -136,14 +124,171 @@ jQuery(document).ready(function ($) {
   //     },
   //     offset: 50
   // });
+
+  /**
+   * Example form submit event.
+   */
+
+  if (_typeof($.fancybox)) {
+    $('.modal form').on('submit', function (event) {
+      event.preventDefault();
+      _parts_preloader_js__WEBPACK_IMPORTED_MODULE_2__["default"].show(); // Disable retry by 120 seconds
+
+      var $submit = $(this).find('button');
+      $submit.attr('disabled', 'disabled');
+      setTimeout(function () {
+        $submit.removeAttr('disabled');
+      }, 120000); // Show success
+
+      setTimeout(function () {
+        _parts_preloader_js__WEBPACK_IMPORTED_MODULE_2__["default"].hide();
+        $.fancybox.open({
+          content: '<h1>Отлично!</h1><p>Ваша заявка принята, ожидайте звонка.</p>',
+          type: 'html'
+        });
+      }, 5000);
+    });
+  }
 });
 
 /***/ }),
 
-/***/ "./public_html/local/templates/new.project/assets/babel/parts/_scrollTo.js":
-/*!*********************************************************************************!*\
-  !*** ./public_html/local/templates/new.project/assets/babel/parts/_scrollTo.js ***!
-  \*********************************************************************************/
+/***/ "./public_html/assets/js/parts/_lazy.js":
+/*!**********************************************!*\
+  !*** ./public_html/assets/js/parts/_lazy.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var lazyAttribute = 'data-lazy-src',
+      lazySetAttribute = 'data-lazy-srcset',
+      lazyBackgroundAttribute = 'data-lazy-bg',
+      lazyImages = [].slice.call(document.querySelectorAll('[' + lazyAttribute + ']')),
+      lazyBackgrounds = [].slice.call(document.querySelectorAll('[' + lazyBackgroundAttribute + ']'));
+
+  var lazyLoad = function lazyLoad(lazyImage) {
+    var srcset = lazyImage.getAttribute(lazySetAttribute);
+    lazyImage.setAttribute('src', lazyImage.getAttribute(lazyAttribute));
+    if (srcset) lazyImage.setAttribute('srcset', srcset);
+
+    lazyImage.onload = function () {
+      lazyImage.removeAttribute(lazyAttribute);
+      if (srcset) lazyImage.removeAttribute(lazySetAttribute);
+    };
+  }; // Usage .element:not([data-lazy-bg]) { background-image: url('lazy.png') } for lazy css background
+  // or data-lazy-bg="lazy.png" attribute for set style background on observe.
+
+
+  var lazyBackground = function lazyBackground(lazyBackgroundElem) {
+    var bg = lazyBackgroundElem.getAttribute(lazyBackgroundAttribute);
+
+    if (bg.length > 0 && 'true' !== bg) {
+      lazyBackgroundElem.style.backgroundImage = "url(".concat(bg, ")");
+    }
+
+    lazyBackgroundElem.removeAttribute(lazyBackgroundAttribute);
+  };
+
+  var lazyStyles = function lazyStyles() {
+    var css = "\n            img { opacity: 1; transition: opacity .3s }\n            [".concat(lazyAttribute, "] { opacity: 0 }"),
+        head = document.head || document.getElementsByTagName('head')[0],
+        style = document.createElement('style');
+    head.appendChild(style);
+    style.type = 'text/css';
+
+    if (style.styleSheet) {
+      // This is required for IE8 and below.
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+  }; // You may use "delete window.IntersectionObserver;" for fallback check.
+
+
+  if ('IntersectionObserver' in window) {
+    lazyStyles();
+    var lazyImageObserver = new IntersectionObserver(function (entries, observer) {
+      return entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          lazyLoad(entry.target);
+          lazyImageObserver.unobserve(entry.target);
+        }
+      });
+    });
+    lazyImages.forEach(function (lazyImage) {
+      return lazyImageObserver.observe(lazyImage);
+    });
+    var lazyBackgroundObserver = new IntersectionObserver(function (entries, observer) {
+      return entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          lazyBackground(entry.target);
+          lazyBackgroundObserver.unobserve(entry.target);
+        }
+      });
+    });
+    lazyBackgrounds.forEach(function (lazyBackgroundElem) {
+      return lazyBackgroundObserver.observe(lazyBackgroundElem);
+    });
+  } else {
+    lazyImages.forEach(lazyLoad);
+    lazyBackgrounds.forEach(lazyBackground);
+  }
+});
+
+/***/ }),
+
+/***/ "./public_html/assets/js/parts/_preloader.js":
+/*!***************************************************!*\
+  !*** ./public_html/assets/js/parts/_preloader.js ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var preloadClass = 'fancy-preloading';
+var preloader = {
+  show: function show() {
+    var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Загрузка..';
+    var $preload = $('<p>' + message + '</p>').css({
+      'margin-top': '50px',
+      'margin-bottom': '-40px',
+      'padding-bottom': '',
+      'color': '#ddd'
+    });
+    $.fancybox.open({
+      closeExisting: true,
+      content: $preload,
+      type: 'html',
+      smallBtn: false,
+      afterLoad: function afterLoad(instance, current) {
+        current.$content.css('background', 'none');
+      },
+      afterShow: function afterShow(instance, current) {
+        $('body').addClass(preloadClass);
+        instance.showLoading(current);
+      },
+      afterClose: function afterClose(instance, current) {
+        $('body').removeClass(preloadClass);
+        instance.hideLoading(current);
+      }
+    });
+  },
+  hide: function hide() {
+    if ($('body').hasClass(preloadClass)) {
+      $.fancybox.getInstance().close();
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (preloader);
+
+/***/ }),
+
+/***/ "./public_html/assets/js/parts/_scrollTo.js":
+/*!**************************************************!*\
+  !*** ./public_html/assets/js/parts/_scrollTo.js ***!
+  \**************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
