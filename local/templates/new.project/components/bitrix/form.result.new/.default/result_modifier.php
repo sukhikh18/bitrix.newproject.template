@@ -1,7 +1,6 @@
-<?
-if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
-    die();
-}
+<? if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
+$arResult["FORM_HEADER"] = str_replace('<form', '<form class="form-result-new"', $arResult["FORM_HEADER"]);
 
 foreach ($arResult["QUESTIONS"] as $FIELD_SID => &$arQuestion) {
     // Keep hidden as hidden.
@@ -45,4 +44,42 @@ foreach ($arResult["QUESTIONS"] as $FIELD_SID => &$arQuestion) {
     if( $arQuestion['LABEL'] ) {
         $arQuestion['LABEL'] = sprintf('<label for="field_%s">%s</label>', $arQuestion['STRUCTURE'][0]['ID'], $arQuestion['LABEL']);
     }
+}
+
+use Bitrix\Main\Context;
+
+$isAjax = function() use ( $arParams ) {
+    $context = Context::getCurrent();
+    /** @var Bitrix\Main\Server */
+    $server = $context->getServer();
+    /** @var Bitrix\Main\Request */
+    $request = $context->getRequest();
+
+    if( 'xmlhttprequest' === strtolower( $server->get( 'HTTP_X_REQUESTED_WITH' ) ) ) return true;
+    if('Y' === $request->get('is_ajax')) return true;
+    if( isset($arParams['IS_AJAX']) && 'Y' == $arParams['IS_AJAX'] ) return true;
+
+    return false;
+};
+
+$message = '';
+
+if ("Y" == $arResult["isFormErrors"]) {
+    $message = '<div class="fail-msg"><p class="text-danger">' . $arResult["FORM_ERRORS_TEXT"] . '</p></div>';
+}
+elseif ("Y" == $arResult["isFormNote"]) {
+    $message = '<div class="note-msg">' . $arResult["FORM_NOTE"] . '</div>';
+}
+elseif( !empty($_REQUEST['formresult']) && 'addok' === $_REQUEST['formresult'] ) {
+    $message = '<div class="success-msg"><p class="text-success">' . $arParams['SUCCESS_MESSAGE'] . '</p></div>';
+}
+
+if( $message && $isAjax() ) {
+    $APPLICATION->RestartBuffer();
+    echo $message;
+    $APPLICATION->FinalActions();
+    die();
+}
+else {
+    $arResult["FORM_HEADER"] .= '<div class="messages">' . $message . '</div>';
 }

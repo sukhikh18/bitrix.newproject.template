@@ -1,33 +1,4 @@
-<? if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
-
-use Bitrix\Main\Context;
-
-$isAjax = function() use ( $arParams ) {
-    /** @var Bitrix\Main\Server */
-    $server = Context::getCurrent()->getServer();
-
-    if( 'xmlhttprequest' === strtolower( $server->get( 'HTTP_X_REQUESTED_WITH' ) ) ) return true;
-    if( isset($arParams['IS_AJAX']) && 'Y' == $arParams['IS_AJAX'] ) return true;
-
-    return false;
-};
-
-$message = '';
-
-if ("Y" == $arResult["isFormErrors"]) {
-    $message = '<div class="fail-msg"><p class="text-danger">' . $arResult["FORM_ERRORS_TEXT"] . '</p></div>';
-}
-elseif ("Y" == $arResult["isFormNote"]) {
-    $message = '<div class="note-msg">' . $arResult["FORM_NOTE"] . '</div>';
-}
-elseif( !empty($_REQUEST['formresult']) && 'addok' === $_REQUEST['formresult'] ) {
-    $message = '<div class="success-msg"><p class="text-success">' . $arParams['SUCCESS_MESSAGE'] . '</p></div>';
-}
-
-echo $message;
-if( $message && $isAjax() ) return;
-
-?>
+<? if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); ?>
 <? if ($arResult["isFormImage"] == "Y"): ?>
     <a href="<?= $arResult["FORM_IMAGE"]["URL"] ?>" target="_blank" alt="<?= GetMessage("FORM_ENLARGE") ?>"><img
                 src="<?= $arResult["FORM_IMAGE"]["URL"] ?>"
