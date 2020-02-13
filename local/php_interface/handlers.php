@@ -1,8 +1,9 @@
 <?php
 
+use \Bitrix\Main\EventManager;
 use \Bitrix\Main\Loader;
 
-$eventManager = \Bitrix\Main\EventManager::getInstance();
+$eventManager = EventManager::getInstance();
 
 // ADMIN
 // Свойство чекбокс
@@ -16,6 +17,8 @@ $eventManager->addEventHandler("fileman", "OnBeforeHTMLEditorScriptRuns", array(
 	"local\handlers\admin\IBlockVisualEditorComponents", "beforeHTMLEditorScriptRuns"));
 $eventManager->addEventHandler("main", "onEndBufferContent", array(
 	"local\handlers\admin\IBlockVisualEditorComponents", "endBufferContent" ));
+// Too long phone number.
+$eventManager->addEventHandler('form', 'onFormValidatorBuildList', array('CFormPhoneValidator', 'getDescription'));
 
 // PAGE
 $eventManager->addEventHandler("main", "OnBeforeProlog", array("local\handlers\Page", "includeFunctions"));
