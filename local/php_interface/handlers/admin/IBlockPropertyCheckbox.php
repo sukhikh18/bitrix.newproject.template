@@ -16,18 +16,18 @@ class IBlockPropertyCheckbox
             'PROPERTY_TYPE'             => 'S',
             'USER_TYPE'                 => 'Checkbox',
             'DESCRIPTION'               => GetMessage('IBLOCK_PROP_CHECKBOX_DESC'),
-            'GetAdminListViewHTML'      => array('CIBlockPropertyCheckbox', 'GetTextVal'),
-            'GetPublicViewHTML'         => array('CIBlockPropertyCheckbox', 'GetTextVal'),
-            'GetPropertyFieldHtml'      => array('CIBlockPropertyCheckbox', 'GetPropertyFieldHtml'),
-            'GetPropertyFieldHtmlMulty' => array('CIBlockPropertyCheckbox', 'GetPropertyFieldHtml'),
-            'AddFilterFields'           => array('CIBlockPropertyCheckbox', 'AddFilterFields'),
-            'GetPublicFilterHTML'       => array('CIBlockPropertyCheckbox', 'GetFilterHTML'),
+            'GetAdminListViewHTML'      => array(__CLASS__, 'GetTextVal'),
+            'GetPublicViewHTML'         => array(__CLASS__, 'GetTextVal'),
+            'GetPropertyFieldHtml'      => array(__CLASS__, 'GetPropertyFieldHtml'),
+            'GetPropertyFieldHtmlMulty' => array(__CLASS__, 'GetPropertyFieldHtml'),
+            'AddFilterFields'           => array(__CLASS__, 'AddFilterFields'),
+            'GetPublicFilterHTML'       => array(__CLASS__, 'GetFilterHTML'),
             //  It seems it doesn't work :(
             //  Another Bitrix bug?
-            'GetAdminFilterHTML'        => array('CIBlockPropertyCheckbox', 'GetFilterHTML'),
-            'ConvertToDB'               => array('CIBlockPropertyCheckbox', 'ConvertToFromDB'),
-            'ConvertFromDB'             => array('CIBlockPropertyCheckbox', 'ConvertToFromDB'),
-            'GetSearchContent'          => array('CIBlockPropertyCheckbox', 'GetSearchContent'),
+            'GetAdminFilterHTML'        => array(__CLASS__, 'GetFilterHTML'),
+            'ConvertToDB'               => array(__CLASS__, 'ConvertToFromDB'),
+            'ConvertFromDB'             => array(__CLASS__, 'ConvertToFromDB'),
+            'GetSearchContent'          => array(__CLASS__, 'GetSearchContent'),
         );
     }
 
