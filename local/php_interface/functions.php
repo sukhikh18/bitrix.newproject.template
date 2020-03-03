@@ -49,14 +49,14 @@ if( !function_exists('body_class') ) {
 if( !function_exists('get_column_class') ) {
     /**
      * Получение класса элемента в bootstrap 4 сетке по количеству элементов в строке
-     * @param  Str/Int $columns количество элементов в строке
-     * @var Константа определенная в constants.php.
-     *      Определяет возможность исползования адаптивной верстки
-     * @return String
+     *
+     * @param  string|int $columns columns count.
+     * @param  bool $responsive use responsive classes.
+     * @param  bool wide on small devices.
+     *
+     * @return string bootstrap class for attribute use.
      */
-    function get_column_class( $columns = 0, $less = false, $responsive = null ) {
-        if( null === $responsive ) $responsive = (defined( 'TPL_RESPONSIVE' ) && TPL_RESPONSIVE);
-
+    function get_column_class( $columns = 0, $responsive = true, $less = true ) {
         if( $responsive ) {
             switch ( strval($columns) ) {
                 case '1':   $cl = 'col-12'; break;
@@ -159,67 +159,10 @@ if( !function_exists('section_exist') ) {
     }
 }
 
-if( ! function_exists('bx_parse_args') ) {
-    /**
-     * Аналог WordPress функции @see wp_parse_args()
-     * @link https://codex.wordpress.org/Function_Reference/wp_parse_args
-     *
-     * Добавлено $clear - Использовать ключи только из defaults
-     */
-    function bx_parse_args( $args, $defaults = array(), $clear = false ) {
-        if ( is_object( $args ) ) $r = get_object_vars( $args );
-        elseif ( is_array( $args ) ) $r =& $args;
-
-        if ( is_array( $defaults ) ) {
-            if( $clear ) {
-                foreach ($r as $r_key => $r_val) {
-                    if(isset( $defaults[ $r_key ] ))
-                        $res[ $r_key ] = $r_val;
-                }
-
-                $r = $res;
-            }
-
-            $r = array_merge( $defaults, $r );
-        }
-
-        return $r;
-    }
-}
-
-if( !function_exists('get_terms_list_by_ID') ) {
-    /**
-     * Обертка функции GetList для получения секций инфоблока по ID
-     * @link https://dev.1c-bitrix.ru/api_help/iblock/classes/ciblockelement/getlist.php
-     * @param  Mixed $iblock_id ИД Инфоблока
-     * @param  array  $arFilter  @see CIBlockSection::GetList
-     * @param  array  $arOrder   @see CIBlockSection::GetList
-     * @param  array  $arSelect  @see CIBlockSection::GetList
-     * @return array for fetch @see CIBlockSection::GetList()->GetNext()
-     */
-    function get_terms_list_by_ID( $iblock_id = null, $arFilter = array(), $arOrder = array(), $arSelect = array() ) {
-        $arFilter = (array) bx_parse_args($arFilter, array(
-            'ACTIVE' => 'Y',
-            'GLOBAL_ACTIVE' => 'Y',
-        ) );
-
-        $arFilter['IBLOCK_ID'] = $iblock_id;
-
-        $arOrder = (array) bx_parse_args($arOrder, array(
-            'DEPTH_LEVEL' => 'ASC',
-            'SORT' => 'ASC',
-        ) );
-
-        $arSelect = array_merge( (array) $arSelect,
-            array('IBLOCK_ID','ID','NAME','DEPTH_LEVEL','IBLOCK_SECTION_ID', 'SECTION_PAGE_URL'));
-
-        return CIBlockSection::GetList($arOrder, $arFilter, false, $arSelect);
-    }
-}
-
 if( !function_exists('get_terms_hierarchical') ) {
     /**
      * Получение секций в удобный (иерархичный) массив данных
+     *
      * @param  Mixed  $iblock_id ИД информационного блока. Передается в переменную $arFilter[IBLOCK_ID].
      *                           При использовании инфоблоков 1.0 можно передать массив
      * @param  Array  $arFilter  Остальные параметры переменной $arFilter для CIBlockSection::GetList
@@ -232,10 +175,21 @@ if( !function_exists('get_terms_hierarchical') ) {
         $arResult['ROOT'] = array();
         $sectionLinc[0] = &$arResult['ROOT'];
 
-        /**
-         * $rsSections = CIBlockSection::GetList()
-         */
-        $rsSections = get_terms_list_by_ID( $iblock_id, $arFilter, $arOrder, $arSelect );
+        $arFilter['IBLOCK_ID'] = $iblock_id;
+        $arFilter = array_merge(array(
+            'ACTIVE' => 'Y',
+            'GLOBAL_ACTIVE' => 'Y',
+        ), $arFilter);
+
+        $arOrder = array_merge(array(
+            'DEPTH_LEVEL' => 'ASC',
+            'SORT' => 'ASC',
+        ), $arOrder);
+
+        $arSelect = array_merge( (array) $arSelect,
+            array('IBLOCK_ID','ID','NAME','DEPTH_LEVEL','IBLOCK_SECTION_ID', 'SECTION_PAGE_URL'));
+
+        $rsSections = CIBlockSection::GetList($arOrder, $arFilter, false, $arSelect);
 
         while($arSection = $rsSections->GetNext()) {
             $sectionLinc[intval($arSection['IBLOCK_SECTION_ID'])]['CHILD'][$arSection['ID']] = $arSection;

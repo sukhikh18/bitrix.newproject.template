@@ -3,18 +3,6 @@ if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-if(!function_exists('esc_attr')) {
-    function esc_attr($value) {
-        return htmlspecialcharsEx($value);
-    }
-}
-
-if(!function_exists('esc_url')) {
-    function esc_url($value) {
-        return htmlspecialcharsEx($value);
-    }
-}
-
 // @TODO: replace to parameters
 $arParams['PICTURE_URL'] = 'DETAIL_PAGE'; // || "" || DETAIL_PICTURE;
 
@@ -85,7 +73,7 @@ foreach ($arResult["ITEMS"] as &$arItem) {
 
     $arItem['DETAIL_PAGE_URL'] = $arItem["USER_HAVE_ACCESS"] &&
         ("N" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || $arItem["DETAIL_TEXT"])
-        ? esc_url($arItem["DETAIL_PAGE_URL"]) : '#';
+        ? htmlspecialcharsEx($arItem["DETAIL_PAGE_URL"]) : '#';
 
     // insert link from custom property
     if( !empty($arParams['LINK_BY_PROPERTY']) ) {
@@ -120,8 +108,8 @@ foreach ($arResult["ITEMS"] as &$arItem) {
 
             $strPict = '';
             $strPictURL = isset($arParams['PICTURE_URL']) && "DETAIL_PICTURE" === $arParams['PICTURE_URL'] ?
-                esc_url($arItem["DETAIL_PICTURE"]["SRC"]) : $arItem['DETAIL_PAGE_URL'];
-            $strPictClass = esc_attr($arParams['ITEM_CLASS']) . '__pict';
+                htmlspecialcharsEx($arItem["DETAIL_PICTURE"]["SRC"]) : $arItem['DETAIL_PAGE_URL'];
+            $strPictClass = htmlspecialcharsEx($arParams['ITEM_CLASS']) . '__pict';
             switch ($arParams['THUMBNAIL_POSITION']) {
                 case 'RIGHT':
                 case 'FLOAT_R':
@@ -139,8 +127,8 @@ foreach ($arResult["ITEMS"] as &$arItem) {
 
                 // create img element
                 $strPict = sprintf('<img src="%s" alt="%s">',
-                    esc_url($arItem["PREVIEW_PICTURE"]["SRC"]),
-                    esc_attr($arItem["NAME"])
+                    htmlspecialcharsEx($arItem["PREVIEW_PICTURE"]["SRC"]),
+                    htmlspecialcharsEx($arItem["NAME"])
                 );
 
                 if( strlen($strPictURL) > 2 ) {
@@ -168,9 +156,9 @@ foreach ($arResult["ITEMS"] as &$arItem) {
             if( strlen($arItem['DETAIL_PAGE_URL']) > 2 ) {
                 // wrap to module with link
                 return sprintf('<a href="%4$s" class="%3$s d-block"%5$s><%1$s>%2$s</%1$s></a>',
-                    esc_attr($arParams["NAME_TAG"]),
+                    htmlspecialcharsEx($arParams["NAME_TAG"]),
                     $arItem["NAME"], // strip_tags?
-                    esc_attr($strNameClass),
+                    htmlspecialcharsEx($strNameClass),
                     $arItem['DETAIL_PAGE_URL'],
                     $arItem['LINK_ATTRS']
                 );
@@ -178,9 +166,9 @@ foreach ($arResult["ITEMS"] as &$arItem) {
             else {
                 // wrap to module box
                 return sprintf('<%1$s class="%3$s">%2$s</%1$s>',
-                    esc_attr($arParams["NAME_TAG"]),
+                    htmlspecialcharsEx($arParams["NAME_TAG"]),
                     $arItem["NAME"], // strip_tags?
-                    esc_attr($arParams['ITEM_CLASS'] . '__name')
+                    htmlspecialcharsEx($arParams['ITEM_CLASS'] . '__name')
                 );
             }
         }),
@@ -192,7 +180,7 @@ foreach ($arResult["ITEMS"] as &$arItem) {
 
             // wrap to module box
             return sprintf('<div class="%s__date">%s</div>',
-                esc_attr($arParams['ITEM_CLASS']),
+                htmlspecialcharsEx($arParams['ITEM_CLASS']),
                 $date
             );
         }),
@@ -204,7 +192,7 @@ foreach ($arResult["ITEMS"] as &$arItem) {
 
             // wrap to module box
             return sprintf('<div class="%s__desc">%s</div>',
-                esc_attr($arParams['ITEM_CLASS']),
+                htmlspecialcharsEx($arParams['ITEM_CLASS']),
                 $text
             );
         }),
@@ -224,10 +212,10 @@ foreach ($arResult["ITEMS"] as &$arItem) {
             if( "Y" === $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || empty($arItem["DETAIL_TEXT"]) ) return '';
 
             if( strlen($arItem['DETAIL_PAGE_URL']) > 2 ) {
-                return sprintf('<div class="%s__more"><a class="btn" href="%s"%s>%s</a></div>',
-                    esc_attr($arParams['ITEM_CLASS']),
-                    $arItem['LINK_ATTRS'],
+                return sprintf('<div class="%1$s__more"><a class="btn" href="%2$s"%3$s>%4$s</a></div>',
+                    htmlspecialcharsEx($arParams['ITEM_CLASS']),
                     $arItem['DETAIL_PAGE_URL'],
+                    $arItem['LINK_ATTRS'],
                     $arItem["MORE_LINK_TEXT"]
                 );
             }
@@ -248,7 +236,7 @@ foreach ($arResult["ITEMS"] as &$arItem) {
             $strSectName = $arSection['NAME'] ? strip_tags($arSection['NAME']) : '';
 
             return sprintf('<div class="%s__sect">%s</div>',
-                esc_attr($arParams['ITEM_CLASS']),
+                htmlspecialcharsEx($arParams['ITEM_CLASS']),
                 $strSectName
             );
         }),
@@ -274,8 +262,8 @@ foreach ($arResult["ITEMS"] as &$arItem) {
             }
 
             $arItem["VAR"]['PROP_' . $propCode] = sprintf('<div class="%1$s__prop %1$s-prop %1$s-prop__%2$s">%3$s</div>',
-                esc_attr($arParams['ITEM_CLASS']),
-                esc_attr(strtolower($propCode)),
+                htmlspecialcharsEx($arParams['ITEM_CLASS']),
+                htmlspecialcharsEx(strtolower($propCode)),
                 $arItem["VAR"]['PROP_' . $propCode]
             );
         }
