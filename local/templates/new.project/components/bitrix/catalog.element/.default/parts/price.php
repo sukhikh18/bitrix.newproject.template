@@ -22,7 +22,7 @@
 			<?
 			if ($showDiscount)
 			{
-				echo Loc::getMessage('CT_BCE_CATALOG_ECONOMY_INFO2', array('#ECONOMY#' => $price['PRINT_RATIO_DISCOUNT']));
+				echo \Bitrix\Main\Localization\Loc::getMessage('CT_BCE_CATALOG_ECONOMY_INFO2', array('#ECONOMY#' => $price['PRINT_RATIO_DISCOUNT']));
 			}
 			?>
 		</div>

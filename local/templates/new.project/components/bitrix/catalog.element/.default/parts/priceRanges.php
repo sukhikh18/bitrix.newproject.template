@@ -1,5 +1,7 @@
 <?php
 
+use \Bitrix\Main\Localization\Loc;
+
 if ($arParams['USE_PRICE_COUNT'])
 {
 	$showRanges = !$haveOffers && count($actualItem['ITEM_QUANTITY_RANGES']) > 1;

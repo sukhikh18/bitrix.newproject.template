@@ -5,7 +5,7 @@ if ($arParams['USE_PRODUCT_QUANTITY'])
 	?>
 	<div class="product-item-detail-info-container" style="<?=(!$actualItem['CAN_BUY'] ? 'display: none;' : '')?>"
 		data-entity="quantity-block">
-		<div class="product-item-detail-info-container-title"><?=Loc::getMessage('CATALOG_QUANTITY')?></div>
+		<div class="product-item-detail-info-container-title"><?= \Bitrix\Main\Localization\Loc::getMessage('CATALOG_QUANTITY') ?></div>
 		<div class="product-item-amount">
 			<div class="product-item-amount-field-container">
 				<span class="product-item-amount-field-btn-minus no-select" id="<?=$itemIds['QUANTITY_DOWN_ID']?>"></span>
