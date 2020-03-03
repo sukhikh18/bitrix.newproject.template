@@ -27,7 +27,8 @@ if ( ! function_exists('enqueue_assets')) {
 		));
 
 		$Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js');
-		$Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js');
+		// Bitrix has own small modernizr.
+		// $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js');
 
 		/**
 		 * Bootstrap framework
