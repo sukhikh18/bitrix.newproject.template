@@ -47,12 +47,6 @@ if ( ! function_exists('enqueue_assets')) {
 		$Asset->addCss(TPL . '/assets/vendor/slick/slick.css');
 		$Asset->addJs(TPL . '/assets/vendor/slick/slick' . $min . '.js');
 
-		/**
-		 * Fancybox modal
-		 */
-		$Asset->addCss(TPL . '/assets/vendor/fancybox/jquery.fancybox' . $min . '.css');
-		$Asset->addJs(TPL . '/assets/vendor/fancybox/jquery.fancybox' . $min . '.js');
-
 		// Masked input
 		// $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.min.js');
 
