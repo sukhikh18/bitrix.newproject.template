@@ -106,6 +106,18 @@ else
 	$showSliderControls = $arResult['MORE_PHOTO_COUNT'] > 1;
 }
 
+if( $arResult['MORE_PHOTO_COUNT'] = sizeof( $arResult["PROPERTIES"]["MORE_PHOTO"]["VALUE"] ) ) {
+	$showSliderControls = true;
+	foreach($arResult["PROPERTIES"]["MORE_PHOTO"]["VALUE"] as $FILE_ID) {
+		if( is_array($FILE = CFile::GetFileArray($FILE_ID)) ) {
+			array_push($actualItem["MORE_PHOTO"], $FILE);
+		}
+	}
+
+	$arResult['MORE_PHOTO'] = $actualItem["MORE_PHOTO"];
+	$arResult['MORE_PHOTO_COUNT'] = sizeof( $arResult['MORE_PHOTO'] );
+}
+
 $skuProps = array();
 $price = $actualItem['ITEM_PRICES'][$actualItem['ITEM_PRICE_SELECTED']];
 $measureRatio = $actualItem['ITEM_MEASURE_RATIOS'][$actualItem['ITEM_MEASURE_RATIO_SELECTED']]['RATIO'];
