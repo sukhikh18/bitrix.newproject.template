@@ -32,38 +32,34 @@ if( ! function_exists('displayOption')) {
 /**
  * Sort by selector
  */
+$sortByUrl = $APPLICATION->GetCurPageParam(SORT_BY_PARAM . "=' + this.value + '", array(SORT_BY_PARAM));
+$sortByDefault = '';
 $arParams['SORT_BY_LIST'] = array(
-	'default' => Loc::getMessage('SORT_BY_LIST_DEFAULT'),
+	$sortByDefault => Loc::getMessage('SORT_BY_LIST_DEFAULT'),
 	'price_asc' => Loc::getMessage('SORT_BY_LIST_PRICE_ASC'),
 	'price_desc' => Loc::getMessage('SORT_BY_LIST_PRICE_DESC'),
-	'stock_desc' => Loc::getMessage('SORT_BY_LIST_STOCK_DESC'),
+	'stock' => Loc::getMessage('SORT_BY_LIST_STOCK'),
 );
 
-$arResult['SORT_BY'] = ( ! empty( $_REQUEST[SORT_BY_PARAM]) && is_string($_REQUEST[SORT_BY_PARAM]))
-	? $_REQUEST[SORT_BY_PARAM] : false;
+$arResult['SORT_BY'] = ( ! empty($_REQUEST[SORT_BY_PARAM]) && is_string($_REQUEST[SORT_BY_PARAM]) &&
+	array_key_exists($_REQUEST[SORT_BY_PARAM], $arParams['SORT_BY_LIST']))
+	? $_REQUEST[SORT_BY_PARAM] : $sortByDefault;
 
 if( 'price_asc' === $arResult['SORT_BY'] || 'price_desc' === $arResult['SORT_BY'] ) {
 	$arParams["ELEMENT_SORT_FIELD"] = 'catalog_PRICE_1';
 	$arParams["ELEMENT_SORT_ORDER"] = ( 'price_asc' === $arResult['SORT_BY'] ) ? 'asc' : 'desc';
 }
-elseif( 'stock_desc' === $arResult['SORT_BY'] ) {
+elseif( 'stock' === $arResult['SORT_BY'] ) {
 	$arParams["ELEMENT_SORT_FIELD"] = 'CATALOG_QUANTITY';
 	$arParams["ELEMENT_SORT_ORDER"] = 'desc';
 }
 
+
 ob_start();
 ?>
 <div class="section-sort">
-	<select class="section-sort-select" onchange="javascript:window.location.href='?<?= SORT_BY_PARAM ?>=' + this.value;">
-		<?php
-		foreach ($arParams['SORT_BY_LIST'] as $value => $label) {
-			printf('<option value="%1$s"%3$s>%2$s</option>',
-				$value,
-				$label,
-				$value == $arResult['SORT_BY'] ? ' selected' : ''
-			) . "\n";
-		}
-		?>
+	<select class="section-sort-select"	onchange="javascript:window.location.href='<?= $sortByUrl ?>'">
+		<?php array_walk($arParams['SORT_BY_LIST'], 'displayOption', $arResult['SORT_BY']) ?>
 	</select>
 </div>
 <?php
