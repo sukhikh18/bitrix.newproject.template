@@ -137,8 +137,10 @@ else
 	<div class="<?=(($isFilter || $isSidebar) ? "col-md-9 col-sm-8 bx-main-block" : "col-12")?>">
 		<section class="current-section">
 			<h1 class="current-section-title"><?= $arResult['CURRENT_SECTION']['NAME'] ?></h1>
-			<?
-			$APPLICATION->IncludeComponent(
+			<?= $arResult['SORT_BY_HTML'] ?>
+
+			<div class="current-section-list">
+			<?$APPLICATION->IncludeComponent(
 				"bitrix:catalog.section.list",
 				"",
 				array(
@@ -153,16 +155,14 @@ else
 					"TOP_DEPTH" => $arParams["SECTION_TOP_DEPTH"],
 					"SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
 					"VIEW_MODE" => $arParams["SECTIONS_VIEW_MODE"],
-					"SHOW_PARENT_NAME" => $arParams["SECTIONS_SHOW_PARENT_NAME"],
+					"SHOW_PARENT_NAME" => 'N',
 					"HIDE_SECTION_NAME" => (isset($arParams["SECTIONS_HIDE_SECTION_NAME"]) ? $arParams["SECTIONS_HIDE_SECTION_NAME"] : "N"),
 					"ADD_SECTIONS_CHAIN" => (isset($arParams["ADD_SECTIONS_CHAIN"]) ? $arParams["ADD_SECTIONS_CHAIN"] : '')
 				),
 				$component,
 				array("HIDE_ICONS" => "Y")
-			);
-			?>
-
-			<?= $arResult['SORT_BY_HTML'] ?>
+			);?>
+			</div>
 		</section>
 		<section class="compare">
 			<?php
