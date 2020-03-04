@@ -71,8 +71,7 @@ $arResult['SORT_BY_HTML'] = ob_get_clean();
 $showByUrl = $APPLICATION->GetCurPageParam(SHOW_BY_PARAM . "=' + this.value + '", array(SHOW_BY_PARAM));
 $showByDefault = ! empty($arParams["PAGE_ELEMENT_COUNT"]) ? intval($arParams["PAGE_ELEMENT_COUNT"]) : 9;
 $arParams['SHOW_BY_LIST'] = array($showByDefault, 24, 42, 60);
-
-$arResult['SHOW_BY'] = ! empty($_REQUEST[SHOW_BY_PARAM]) ? intval($_REQUEST[SHOW_BY_PARAM]) : $showByDefault;
+$arParams["PAGE_ELEMENT_COUNT"] = ! empty($_REQUEST[SHOW_BY_PARAM]) ? intval($_REQUEST[SHOW_BY_PARAM]) : $showByDefault;
 
 ob_start();
 ?>
@@ -80,7 +79,7 @@ ob_start();
 	<div class="section-show-label">Показывать по&nbsp;</div>
 	<select class="section-show-select" onchange="javascript:window.location.href='<?= $showByUrl ?>'">
 		<?php array_walk(array_combine($arParams['SHOW_BY_LIST'], $arParams['SHOW_BY_LIST']), 'displayOption',
-			$arResult['SHOW_BY']) ?>
+			$arParams["PAGE_ELEMENT_COUNT"]) ?>
 	</select>
 </div>
 <?php
