@@ -161,6 +161,8 @@ else
 				array("HIDE_ICONS" => "Y")
 			);
 			?>
+
+			<?= $arResult['SORT_BY_HTML'] ?>
 		</section>
 		<section class="compare">
 			<?php
