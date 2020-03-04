@@ -319,6 +319,7 @@ else
 				$component
 			);
 			?>
+			<?= $arResult['SHOW_BY_HTML'] ?>
 		</section>
 		<section class="recommends">
 			<?php

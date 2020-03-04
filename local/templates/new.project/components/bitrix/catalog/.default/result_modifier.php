@@ -3,6 +3,7 @@
 use \Bitrix\Main\Localization\Loc;
 
 const SORT_BY_PARAM = 'sort_by';
+const SHOW_BY_PARAM = 'show_by';
 
 $arResult['CURRENT_SECTION'] = array(
 	'ID' => 0,
@@ -17,6 +18,15 @@ if( !empty( $arResult['VARIABLES']['SECTION_ID'] ) ) {
 			"ID" => intval( $arResult['VARIABLES']['SECTION_ID'] ),
 		),
 	))->fetch();
+}
+
+if( ! function_exists('displayOption')) {
+    function displayOption($label, $value, $active) {
+    	$selected = $active !== $value ?: ' selected';
+    	if( $attributes ) $selected .= ' ';
+
+    	printf('<option value="%1$s"%3$s%4$s>%2$s</option>', $value, $label, $selected, $attributes);
+    }
 }
 
 /**
@@ -58,3 +68,25 @@ ob_start();
 </div>
 <?php
 $arResult['SORT_BY_HTML'] = ob_get_clean();
+
+/**
+ * Show by selector
+ */
+$showByUrl = $APPLICATION->GetCurPageParam(SHOW_BY_PARAM . "=' + this.value + '", array(SHOW_BY_PARAM));
+$showByDefault = ! empty($arParams["PAGE_ELEMENT_COUNT"]) ? intval($arParams["PAGE_ELEMENT_COUNT"]) : 9;
+$arParams['SHOW_BY_LIST'] = array($showByDefault, 24, 42, 60);
+
+$arResult['SHOW_BY'] = ! empty($_REQUEST[SHOW_BY_PARAM]) ? intval($_REQUEST[SHOW_BY_PARAM]) : $showByDefault;
+
+ob_start();
+?>
+<div class="section-show">
+	<div class="section-show-label">Показывать по&nbsp;</div>
+	<select class="section-show-select" onchange="javascript:window.location.href='<?= $showByUrl ?>'">
+		<?php array_walk(array_combine($arParams['SHOW_BY_LIST'], $arParams['SHOW_BY_LIST']), 'displayOption',
+			$arResult['SHOW_BY']) ?>
+	</select>
+</div>
+<?php
+
+$arResult['SHOW_BY_HTML'] = ob_get_clean();
