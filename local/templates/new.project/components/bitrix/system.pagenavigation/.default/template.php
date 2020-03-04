@@ -21,15 +21,15 @@ ob_start();
             if ($arResult["NavPageNomer"] > 1) { ?>
                 <!-- <a class="pagenav-item" href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>">Начало</a> -->
                 <? if ($arResult["NavPageNomer"] > 2) { ?>
-                    <a class="pagenav-item pagenav__prev"
+                    <a class="pagenav-item pagenav-item_prev"
                        href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= ($arResult["NavPageNomer"] - 1) ?>"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_PREV') ?></a>
                 <? } else { ?>
-                    <a class="pagenav-item pagenav__prev"
+                    <a class="pagenav-item pagenav-item_prev"
                        href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_PREV') ?></a>
                 <? } ?>
             <? } else { // Если страница первая?>
                 <!-- <span class="pagenav-item">Начало</span> -->
-                <span class="pagenav-item pagenav__prev"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_PREV') ?></span>
+                <span class="pagenav-item pagenav-item_prev"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_PREV') ?></span>
                 <?
             } ?>
             <?
@@ -60,11 +60,11 @@ ob_start();
                     <a class="pagenav-item"
                        href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= $arResult["NavPageCount"] ?>"><?= $arResult["NavPageCount"]; ?></a>
                 <? endif; ?>
-                <a class="pagenav-item pagenav__next"
+                <a class="pagenav-item pagenav-item_next"
                    href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= ($arResult["NavPageNomer"] + 1) ?>"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_NEXT') ?></a>
                 <!--  -->
             <? } else { // Если страница последняя ?>
-                <span class="pagenav-item pagenav__next"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_NEXT') ?></span>
+                <span class="pagenav-item pagenav-item_next"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_NEXT') ?></span>
                 <!-- <span class="pagenav-item">Конец</span> -->
                 <?
             } ?>
