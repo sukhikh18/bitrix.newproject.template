@@ -2,6 +2,8 @@
     die();
 }
 
+use \Bitrix\Main\Localization\Loc;
+
 if ( ! $arResult['NavShowAlways']) {
     if ($arResult['NavRecordCount'] == 0 || ($arResult['NavPageCount'] == 1 && $arResult['NavShowAll'] == false)) {
         return;
@@ -13,21 +15,21 @@ $strNavQueryStringFull = ($arResult['NavQueryString'] != '' ? '?' . $arResult['N
 ob_start();
 ?>
     <div class="pagenav">
-        <div class="pagenav__label">Страницы</div>
-        <div class="pagenav__body">
+        <div class="pagenav-label"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_LABEL') ?></div>
+        <div class="pagenav-body">
             <?
             if ($arResult["NavPageNomer"] > 1) { ?>
-                <!-- <a class="pagenav__item" href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>">Начало</a> -->
+                <!-- <a class="pagenav-item" href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>">Начало</a> -->
                 <? if ($arResult["NavPageNomer"] > 2) { ?>
-                    <a class="pagenav__item pagenav__prev"
-                       href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= ($arResult["NavPageNomer"] - 1) ?>">Предыдущая</a>
+                    <a class="pagenav-item pagenav__prev"
+                       href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= ($arResult["NavPageNomer"] - 1) ?>"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_PREV') ?></a>
                 <? } else { ?>
-                    <a class="pagenav__item pagenav__prev"
-                       href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>">Предыдущая</a>
+                    <a class="pagenav-item pagenav__prev"
+                       href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_PREV') ?></a>
                 <? } ?>
             <? } else { // Если страница первая?>
-                <!-- <span class="pagenav__item">Начало</span> -->
-                <span class="pagenav__item pagenav__prev">Предыдущая</span>
+                <!-- <span class="pagenav-item">Начало</span> -->
+                <span class="pagenav-item pagenav__prev"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_PREV') ?></span>
                 <?
             } ?>
             <?
@@ -38,12 +40,12 @@ ob_start();
                 ?>
                 <?
                 if ($page == $arResult["NavPageNomer"]) { ?>
-                    <span class="pagenav__item pagenav__item_num pagenav__item_current"><?= $page ?></span>
+                    <span class="pagenav-item pagenav-item_num pagenav-item_current"><?= $page ?></span>
                 <? } else { ?>
-                    <a class="pagenav__item pagenav__item_num"
+                    <a class="pagenav-item pagenav-item_num"
                        href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= $page ?>"><?= $page ?></a>
                     <? /*if($page == $arResult["NavPageCount"] - 1):?>
-            <a class="pagenav__item pagenav__item_num" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$page+1?>"><?=$page+1?></a>
+            <a class="pagenav-item pagenav-item_num" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$page+1?>"><?=$page+1?></a>
             <?endif;*/ ?>
                     <?
                 } ?>
@@ -54,16 +56,16 @@ ob_start();
             <?
             if ($arResult["NavPageNomer"] < $arResult["NavPageCount"]) { ?>
                 <? if ($arResult["nEndPage"] + 1 < $arResult["NavPageCount"]): ?>
-                    <span class="pagenav__item pagenav__item_empty">...</span>
-                    <a class="pagenav__item"
+                    <span class="pagenav-item pagenav-item_empty">...</span>
+                    <a class="pagenav-item"
                        href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= $arResult["NavPageCount"] ?>"><?= $arResult["NavPageCount"]; ?></a>
                 <? endif; ?>
-                <a class="pagenav__item pagenav__next"
-                   href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= ($arResult["NavPageNomer"] + 1) ?>">Следующая</a>
+                <a class="pagenav-item pagenav__next"
+                   href="<?= $arResult["sUrlPath"] ?>?<?= $strNavQueryString ?>PAGEN_<?= $arResult["NavNum"] ?>=<?= ($arResult["NavPageNomer"] + 1) ?>"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_NEXT') ?></a>
                 <!--  -->
             <? } else { // Если страница последняя ?>
-                <span class="pagenav__item pagenav__next">Следующая</span>
-                <!-- <span class="pagenav__item">Конец</span> -->
+                <span class="pagenav-item pagenav__next"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_NEXT') ?></span>
+                <!-- <span class="pagenav-item">Конец</span> -->
                 <?
             } ?>
         </div>
