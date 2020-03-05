@@ -12,11 +12,23 @@ if ( ! $arResult['NavShowAlways']) {
 
 $strNavQueryString     = ($arResult['NavQueryString'] != '' ? $arResult['NavQueryString'] . '&amp;' : '');
 $strNavQueryStringFull = ($arResult['NavQueryString'] != '' ? '?' . $arResult['NavQueryString'] : '');
+
+$NavRecordCount = intval($arResult['NavRecordCount']);
+if(($to = intval($arResult['NavPageSize']) * intval($arResult['NavPageNomer'])) > $NavRecordCount) $to = $NavRecordCount;
+if(($from = $to - intval($arResult['NavPageSize'])) < 1) $from = 1;
+
 ob_start();
 ?>
     <div class="pagenav">
-        <div class="pagenav-label"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_LABEL') ?></div>
-        <div class="pagenav-body">
+        <div class="pagenav-summary">
+            <div class="pagenav-summary-label"><?= Loc::getMessage('SYSTEM_PAGENAVIGATION_LABEL') ?>&nbsp;</div>
+            <div class="page-summary-body">
+                <span class="pagenav-summary-diff"><?= $from ?> - <?= $to ?></span>
+                <span class="pagenav-summary-full"> из <?= $NavRecordCount ?></span>
+            </div>
+        </div>
+
+        <div class="pagenav-items">
             <?
             if ($arResult["NavPageNomer"] > 1) { ?>
                 <!-- <a class="pagenav-item" href="<?= $arResult["sUrlPath"] ?><?= $strNavQueryStringFull ?>">Начало</a> -->
