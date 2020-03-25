@@ -1,5 +1,8 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
+$composer =  $_SERVER["DOCUMENT_ROOT"] . "/local/vendor/autoload.php";
+if(is_file($composer)) require_once $composer;
+
 $php_interface = '/local/php_interface';
 
 CModule::AddAutoloadClasses(
