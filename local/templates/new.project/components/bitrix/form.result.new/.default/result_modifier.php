@@ -1,5 +1,65 @@
 <? if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
+if( ! function_exists('formHasPhoneValidator')) {
+    function formHasPhoneValidator($form_id) {
+        $rsValidatorList = CFormValidator::GetListForm(
+            $form_id,
+            $arFilter = array("ACTIVE" => "Y"),
+            $by = "C_SORT",
+            $order = "ASC",
+        );
+
+        while( $arValidator = $rsValidatorList->Fetch() ) {
+            if('phone_ru' === $arValidator['NAME']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if( ! function_exists('getFieldsWithPhoneRuValidator')) {
+    function getFieldsWithPhoneRuValidator($arQuestions) {
+        $arFields = array();
+
+        foreach ($arQuestions as $sid => $arQuestion) {
+            if('text' !== $arQuestion['FIELD_TYPE']) continue;
+            $arType = array("TYPE" => 'text');
+
+            $rsValidatorList = CFormValidator::GetList($arQuestion['ID'], $arType, $by = "C_SORT", $order = "ASC");
+
+            while ($arValidator = $rsValidatorList->Fetch()) {
+                if('phone_ru' === $arValidator['NAME']) {
+                    $arFields[$arQuestion['SID']] = $arQuestion;
+                }
+            }
+        }
+
+        return $arFields;
+    }
+}
+
+if(formHasPhoneValidator($arParams['WEB_FORM_ID'])) {
+    $APPLICATION->AddHeadScript($this->GetFolder() . '/../.default/assets/cleave-with-phone.ru.js');
+    $APPLICATION->AddHeadString('<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            new Cleave(\'[type="tel"]\', {
+                phone: true,
+                phoneRegionCode: "RU"
+            });
+        });
+    </script>');
+
+    $fields = getFieldsWithPhoneRuValidator($arResult['arQuestions']);
+    foreach ($fields as $sid => $field) {
+        if(isset($arResult["QUESTIONS"][$sid])) {
+            $arResult["QUESTIONS"][$sid]["HTML_CODE"] = str_replace('type="text"', 'type="tel"',
+                $arResult["QUESTIONS"][$sid]["HTML_CODE"]);
+        }
+    }
+}
+
 $arResult["FORM_HEADER"] = str_replace('<form', '<form class="form-result-new"', $arResult["FORM_HEADER"]);
 
 foreach ($arResult["QUESTIONS"] as $FIELD_SID => &$arQuestion) {

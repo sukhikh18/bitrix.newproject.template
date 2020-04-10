@@ -1,0 +1,16 @@
+{
+    "name": "newproject.template/bitrix",
+    "authors": [
+        {
+            "name": "nikolays93",
+            "email": "nikolays93@ya.ru"
+        }
+    ],
+    "require": {},
+    "repositories": [
+    	{
+    		"type": "git",
+    		"url": "https://github.com/nikolays93/bootstrap.templates"
+    	}
+    ]
+}

@@ -1,5 +1,8 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
+$composer =  $_SERVER["DOCUMENT_ROOT"] . "/local/vendor/autoload.php";
+if(is_file($composer)) require_once $composer;
+
 $php_interface = '/local/php_interface';
 
 CModule::AddAutoloadClasses(
@@ -8,6 +11,7 @@ CModule::AddAutoloadClasses(
         'local\handlers\admin\IBlockPropertyCheckbox' => $php_interface . '/handlers/admin/IBlockPropertyCheckbox.php',
         'local\handlers\admin\CUserTypeIBlockElement' => $php_interface . '/handlers/admin/IBlockUserFieldElement.php',
         'local\handlers\admin\IBlockVisualEditorComponents' => $php_interface . '/handlers/admin/IBlockVisualEditorComponents.php',
+        'CFormPhoneValidator' => $php_interface . '/handlers/admin/CFormPhoneValidator.php',
 
         'local\handlers\Page' => $php_interface . '/handlers/page.php',
         'local\handlers\User' => $php_interface . '/handlers/user.php',
