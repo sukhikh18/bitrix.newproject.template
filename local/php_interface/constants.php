@@ -26,7 +26,7 @@ define("IBLOCK_ID__CATALOG", 2);
  */
 define('PATH_TO_CATALOG', '/shop/');
 
-define('PATH_TO_AUTH',            '/auth/');
+define('PATH_TO_AUTH',            '/user/');
 define('PATH_TO_REGISTER',        PATH_TO_AUTH . '?register=yes');
 define('PATH_TO_FORGOT_PASSWORD', PATH_TO_AUTH . '?forgot_password=yes');
 

@@ -16,6 +16,14 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/rest/index.php',
     'SORT' => 100,
   ),
+  2 => 
+  array (
+    'CONDITION' => '#^/auth/#',
+    'RULE' => '',
+    'ID' => NULL,
+    'PATH' => '/user/',
+    'SORT' => 100,
+  ),
   3 => 
   array (
     'CONDITION' => '#^/news/#',
