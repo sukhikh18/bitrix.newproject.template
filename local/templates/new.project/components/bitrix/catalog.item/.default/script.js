@@ -34,7 +34,6 @@
 		this.showSkuProps = false;
 		this.basketAction = 'ADD';
 		this.showClosePopup = false;
-		this.useCompare = false;
 		this.showSubscription = false;
 		this.visual = {
 			ID: '',
@@ -76,12 +75,6 @@
 			sku_props_var: 'basket_props',
 			add_url: '',
 			buy_url: ''
-		};
-
-		this.compareData = {
-			compareUrl: '',
-			compareDeleteUrl: '',
-			comparePath: ''
 		};
 
 		this.defaultPict = {
@@ -151,7 +144,6 @@
 		this.obSecondDscPerc = null;
 		this.obSkuProps = null;
 		this.obMeasure = null;
-		this.obCompare = null;
 
 		this.obPopupWin = null;
 		this.basketUrl = '';
@@ -191,7 +183,6 @@
 			}
 
 			this.showClosePopup = arParams.SHOW_CLOSE_POPUP;
-			this.useCompare = arParams.DISPLAY_COMPARE;
 			this.fullDisplayMode = arParams.PRODUCT_DISPLAY_MODE === 'Y';
 			this.bigData = arParams.BIG_DATA;
 			this.viewMode = arParams.VIEW_MODE || '';
@@ -366,39 +357,6 @@
 				if (this.basketData.add_url === '' && this.basketData.buy_url === '')
 				{
 					this.errorCode = -1024;
-				}
-			}
-
-			if (this.useCompare)
-			{
-				if (arParams.COMPARE && typeof arParams.COMPARE === 'object')
-				{
-					if (arParams.COMPARE.COMPARE_PATH)
-					{
-						this.compareData.comparePath = arParams.COMPARE.COMPARE_PATH;
-					}
-
-					if (arParams.COMPARE.COMPARE_URL_TEMPLATE)
-					{
-						this.compareData.compareUrl = arParams.COMPARE.COMPARE_URL_TEMPLATE;
-					}
-					else
-					{
-						this.useCompare = false;
-					}
-
-					if (arParams.COMPARE.COMPARE_DELETE_URL_TEMPLATE)
-					{
-						this.compareData.compareDeleteUrl = arParams.COMPARE.COMPARE_DELETE_URL_TEMPLATE;
-					}
-					else
-					{
-						this.useCompare = false;
-					}
-				}
-				else
-				{
-					this.useCompare = false;
 				}
 			}
 		}
@@ -650,17 +608,6 @@
 					{
 						BX.bind(this.obBuyBtn, 'click', BX.proxy(this.buyBasket, this));
 					}
-				}
-
-				if (this.useCompare)
-				{
-					this.obCompare = BX(this.visual.COMPARE_LINK_ID);
-					if (this.obCompare)
-					{
-						BX.bind(this.obCompare, 'click', BX.proxy(this.compare, this));
-					}
-
-					BX.addCustomEvent('onCatalogDeleteCompare', BX.proxy(this.checkDeletedCompare, this));
 				}
 			}
 		},
@@ -1908,7 +1855,6 @@
 
 				this.quantitySet(index);
 				this.setPrice();
-				this.setCompared(this.offers[index].COMPARED);
 
 				this.offerNum = index;
 			}
@@ -2100,209 +2046,6 @@
 						BX.adjust(this.obSecondDscPerc, obData);
 					}
 				}
-			}
-		},
-
-		compare: function(event)
-		{
-			var checkbox = this.obCompare.querySelector('[data-entity="compare-checkbox"]'),
-				target = BX.getEventTarget(event),
-				checked = true;
-
-			if (checkbox)
-			{
-				checked = target === checkbox ? checkbox.checked : !checkbox.checked;
-			}
-
-			var url = checked ? this.compareData.compareUrl : this.compareData.compareDeleteUrl,
-				compareLink;
-
-			if (url)
-			{
-				if (target !== checkbox)
-				{
-					BX.PreventDefault(event);
-					this.setCompared(checked);
-				}
-
-				switch (this.productType)
-				{
-					case 0: // no catalog
-					case 1: // product
-					case 2: // set
-						compareLink = url.replace('#ID#', this.product.id.toString());
-						break;
-					case 3: // sku
-						compareLink = url.replace('#ID#', this.offers[this.offerNum].ID);
-						break;
-				}
-
-				BX.ajax({
-					method: 'POST',
-					dataType: checked ? 'json' : 'html',
-					url: compareLink + (compareLink.indexOf('?') !== -1 ? '&' : '?') + 'ajax_action=Y',
-					onsuccess: checked
-						? BX.proxy(this.compareResult, this)
-						: BX.proxy(this.compareDeleteResult, this)
-				});
-			}
-		},
-
-		compareResult: function(result)
-		{
-			var popupContent, popupButtons;
-
-			if (this.obPopupWin)
-			{
-				this.obPopupWin.close();
-			}
-
-			if (!BX.type.isPlainObject(result))
-				return;
-
-			this.initPopupWindow();
-
-			if (this.offers.length > 0)
-			{
-				this.offers[this.offerNum].COMPARED = result.STATUS === 'OK';
-			}
-
-			if (result.STATUS === 'OK')
-			{
-				BX.onCustomEvent('OnCompareChange');
-
-				popupContent = '<div style="width: 100%; margin: 0; text-align: center;"><p>'
-					+ BX.message('COMPARE_MESSAGE_OK')
-					+ '</p></div>';
-
-				if (this.showClosePopup)
-				{
-					popupButtons = [
-						new BasketButton({
-							text: BX.message('BTN_MESSAGE_COMPARE_REDIRECT'),
-							events: {
-								click: BX.delegate(this.compareRedirect, this)
-							},
-							style: {marginRight: '10px'}
-						}),
-						new BasketButton({
-							text: BX.message('BTN_MESSAGE_CLOSE_POPUP'),
-							events: {
-								click: BX.delegate(this.obPopupWin.close, this.obPopupWin)
-							}
-						})
-					];
-				}
-				else
-				{
-					popupButtons = [
-						new BasketButton({
-							text: BX.message('BTN_MESSAGE_COMPARE_REDIRECT'),
-							events: {
-								click: BX.delegate(this.compareRedirect, this)
-							}
-						})
-					];
-				}
-			}
-			else
-			{
-				popupContent = '<div style="width: 100%; margin: 0; text-align: center;"><p>'
-					+ (result.MESSAGE ? result.MESSAGE : BX.message('COMPARE_UNKNOWN_ERROR'))
-					+ '</p></div>';
-				popupButtons = [
-					new BasketButton({
-						text: BX.message('BTN_MESSAGE_CLOSE'),
-						events: {
-							click: BX.delegate(this.obPopupWin.close, this.obPopupWin)
-						}
-					})
-				];
-			}
-
-			this.obPopupWin.setTitleBar(BX.message('COMPARE_TITLE'));
-			this.obPopupWin.setContent(popupContent);
-			this.obPopupWin.setButtons(popupButtons);
-			this.obPopupWin.show();
-		},
-
-		compareDeleteResult: function()
-		{
-			BX.onCustomEvent('OnCompareChange');
-
-			if (this.offers && this.offers.length)
-			{
-				this.offers[this.offerNum].COMPARED = false;
-			}
-		},
-
-		setCompared: function(state)
-		{
-			if (!this.obCompare)
-				return;
-
-			var checkbox = this.obCompare.querySelector('[data-entity="compare-checkbox"]');
-			if (checkbox)
-			{
-				checkbox.checked = state;
-			}
-		},
-
-		setCompareInfo: function(comparedIds)
-		{
-			if (!BX.type.isArray(comparedIds))
-				return;
-
-			for (var i in this.offers)
-			{
-				if (this.offers.hasOwnProperty(i))
-				{
-					this.offers[i].COMPARED = BX.util.in_array(this.offers[i].ID, comparedIds);
-				}
-			}
-		},
-
-		compareRedirect: function()
-		{
-			if (this.compareData.comparePath)
-			{
-				location.href = this.compareData.comparePath;
-			}
-			else
-			{
-				this.obPopupWin.close();
-			}
-		},
-
-		checkDeletedCompare: function(id)
-		{
-			switch (this.productType)
-			{
-				case 0: // no catalog
-				case 1: // product
-				case 2: // set
-					if (this.product.id == id)
-					{
-						this.setCompared(false);
-					}
-
-					break;
-				case 3: // sku
-					var i = this.offers.length;
-					while (i--)
-					{
-						if (this.offers[i].ID == id)
-						{
-							this.offers[i].COMPARED = false;
-
-							if (this.offerNum == i)
-							{
-								this.setCompared(false);
-							}
-
-							break;
-						}
-					}
 			}
 		},
 
