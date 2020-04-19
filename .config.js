@@ -27,13 +27,14 @@ var paths = module.exports.paths = {
     },
 
     images: {
-        src:  'img/HD/',
+        src:  'img/high/',
+        pages: 'page/**/img/high/',
         dest: 'img/',
     },
 
     pages: {
-        src: assets + 'pages/',
-        dest: 'pages/',
+        src: assets + 'page/',
+        dest: 'page/',
     },
 
     vendor: {
