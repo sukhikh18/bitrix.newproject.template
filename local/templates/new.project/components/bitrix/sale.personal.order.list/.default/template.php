@@ -8,7 +8,7 @@ use Bitrix\Main,
 
 Asset::getInstance()->addJs("/bitrix/components/bitrix/sale.order.payment.change/templates/.default/script.js");
 Asset::getInstance()->addCss("/bitrix/components/bitrix/sale.order.payment.change/templates/.default/style.css");
-$this->addExternalCss("/bitrix/css/main/bootstrap.css");
+// $this->addExternalCss("/bitrix/css/main/bootstrap.css");
 CJSCore::Init(array('clipboard', 'fx'));
 
 Loc::loadMessages(__FILE__);
@@ -131,7 +131,7 @@ else
 			?>
 			<div class="col-md-12 col-sm-12 sale-order-list-container">
 				<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12 sale-order-list-title-container">
+					<div class="col-md-12 col-sm-12 col-12 sale-order-list-title-container">
 						<h2 class="sale-order-list-title">
 							<?=Loc::getMessage('SPOL_TPL_ORDER')?>
 							<?=Loc::getMessage('SPOL_TPL_NUMBER_SIGN').$order['ORDER']['ACCOUNT_NUMBER']?>
@@ -181,21 +181,7 @@ else
 							}
 							?>
 							<div class="row sale-order-list-inner-row">
-								<?
-								if ($showDelimeter)
-								{
-									?>
-									<div class="sale-order-list-top-border"></div>
-									<?
-								}
-								else
-								{
-									$showDelimeter = true;
-								}
-								?>
-
-								<div class="sale-order-list-inner-row-body">
-									<div class="col-md-9 col-sm-8 col-xs-12 sale-order-list-payment">
+									<div class="col-md-9 col-sm-8 col-12 sale-order-list-payment">
 										<div class="sale-order-list-payment-title">
 											<?
 											$paymentSubTitle = Loc::getMessage('SPOL_TPL_BILL')." ".Loc::getMessage('SPOL_TPL_NUMBER_SIGN').htmlspecialcharsbx($payment['ACCOUNT_NUMBER']);
@@ -283,7 +269,7 @@ else
 										if ($order['ORDER']['IS_ALLOW_PAY'] == 'N')
 										{
 											?>
-											<div class="col-md-3 col-sm-4 col-xs-12 sale-order-list-button-container">
+											<div class="col-md-3 col-sm-4 col-12 sale-order-list-button-container">
 												<a class="sale-order-list-button inactive-button">
 													<?=Loc::getMessage('SPOL_TPL_PAY')?>
 												</a>
@@ -293,7 +279,7 @@ else
 										elseif ($payment['NEW_WINDOW'] === 'Y')
 										{
 											?>
-											<div class="col-md-3 col-sm-4 col-xs-12 sale-order-list-button-container">
+											<div class="col-md-3 col-sm-4 col-12 sale-order-list-button-container">
 												<a class="sale-order-list-button" target="_blank" href="<?=htmlspecialcharsbx($payment['PSA_ACTION_FILE'])?>">
 													<?=Loc::getMessage('SPOL_TPL_PAY')?>
 												</a>
@@ -303,7 +289,7 @@ else
 										else
 										{
 											?>
-											<div class="col-md-3 col-sm-4 col-xs-12 sale-order-list-button-container">
+											<div class="col-md-3 col-sm-4 col-12 sale-order-list-button-container">
 												<a class="sale-order-list-button ajax_reload" href="<?=htmlspecialcharsbx($payment['PSA_ACTION_FILE'])?>">
 													<?=Loc::getMessage('SPOL_TPL_PAY')?>
 												</a>
@@ -313,8 +299,7 @@ else
 									}
 									?>
 
-								</div>
-								<div class="col-lg-9 col-md-9 col-sm-10 col-xs-12 sale-order-list-inner-row-template">
+								<div class="col-lg-9 col-md-9 col-sm-10 col-12 sale-order-list-inner-row-template">
 									<a class="sale-order-list-cancel-payment">
 										<i class="fa fa-long-arrow-left"></i> <?=Loc::getMessage('SPOL_CANCEL_PAYMENT')?>
 									</a>
@@ -352,7 +337,7 @@ else
 										$showDelimeter = true;
 									}
 								?>
-								<div class="col-md-9 col-sm-8 col-xs-12 sale-order-list-shipment">
+								<div class="col-md-9 col-sm-8 col-12 sale-order-list-shipment">
 									<div class="sale-order-list-shipment-title">
 									<span class="sale-order-list-shipment-element">
 										<?=Loc::getMessage('SPOL_TPL_LOAD')?>
@@ -431,7 +416,6 @@ else
 						}
 						?>
 						<div class="row sale-order-list-inner-row">
-							<div class="sale-order-list-top-border"></div>
 							<div class="col-md-<?=($order['ORDER']['CAN_CANCEL'] !== 'N') ? 8 : 10?>  col-sm-12 sale-order-list-about-container">
 								<a class="sale-order-list-about-link" href="<?=htmlspecialcharsbx($order["ORDER"]["URL_TO_DETAIL"])?>"><?=Loc::getMessage('SPOL_TPL_MORE_ON_ORDER')?></a>
 							</div>
