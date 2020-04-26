@@ -11,6 +11,11 @@ if($arResult["SHOW_SMS_FIELD"] == true)
 {
 	CJSCore::Init('phone_auth');
 }
+
+$arResult["INCLUDE_FORUM"] = "N";
+$arResult["INCLUDE_BLOG"] = "N";
+$arResult["INCLUDE_LEARNING"] = "N";
+
 ?>
 
 <div class="bx-auth-profile">
@@ -90,84 +95,52 @@ else
 
 var cookie_prefix = '<?=$arResult["COOKIE_PREFIX"]?>';
 </script>
-<form method="post" name="form1" action="<?=$arResult["FORM_TARGET"]?>" enctype="multipart/form-data">
+
+<form method="post" name="form1" action="<?=$arResult["FORM_TARGET"]?>" enctype="multipart/form-data" class="profile-form">
 <?=$arResult["BX_SESSION_CHECK"]?>
 <input type="hidden" name="lang" value="<?=LANG?>" />
 <input type="hidden" name="ID" value=<?=$arResult["ID"]?> />
 
-<div class="profile-link profile-user-div-link"><a title="<?=GetMessage("REG_SHOW_HIDE")?>" href="javascript:void(0)" onclick="SectionClick('reg')"><?=GetMessage("REG_SHOW_HIDE")?></a></div>
-<div class="profile-block-<?=strpos($arResult["opened"], "reg") === false ? "hidden" : "shown"?>" id="user_div_reg">
-<table class="profile-table data-table">
-	<thead>
+<h5 class="profile-link profile-user-div-link"><?=GetMessage("REG_SHOW_HIDE")?></h5>
+
+<div id="user_div_reg">
+    <div class="custom-auth__errors" data-entity="error-messages"></div>
+
+    <!-- <input type="text" name="TITLE" value="<?=$arResult["arUser"]["TITLE"]?>" /> -->
+
+    <div class="form-group form-name">
+    	<label>Ваше имя</label>
+    	<input type="text" placeholder="Ф.И.О." name="NAME" value="<?=$arResult["arUser"]["NAME"]?>" class="form-control" autocomplete="name">
+    </div>
+
+    <div class="form-group form-name">
+    	<label>Ваш логин</label>
+    	<input type="text" placeholder="Логин" name="LOGIN" value="<? echo $arResult["arUser"]["LOGIN"]?>" class="form-control" autocomplete="login">
+    	<!-- <input type="text" name="SECOND_NAME" value="<?=$arResult["arUser"]["SECOND_NAME"]?>" /> -->
+    </div>
+
+    <div class="form-group form-email">
+    	<label>Ваш Email</label>
+    	<input type="text" placeholder="Электронная почта" name="EMAIL" value="<? echo $arResult["arUser"]["EMAIL"]?>" class="form-control" autocomplete="email" required="true">
+    </div>
+
+    <div class="form-group form-personal_phone">
+    	<label>Ваш номер телефона</label>
+    	<input type="tel" placeholder="Номер телефона" name="PERSONAL_PHONE" value="<?=$arResult["arUser"]["PERSONAL_PHONE"]?>" class="form-control" autocomplete="tel">
+    </div>
+
+    <?/*if($arResult["PHONE_REGISTRATION"]):?>
 		<tr>
-			<td colspan="2">&nbsp;</td>
+			<td><?echo GetMessage("main_profile_phone_number")?><?if($arResult["PHONE_REQUIRED"]):?><span class="starrequired">*</span><?endif?></td>
+			<td><input type="text" name="PHONE_NUMBER" maxlength="50" value="<? echo $arResult["arUser"]["PHONE_NUMBER"]?>" /></td>
 		</tr>
-	</thead>
-	<tbody>
-	<?
-	if($arResult["ID"]>0)
-	{
-	?>
-		<?
-		if (strlen($arResult["arUser"]["TIMESTAMP_X"])>0)
-		{
-		?>
+	<?endif*/ // SHOW_SMS_FIELD ?>
+
+	<?/*if($arResult['CAN_EDIT_PASSWORD']):?>
 		<tr>
-			<td><?=GetMessage('LAST_UPDATE')?></td>
-			<td><?=$arResult["arUser"]["TIMESTAMP_X"]?></td>
-		</tr>
-		<?
-		}
-		?>
-		<?
-		if (strlen($arResult["arUser"]["LAST_LOGIN"])>0)
-		{
-		?>
-		<tr>
-			<td><?=GetMessage('LAST_LOGIN')?></td>
-			<td><?=$arResult["arUser"]["LAST_LOGIN"]?></td>
-		</tr>
-		<?
-		}
-		?>
-	<?
-	}
-	?>
-	<tr>
-		<td><?echo GetMessage("main_profile_title")?></td>
-		<td><input type="text" name="TITLE" value="<?=$arResult["arUser"]["TITLE"]?>" /></td>
-	</tr>
-	<tr>
-		<td><?=GetMessage('NAME')?></td>
-		<td><input type="text" name="NAME" maxlength="50" value="<?=$arResult["arUser"]["NAME"]?>" /></td>
-	</tr>
-	<tr>
-		<td><?=GetMessage('LAST_NAME')?></td>
-		<td><input type="text" name="LAST_NAME" maxlength="50" value="<?=$arResult["arUser"]["LAST_NAME"]?>" /></td>
-	</tr>
-	<tr>
-		<td><?=GetMessage('SECOND_NAME')?></td>
-		<td><input type="text" name="SECOND_NAME" maxlength="50" value="<?=$arResult["arUser"]["SECOND_NAME"]?>" /></td>
-	</tr>
-	<tr>
-		<td><?=GetMessage('LOGIN')?><span class="starrequired">*</span></td>
-		<td><input type="text" name="LOGIN" maxlength="50" value="<? echo $arResult["arUser"]["LOGIN"]?>" /></td>
-	</tr>
-	<tr>
-		<td><?=GetMessage('EMAIL')?><?if($arResult["EMAIL_REQUIRED"]):?><span class="starrequired">*</span><?endif?></td>
-		<td><input type="text" name="EMAIL" maxlength="50" value="<? echo $arResult["arUser"]["EMAIL"]?>" /></td>
-	</tr>
-<?if($arResult["PHONE_REGISTRATION"]):?>
-	<tr>
-		<td><?echo GetMessage("main_profile_phone_number")?><?if($arResult["PHONE_REQUIRED"]):?><span class="starrequired">*</span><?endif?></td>
-		<td><input type="text" name="PHONE_NUMBER" maxlength="50" value="<? echo $arResult["arUser"]["PHONE_NUMBER"]?>" /></td>
-	</tr>
-<?endif?>
-<?if($arResult['CAN_EDIT_PASSWORD']):?>
-	<tr>
-		<td><?=GetMessage('NEW_PASSWORD_REQ')?></td>
-		<td><input type="password" name="NEW_PASSWORD" maxlength="50" value="" autocomplete="off" class="bx-auth-input" />
-<?if($arResult["SECURE_AUTH"]):?>
+			<td><?=GetMessage('NEW_PASSWORD_REQ')?></td>
+			<td><input type="password" name="NEW_PASSWORD" maxlength="50" value="" autocomplete="off" class="bx-auth-input" />
+				<?if($arResult["SECURE_AUTH"]):?>
 				<span class="bx-auth-secure" id="bx_auth_secure" title="<?echo GetMessage("AUTH_SECURE_NOTE")?>" style="display:none">
 					<div class="bx-auth-secure-icon"></div>
 				</span>
@@ -176,45 +149,52 @@ var cookie_prefix = '<?=$arResult["COOKIE_PREFIX"]?>';
 					<div class="bx-auth-secure-icon bx-auth-secure-unlock"></div>
 				</span>
 				</noscript>
-<script type="text/javascript">
-document.getElementById('bx_auth_secure').style.display = 'inline-block';
-</script>
-		</td>
-	</tr>
-<?endif?>
-	<tr>
-		<td><?=GetMessage('NEW_PASSWORD_CONFIRM')?></td>
-		<td><input type="password" name="NEW_PASSWORD_CONFIRM" maxlength="50" value="" autocomplete="off" /></td>
-	</tr>
-<?endif?>
-<?if($arResult["TIME_ZONE_ENABLED"] == true):?>
-	<tr>
-		<td colspan="2" class="profile-header"><?echo GetMessage("main_profile_time_zones")?></td>
-	</tr>
-	<tr>
-		<td><?echo GetMessage("main_profile_time_zones_auto")?></td>
-		<td>
-			<select name="AUTO_TIME_ZONE" onchange="this.form.TIME_ZONE.disabled=(this.value != 'N')">
-				<option value=""><?echo GetMessage("main_profile_time_zones_auto_def")?></option>
-				<option value="Y"<?=($arResult["arUser"]["AUTO_TIME_ZONE"] == "Y"? ' SELECTED="SELECTED"' : '')?>><?echo GetMessage("main_profile_time_zones_auto_yes")?></option>
-				<option value="N"<?=($arResult["arUser"]["AUTO_TIME_ZONE"] == "N"? ' SELECTED="SELECTED"' : '')?>><?echo GetMessage("main_profile_time_zones_auto_no")?></option>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td><?echo GetMessage("main_profile_time_zones_zones")?></td>
-		<td>
-			<select name="TIME_ZONE"<?if($arResult["arUser"]["AUTO_TIME_ZONE"] <> "N") echo ' disabled="disabled"'?>>
-<?foreach($arResult["TIME_ZONE_LIST"] as $tz=>$tz_name):?>
-				<option value="<?=htmlspecialcharsbx($tz)?>"<?=($arResult["arUser"]["TIME_ZONE"] == $tz? ' SELECTED="SELECTED"' : '')?>><?=htmlspecialcharsbx($tz_name)?></option>
-<?endforeach?>
-			</select>
-		</td>
-	</tr>
-<?endif?>
-	</tbody>
-</table>
+				<script type="text/javascript">
+				document.getElementById('bx_auth_secure').style.display = 'inline-block';
+				</script>
+			</td>
+		</tr>
+		<?endif?>
+		<tr>
+			<td><?=GetMessage('NEW_PASSWORD_CONFIRM')?></td>
+			<td><input type="password" name="NEW_PASSWORD_CONFIRM" maxlength="50" value="" autocomplete="off" /></td>
+		</tr>
+	<?endif*/ // CAN_EDIT_PASSWORD?>
+
+	<div class="form-group form-email">
+    	<label>Введите ваш новый пароль</label>
+    	<input type="password" placeholder="Пароль" name="REGISTER[PASSWORD]" value="" class="form-control" autocomplete="off">
+    	<small class="form-text text-muted">Если хотите изменить введите новый пароль.</small>
+    </div>
+
+    <?/*if($arResult["TIME_ZONE_ENABLED"] == true):?>
+		<tr>
+			<td colspan="2" class="profile-header"><?echo GetMessage("main_profile_time_zones")?></td>
+		</tr>
+		<tr>
+			<td><?echo GetMessage("main_profile_time_zones_auto")?></td>
+			<td>
+				<select name="AUTO_TIME_ZONE" onchange="this.form.TIME_ZONE.disabled=(this.value != 'N')">
+					<option value=""><?echo GetMessage("main_profile_time_zones_auto_def")?></option>
+					<option value="Y"<?=($arResult["arUser"]["AUTO_TIME_ZONE"] == "Y"? ' SELECTED="SELECTED"' : '')?>><?echo GetMessage("main_profile_time_zones_auto_yes")?></option>
+					<option value="N"<?=($arResult["arUser"]["AUTO_TIME_ZONE"] == "N"? ' SELECTED="SELECTED"' : '')?>><?echo GetMessage("main_profile_time_zones_auto_no")?></option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td><?echo GetMessage("main_profile_time_zones_zones")?></td>
+			<td>
+				<select name="TIME_ZONE"<?if($arResult["arUser"]["AUTO_TIME_ZONE"] <> "N") echo ' disabled="disabled"'?>>
+					<?foreach($arResult["TIME_ZONE_LIST"] as $tz=>$tz_name):?>
+					<option value="<?=htmlspecialcharsbx($tz)?>"<?=($arResult["arUser"]["TIME_ZONE"] == $tz? ' SELECTED="SELECTED"' : '')?>><?=htmlspecialcharsbx($tz_name)?></option>
+					<?endforeach?>
+				</select>
+			</td>
+		</tr>
+	<?endif*/ // TIME_ZONE_ENABLED?>
 </div>
+
+<?php /* ?>
 <div class="profile-link profile-user-div-link"><a title="<?=GetMessage("USER_SHOW_HIDE")?>" href="javascript:void(0)" onclick="SectionClick('personal')"><?=GetMessage("USER_PERSONAL_INFO")?></a></div>
 <div id="user_div_personal" class="profile-block-<?=strpos($arResult["opened"], "personal") === false ? "hidden" : "shown"?>">
 <table class="data-table profile-table">
@@ -331,6 +311,7 @@ document.getElementById('bx_auth_secure').style.display = 'inline-block';
 </table>
 </div>
 
+
 <div class="profile-link profile-user-div-link"><a title="<?=GetMessage("USER_SHOW_HIDE")?>" href="javascript:void(0)" onclick="SectionClick('work')"><?=GetMessage("USER_WORK_INFO")?></a></div>
 <div id="user_div_work" class="profile-block-<?=strpos($arResult["opened"], "work") === false ? "hidden" : "shown"?>">
 <table class="data-table profile-table">
@@ -422,6 +403,7 @@ document.getElementById('bx_auth_secure').style.display = 'inline-block';
 	</tbody>
 </table>
 </div>
+<?php */ ?>
 	<?
 	if ($arResult["INCLUDE_FORUM"] == "Y")
 	{
@@ -541,7 +523,8 @@ document.getElementById('bx_auth_secure').style.display = 'inline-block';
 	</table>
 	</div>
 	<?endif;?>
-	<?if($arResult["IS_ADMIN"]):?>
+
+	<?/*if($arResult["IS_ADMIN"]):?>
 	<div class="profile-link profile-user-div-link"><a title="<?=GetMessage("USER_SHOW_HIDE")?>" href="javascript:void(0)" onclick="SectionClick('admin')"><?=GetMessage("USER_ADMIN_NOTES")?></a></div>
 	<div id="user_div_admin" class="profile-block-<?=strpos($arResult["opened"], "admin") === false ? "hidden" : "shown"?>">
 	<table class="data-table profile-table">
@@ -558,7 +541,7 @@ document.getElementById('bx_auth_secure').style.display = 'inline-block';
 		</tbody>
 	</table>
 	</div>
-	<?endif;?>
+	<?endif;*/?>
 	<?// ********************* User properties ***************************************************?>
 	<?if($arResult["USER_PROPERTIES"]["SHOW"] == "Y"):?>
 	<div class="profile-link profile-user-div-link"><a title="<?=GetMessage("USER_SHOW_HIDE")?>" href="javascript:void(0)" onclick="SectionClick('user_properties')"><?=strlen(trim($arParams["USER_PROPERTY_NAME"])) > 0 ? $arParams["USER_PROPERTY_NAME"] : GetMessage("USER_TYPE_EDIT_TAB")?></a></div>
@@ -587,20 +570,11 @@ document.getElementById('bx_auth_secure').style.display = 'inline-block';
 	</div>
 	<?endif;?>
 	<?// ******************** /User properties ***************************************************?>
-	<p><?echo $arResult["GROUP_POLICY"]["PASSWORD_REQUIREMENTS"];?></p>
-	<p><input type="submit" name="save" value="<?=(($arResult["ID"]>0) ? GetMessage("MAIN_SAVE") : GetMessage("MAIN_ADD"))?>">&nbsp;&nbsp;<input type="reset" value="<?=GetMessage('MAIN_RESET');?>"></p>
+	<div class="submit-wrap mt-2 mb-2">
+        <button type="submit" name="save" value="<?= GetMessage("MAIN_SAVE") ?>" class="btn btn-primary">Сохранить</button>
+    </div>
+	<!--  -->
 </form>
-<?
-if($arResult["SOCSERV_ENABLED"])
-{
-	$APPLICATION->IncludeComponent("bitrix:socserv.auth.split", ".default", array(
-			"SHOW_PROFILES" => "Y",
-			"ALLOW_DELETE" => "Y"
-		),
-		false
-	);
-}
-?>
 
 <?endif?>
 
