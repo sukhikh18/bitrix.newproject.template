@@ -34,13 +34,11 @@
 		this.showSkuProps = false;
 		this.basketAction = 'ADD';
 		this.showClosePopup = false;
-		this.useCompare = false;
 		this.showSubscription = false;
 		this.visual = {
 			ID: '',
 			PICT_ID: '',
 			SECOND_PICT_ID: '',
-			PICT_SLIDER_ID: '',
 			QUANTITY_ID: '',
 			QUANTITY_UP_ID: '',
 			QUANTITY_DOWN_ID: '',
@@ -78,30 +76,11 @@
 			buy_url: ''
 		};
 
-		this.compareData = {
-			compareUrl: '',
-			compareDeleteUrl: '',
-			comparePath: ''
-		};
-
 		this.defaultPict = {
 			pict: null,
 			secondPict: null
 		};
 
-		this.defaultSliderOptions = {
-			interval: 3000,
-			wrap: true
-		};
-		this.slider = {
-			options: {},
-			items: [],
-			active: null,
-			sliding: null,
-			paused: null,
-			interval: null,
-			progress: null
-		};
 		this.touch = null;
 
 		this.quantityDelay = null;
@@ -139,8 +118,6 @@
 		this.obQuantityLimit = {};
 		this.obPict = null;
 		this.obSecondPict = null;
-		this.obPictSlider = null;
-		this.obPictSliderIndicator = null;
 		this.obPrice = null;
 		this.obTree = null;
 		this.obBuyBtn = null;
@@ -151,7 +128,6 @@
 		this.obSecondDscPerc = null;
 		this.obSkuProps = null;
 		this.obMeasure = null;
-		this.obCompare = null;
 
 		this.obPopupWin = null;
 		this.basketUrl = '';
@@ -191,7 +167,6 @@
 			}
 
 			this.showClosePopup = arParams.SHOW_CLOSE_POPUP;
-			this.useCompare = arParams.DISPLAY_COMPARE;
 			this.fullDisplayMode = arParams.PRODUCT_DISPLAY_MODE === 'Y';
 			this.bigData = arParams.BIG_DATA;
 			this.viewMode = arParams.VIEW_MODE || '';
@@ -368,39 +343,6 @@
 					this.errorCode = -1024;
 				}
 			}
-
-			if (this.useCompare)
-			{
-				if (arParams.COMPARE && typeof arParams.COMPARE === 'object')
-				{
-					if (arParams.COMPARE.COMPARE_PATH)
-					{
-						this.compareData.comparePath = arParams.COMPARE.COMPARE_PATH;
-					}
-
-					if (arParams.COMPARE.COMPARE_URL_TEMPLATE)
-					{
-						this.compareData.compareUrl = arParams.COMPARE.COMPARE_URL_TEMPLATE;
-					}
-					else
-					{
-						this.useCompare = false;
-					}
-
-					if (arParams.COMPARE.COMPARE_DELETE_URL_TEMPLATE)
-					{
-						this.compareData.compareDeleteUrl = arParams.COMPARE.COMPARE_DELETE_URL_TEMPLATE;
-					}
-					else
-					{
-						this.useCompare = false;
-					}
-				}
-				else
-				{
-					this.useCompare = false;
-				}
-			}
 		}
 
 		if (this.errorCode === 0)
@@ -430,14 +372,6 @@
 			if (this.secondPict && this.visual.SECOND_PICT_ID)
 			{
 				this.obSecondPict = BX(this.visual.SECOND_PICT_ID);
-			}
-
-			this.obPictSlider = BX(this.visual.PICT_SLIDER_ID);
-			this.obPictSliderIndicator = BX(this.visual.PICT_SLIDER_ID + '_indicator');
-			this.obPictSliderProgressBar = BX(this.visual.PICT_SLIDER_ID + '_progress_bar');
-			if (!this.obPictSlider)
-			{
-				this.errorCode = -4;
 			}
 
 			this.obPrice = BX(this.visual.PRICE_ID);
@@ -538,14 +472,7 @@
 
 			if (this.errorCode === 0)
 			{
-				// product slider events
-				if (this.isTouchDevice)
-				{
-					BX.bind(this.obPictSlider, 'touchstart', BX.proxy(this.touchStartEvent, this));
-					BX.bind(this.obPictSlider, 'touchend', BX.proxy(this.touchEndEvent, this));
-					BX.bind(this.obPictSlider, 'touchcancel', BX.proxy(this.touchEndEvent, this));
-				}
-				else
+				if (!this.isTouchDevice)
 				{
 					if (this.viewMode === 'CARD')
 					{
@@ -553,10 +480,6 @@
 						BX.bind(this.obProduct, 'mouseenter', BX.proxy(this.hoverOn, this));
 						BX.bind(this.obProduct, 'mouseleave', BX.proxy(this.hoverOff, this));
 					}
-
-					// product slider events
-					BX.bind(this.obProduct, 'mouseenter', BX.proxy(this.cycleSlider, this));
-					BX.bind(this.obProduct, 'mouseleave', BX.proxy(this.stopSlider, this));
 				}
 
 				if (this.bigData)
@@ -609,11 +532,6 @@
 					case 0: // no catalog
 					case 1: // product
 					case 2: // set
-						if (parseInt(this.product.morePhotoCount) > 1 && this.obPictSlider)
-						{
-							this.initializeSlider();
-						}
-
 						this.checkQuantityControls();
 
 						break;
@@ -632,10 +550,6 @@
 
 							this.setCurrent();
 						}
-						else if (parseInt(this.product.morePhotoCount) > 1 && this.obPictSlider)
-						{
-							this.initializeSlider();
-						}
 
 						break;
 				}
@@ -650,17 +564,6 @@
 					{
 						BX.bind(this.obBuyBtn, 'click', BX.proxy(this.buyBasket, this));
 					}
-				}
-
-				if (this.useCompare)
-				{
-					this.obCompare = BX(this.visual.COMPARE_LINK_ID);
-					if (this.obCompare)
-					{
-						BX.bind(this.obCompare, 'click', BX.proxy(this.compare, this));
-					}
-
-					BX.addCustomEvent('onCatalogDeleteCompare', BX.proxy(this.checkDeletedCompare, this));
 				}
 			}
 		},
@@ -1170,281 +1073,6 @@
 			}
 		},
 
-		initializeSlider: function()
-		{
-			var wrap = this.obPictSlider.getAttribute('data-slider-wrap');
-			if (wrap)
-			{
-				this.slider.options.wrap = wrap === 'true';
-			}
-			else
-			{
-				this.slider.options.wrap = this.defaultSliderOptions.wrap;
-			}
-
-			if (this.isTouchDevice)
-			{
-				this.slider.options.interval = false;
-			}
-			else
-			{
-				this.slider.options.interval = parseInt(this.obPictSlider.getAttribute('data-slider-interval')) || this.defaultSliderOptions.interval;
-				// slider interval must be more than 700ms because of css transitions
-				if (this.slider.options.interval < 700)
-				{
-					this.slider.options.interval = 700;
-				}
-
-				if (this.obPictSliderIndicator)
-				{
-					var controls = this.obPictSliderIndicator.querySelectorAll('[data-go-to]');
-					for (var i in controls)
-					{
-						if (controls.hasOwnProperty(i))
-						{
-							BX.bind(controls[i], 'click', BX.proxy(this.sliderClickHandler, this));
-						}
-					}
-				}
-
-				if (this.obPictSliderProgressBar)
-				{
-					if (this.slider.progress)
-					{
-						this.resetProgress();
-						this.cycleSlider();
-					}
-					else
-					{
-						this.slider.progress = new BX.easing({
-							transition: BX.easing.transitions.linear,
-							step: BX.delegate(function(state){
-								this.obPictSliderProgressBar.style.width = state.width / 10 + '%';
-							}, this)
-						});
-					}
-				}
-			}
-		},
-
-		checkTouch: function(event)
-		{
-			if (!event || !event.changedTouches)
-				return false;
-
-			return event.changedTouches[0].identifier === this.touch.identifier;
-		},
-
-		touchStartEvent: function(event)
-		{
-			if (event.touches.length != 1)
-				return;
-
-			this.touch = event.changedTouches[0];
-		},
-
-		touchEndEvent: function(event)
-		{
-			if (!this.checkTouch(event))
-				return;
-
-			var deltaX = this.touch.pageX - event.changedTouches[0].pageX,
-				deltaY = this.touch.pageY - event.changedTouches[0].pageY;
-
-			if (Math.abs(deltaX) >= Math.abs(deltaY) + 10)
-			{
-				if (deltaX > 0)
-				{
-					this.slideNext();
-				}
-
-				if (deltaX < 0)
-				{
-					this.slidePrev();
-				}
-			}
-		},
-
-		sliderClickHandler: function(event)
-		{
-			var target = BX.getEventTarget(event),
-				slideIndex = target.getAttribute('data-go-to');
-
-			if (slideIndex)
-			{
-				this.slideTo(slideIndex)
-			}
-
-			BX.PreventDefault(event);
-		},
-
-		slideNext: function()
-		{
-			if (this.slider.sliding)
-				return;
-
-			return this.slide('next');
-		},
-
-		slidePrev: function()
-		{
-			if (this.slider.sliding)
-				return;
-
-			return this.slide('prev');
-		},
-
-		slideTo: function(pos)
-		{
-			this.slider.active = BX.findChild(this.obPictSlider, {className: 'item active'}, true, false);
-			this.slider.progress && (this.slider.interval = true);
-
-			var activeIndex = this.getItemIndex(this.slider.active);
-
-			if (pos > (this.slider.items.length - 1) || pos < 0)
-				return;
-
-			if (this.slider.sliding)
-				return false;
-
-			if (activeIndex == pos)
-			{
-				this.stopSlider();
-				this.cycleSlider();
-				return;
-			}
-
-			return this.slide(pos > activeIndex ? 'next' : 'prev', this.eq(this.slider.items, pos));
-		},
-
-		slide: function(type, next)
-		{
-			var active = BX.findChild(this.obPictSlider, {className: 'item active'}, true, false),
-				isCycling = this.slider.interval,
-				direction = type === 'next' ? 'left' : 'right';
-
-			next = next || this.getItemForDirection(type, active);
-
-			if (BX.hasClass(next, 'active'))
-			{
-				return (this.slider.sliding = false);
-			}
-
-			this.slider.sliding = true;
-
-			isCycling && this.stopSlider();
-
-			if (this.obPictSliderIndicator)
-			{
-				BX.removeClass(this.obPictSliderIndicator.querySelector('.active'), 'active');
-				var nextIndicator = this.obPictSliderIndicator.querySelectorAll('[data-go-to]')[this.getItemIndex(next)];
-				nextIndicator && BX.addClass(nextIndicator, 'active');
-			}
-
-			if (BX.hasClass(this.obPictSlider, 'slide') && !BX.browser.IsIE())
-			{
-				var self = this;
-				BX.addClass(next, type);
-				next.offsetWidth; // force reflow
-				BX.addClass(active, direction);
-				BX.addClass(next, direction);
-				setTimeout(function() {
-					BX.addClass(next, 'active');
-					BX.removeClass(active, 'active');
-					BX.removeClass(active, direction);
-					BX.removeClass(next, type);
-					BX.removeClass(next, direction);
-					self.slider.sliding = false;
-				}, 700);
-			}
-			else
-			{
-				BX.addClass(next, 'active');
-				this.slider.sliding = false;
-			}
-
-			this.obPictSliderProgressBar && this.resetProgress();
-			isCycling && this.cycleSlider();
-		},
-
-		stopSlider: function(event)
-		{
-			event || (this.slider.paused = true);
-
-			this.slider.interval && clearInterval(this.slider.interval);
-
-			if (this.slider.progress)
-			{
-				this.slider.progress.stop();
-
-				var width = parseInt(this.obPictSliderProgressBar.style.width);
-
-				this.slider.progress.options.duration = this.slider.options.interval * width / 200;
-				this.slider.progress.options.start = {width: width * 10};
-				this.slider.progress.options.finish = {width: 0};
-				this.slider.progress.options.complete = null;
-				this.slider.progress.animate();
-			}
-		},
-
-		cycleSlider: function(event)
-		{
-			event || (this.slider.paused = false);
-
-			this.slider.interval && clearInterval(this.slider.interval);
-
-			if (this.slider.options.interval && !this.slider.paused)
-			{
-				if (this.slider.progress)
-				{
-					this.slider.progress.stop();
-
-					var width = parseInt(this.obPictSliderProgressBar.style.width);
-
-					this.slider.progress.options.duration = this.slider.options.interval * (100 - width) / 100;
-					this.slider.progress.options.start = {width: width * 10};
-					this.slider.progress.options.finish = {width: 1000};
-					this.slider.progress.options.complete = BX.delegate(function(){
-						this.slider.interval = true;
-						this.slideNext();
-					}, this);
-					this.slider.progress.animate();
-				}
-				else
-				{
-					this.slider.interval = setInterval(BX.proxy(this.slideNext, this), this.slider.options.interval);
-				}
-			}
-		},
-
-		resetProgress: function()
-		{
-			this.slider.progress && this.slider.progress.stop();
-			this.obPictSliderProgressBar.style.width = 0;
-		},
-
-		getItemForDirection: function(direction, active)
-		{
-			var activeIndex = this.getItemIndex(active),
-				willWrap = direction === 'prev' && activeIndex === 0
-					|| direction === 'next' && activeIndex == (this.slider.items.length - 1);
-
-			if (willWrap && !this.slider.options.wrap)
-				return active;
-
-			var delta = direction === 'prev' ? -1 : 1,
-				itemIndex = (activeIndex + delta) % this.slider.items.length;
-
-			return this.eq(this.slider.items, itemIndex);
-		},
-
-		getItemIndex: function(item)
-		{
-			this.slider.items = BX.findChildren(item.parentNode, {className: 'item'}, true);
-
-			return this.slider.items.indexOf(item || this.slider.active);
-		},
-
 		eq: function(obj, i)
 		{
 			var len = obj.length,
@@ -1777,85 +1405,8 @@
 			}
 			if (index > -1)
 			{
-				if (parseInt(this.offers[index].MORE_PHOTO_COUNT) > 1 && this.obPictSlider)
+				if (parseInt(this.offers[index].MORE_PHOTO_COUNT) <= 1)
 				{
-					// hide pict and second_pict containers
-					if (this.obPict)
-					{
-						this.obPict.style.display = 'none';
-					}
-
-					if (this.obSecondPict)
-					{
-						this.obSecondPict.style.display = 'none';
-					}
-
-					// clear slider container
-					BX.cleanNode(this.obPictSlider);
-
-					// fill slider container with slides
-					for (i in this.offers[index].MORE_PHOTO)
-					{
-						if (this.offers[index].MORE_PHOTO.hasOwnProperty(i))
-						{
-							this.obPictSlider.appendChild(
-								BX.create('SPAN', {
-									props: {className: 'product-item-image-slide item' + (i == 0 ? ' active' : '')},
-									style: {backgroundImage: 'url(\'' + this.offers[index].MORE_PHOTO[i].SRC + '\')'}
-								})
-							);
-						}
-					}
-
-					// fill slider indicator if exists
-					if (this.obPictSliderIndicator)
-					{
-						BX.cleanNode(this.obPictSliderIndicator);
-
-						for (i in this.offers[index].MORE_PHOTO)
-						{
-							if (this.offers[index].MORE_PHOTO.hasOwnProperty(i))
-							{
-								this.obPictSliderIndicator.appendChild(
-									BX.create('DIV', {
-										attrs: {'data-go-to': i},
-										props: {className: 'product-item-image-slider-control' + (i == 0 ? ' active' : '')}
-									})
-								);
-								this.obPictSliderIndicator.appendChild(document.createTextNode(' '));
-							}
-						}
-
-						this.obPictSliderIndicator.style.display = '';
-					}
-
-					if (this.obPictSliderProgressBar)
-					{
-						this.obPictSliderProgressBar.style.display = '';
-					}
-
-					// show slider container
-					this.obPictSlider.style.display = '';
-					this.initializeSlider();
-				}
-				else
-				{
-					// hide slider container
-					if (this.obPictSlider)
-					{
-						this.obPictSlider.style.display = 'none';
-					}
-
-					if (this.obPictSliderIndicator)
-					{
-						this.obPictSliderIndicator.style.display = 'none';
-					}
-
-					if (this.obPictSliderProgressBar)
-					{
-						this.obPictSliderProgressBar.style.display = 'none';
-					}
-
 					// show pict and pict_second containers
 					if (this.obPict)
 					{
@@ -1908,7 +1459,6 @@
 
 				this.quantitySet(index);
 				this.setPrice();
-				this.setCompared(this.offers[index].COMPARED);
 
 				this.offerNum = index;
 			}
@@ -2100,209 +1650,6 @@
 						BX.adjust(this.obSecondDscPerc, obData);
 					}
 				}
-			}
-		},
-
-		compare: function(event)
-		{
-			var checkbox = this.obCompare.querySelector('[data-entity="compare-checkbox"]'),
-				target = BX.getEventTarget(event),
-				checked = true;
-
-			if (checkbox)
-			{
-				checked = target === checkbox ? checkbox.checked : !checkbox.checked;
-			}
-
-			var url = checked ? this.compareData.compareUrl : this.compareData.compareDeleteUrl,
-				compareLink;
-
-			if (url)
-			{
-				if (target !== checkbox)
-				{
-					BX.PreventDefault(event);
-					this.setCompared(checked);
-				}
-
-				switch (this.productType)
-				{
-					case 0: // no catalog
-					case 1: // product
-					case 2: // set
-						compareLink = url.replace('#ID#', this.product.id.toString());
-						break;
-					case 3: // sku
-						compareLink = url.replace('#ID#', this.offers[this.offerNum].ID);
-						break;
-				}
-
-				BX.ajax({
-					method: 'POST',
-					dataType: checked ? 'json' : 'html',
-					url: compareLink + (compareLink.indexOf('?') !== -1 ? '&' : '?') + 'ajax_action=Y',
-					onsuccess: checked
-						? BX.proxy(this.compareResult, this)
-						: BX.proxy(this.compareDeleteResult, this)
-				});
-			}
-		},
-
-		compareResult: function(result)
-		{
-			var popupContent, popupButtons;
-
-			if (this.obPopupWin)
-			{
-				this.obPopupWin.close();
-			}
-
-			if (!BX.type.isPlainObject(result))
-				return;
-
-			this.initPopupWindow();
-
-			if (this.offers.length > 0)
-			{
-				this.offers[this.offerNum].COMPARED = result.STATUS === 'OK';
-			}
-
-			if (result.STATUS === 'OK')
-			{
-				BX.onCustomEvent('OnCompareChange');
-
-				popupContent = '<div style="width: 100%; margin: 0; text-align: center;"><p>'
-					+ BX.message('COMPARE_MESSAGE_OK')
-					+ '</p></div>';
-
-				if (this.showClosePopup)
-				{
-					popupButtons = [
-						new BasketButton({
-							text: BX.message('BTN_MESSAGE_COMPARE_REDIRECT'),
-							events: {
-								click: BX.delegate(this.compareRedirect, this)
-							},
-							style: {marginRight: '10px'}
-						}),
-						new BasketButton({
-							text: BX.message('BTN_MESSAGE_CLOSE_POPUP'),
-							events: {
-								click: BX.delegate(this.obPopupWin.close, this.obPopupWin)
-							}
-						})
-					];
-				}
-				else
-				{
-					popupButtons = [
-						new BasketButton({
-							text: BX.message('BTN_MESSAGE_COMPARE_REDIRECT'),
-							events: {
-								click: BX.delegate(this.compareRedirect, this)
-							}
-						})
-					];
-				}
-			}
-			else
-			{
-				popupContent = '<div style="width: 100%; margin: 0; text-align: center;"><p>'
-					+ (result.MESSAGE ? result.MESSAGE : BX.message('COMPARE_UNKNOWN_ERROR'))
-					+ '</p></div>';
-				popupButtons = [
-					new BasketButton({
-						text: BX.message('BTN_MESSAGE_CLOSE'),
-						events: {
-							click: BX.delegate(this.obPopupWin.close, this.obPopupWin)
-						}
-					})
-				];
-			}
-
-			this.obPopupWin.setTitleBar(BX.message('COMPARE_TITLE'));
-			this.obPopupWin.setContent(popupContent);
-			this.obPopupWin.setButtons(popupButtons);
-			this.obPopupWin.show();
-		},
-
-		compareDeleteResult: function()
-		{
-			BX.onCustomEvent('OnCompareChange');
-
-			if (this.offers && this.offers.length)
-			{
-				this.offers[this.offerNum].COMPARED = false;
-			}
-		},
-
-		setCompared: function(state)
-		{
-			if (!this.obCompare)
-				return;
-
-			var checkbox = this.obCompare.querySelector('[data-entity="compare-checkbox"]');
-			if (checkbox)
-			{
-				checkbox.checked = state;
-			}
-		},
-
-		setCompareInfo: function(comparedIds)
-		{
-			if (!BX.type.isArray(comparedIds))
-				return;
-
-			for (var i in this.offers)
-			{
-				if (this.offers.hasOwnProperty(i))
-				{
-					this.offers[i].COMPARED = BX.util.in_array(this.offers[i].ID, comparedIds);
-				}
-			}
-		},
-
-		compareRedirect: function()
-		{
-			if (this.compareData.comparePath)
-			{
-				location.href = this.compareData.comparePath;
-			}
-			else
-			{
-				this.obPopupWin.close();
-			}
-		},
-
-		checkDeletedCompare: function(id)
-		{
-			switch (this.productType)
-			{
-				case 0: // no catalog
-				case 1: // product
-				case 2: // set
-					if (this.product.id == id)
-					{
-						this.setCompared(false);
-					}
-
-					break;
-				case 3: // sku
-					var i = this.offers.length;
-					while (i--)
-					{
-						if (this.offers[i].ID == id)
-						{
-							this.offers[i].COMPARED = false;
-
-							if (this.offerNum == i)
-							{
-								this.setCompared(false);
-							}
-
-							break;
-						}
-					}
 			}
 		},
 
