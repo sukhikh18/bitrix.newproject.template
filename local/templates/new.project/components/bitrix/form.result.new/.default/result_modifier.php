@@ -1,4 +1,7 @@
-<? if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<?php
+use Bitrix\Main\Context;
+
+if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 if( ! function_exists('formHasPhoneValidator')) {
     function formHasPhoneValidator($form_id) {
@@ -6,7 +9,7 @@ if( ! function_exists('formHasPhoneValidator')) {
             $form_id,
             $arFilter = array("ACTIVE" => "Y"),
             $by = "C_SORT",
-            $order = "ASC",
+            $order = "ASC"
         );
 
         while( $arValidator = $rsValidatorList->Fetch() ) {
@@ -78,7 +81,7 @@ foreach ($arResult["QUESTIONS"] as $FIELD_SID => &$arQuestion) {
     // Clear value and insert own placeholder attribute value.
     $arQuestion["HTML_CODE"] = preg_replace(
         "/value=\"(\w+)?\"/ui",
-        "placeholder=\"" . $q[0] . "\" value=\"\"",
+        "placeholder=\"" . trim($arQuestion["CAPTION"]) . "\" value=\"\"",
         $arQuestion["HTML_CODE"]
     );
 
@@ -106,35 +109,25 @@ foreach ($arResult["QUESTIONS"] as $FIELD_SID => &$arQuestion) {
     }
 }
 
-use Bitrix\Main\Context;
+$context = Context::getCurrent();
+$isXmlhttprequest = 'xmlhttprequest' === strtolower( $context->getServer()->get( 'HTTP_X_REQUESTED_WITH' ) );
+$isAjaxRequestParam = 'Y' === $context->getRequest()->get('is_ajax');
+$isAjaxParam = isset($arParams['IS_AJAX']) && 'Y' == $arParams['IS_AJAX'];
 
-$isAjax = function() use ( $arParams ) {
-    $context = Context::getCurrent();
-    /** @var Bitrix\Main\Server */
-    $server = $context->getServer();
-    /** @var Bitrix\Main\Request */
-    $request = $context->getRequest();
-
-    if( 'xmlhttprequest' === strtolower( $server->get( 'HTTP_X_REQUESTED_WITH' ) ) ) return true;
-    if('Y' === $request->get('is_ajax')) return true;
-    if( isset($arParams['IS_AJAX']) && 'Y' == $arParams['IS_AJAX'] ) return true;
-
-    return false;
-};
 
 $message = '';
 
 if ("Y" == $arResult["isFormErrors"]) {
-    $message = '<div class="fail-msg"><p class="text-danger">' . $arResult["FORM_ERRORS_TEXT"] . '</p></div>';
-}
-elseif ("Y" == $arResult["isFormNote"]) {
-    $message = '<div class="note-msg">' . $arResult["FORM_NOTE"] . '</div>';
+    $message = '<p class="fail-msg text-danger">' . $arResult["FORM_ERRORS_TEXT"] . '</p>';
 }
 elseif( !empty($_REQUEST['formresult']) && 'addok' === $_REQUEST['formresult'] ) {
-    $message = '<div class="success-msg"><p class="text-success">' . $arParams['SUCCESS_MESSAGE'] . '</p></div>';
+    $message = '<p class="success-msg text-success">' . $arParams['SUCCESS_MESSAGE'] . '</p>';
+}
+elseif ("Y" == $arResult["isFormNote"]) {
+    $message = '<p class="note-msg">' . $arResult["FORM_NOTE"] . '</p>';
 }
 
-if( $message && $isAjax() ) {
+if( $message && ($isXmlhttprequest || $isAjaxRequestParam || $isAjaxParam) ) {
     $APPLICATION->RestartBuffer();
     echo $message;
     $APPLICATION->FinalActions();

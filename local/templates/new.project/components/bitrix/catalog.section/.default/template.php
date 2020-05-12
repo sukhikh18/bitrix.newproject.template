@@ -154,100 +154,90 @@ $generalParams = array(
 $obName = 'ob'.preg_replace('/[^a-zA-Z0-9_]/', 'x', $this->GetEditAreaId($navParams['NavNum']));
 $containerName = 'container-'.$navParams['NavNum'];
 
-if ($showTopPager)
-{
-	?>
-	<div data-pagination-num="<?=$navParams['NavNum']?>">
-		<!-- pagination-container -->
-		<?=$arResult['NAV_STRING']?>
-		<!-- pagination-container -->
-	</div>
-	<?
-}
+if ($showTopPager) : ?>
+<div data-pagination-num="<?=$navParams['NavNum']?>">
+	<!-- pagination-container -->
+	<?=$arResult['NAV_STRING']?>
+	<!-- pagination-container -->
+</div>
+<?php endif ?>
 
-?>
+<div class="catalog-section bx-<?= $arParams['TEMPLATE_THEME'] ?>" data-entity="<?= $containerName ?>">
+<?php if (!empty($arResult['ITEMS']) && !empty($arResult['ITEM_ROWS'])) { ?>
+	<!-- items-container -->
+	<div class="row" data-entity="items-row">
+	<?php
+	foreach ($arResult['ITEMS'] as $item) {
+		$uniqueId = $item['ID'].'_'.md5($this->randString().$component->getAction());
+		$this->AddEditAction($uniqueId, $item['EDIT_LINK'], $elementEdit);
+		$this->AddDeleteAction($uniqueId, $item['DELETE_LINK'], $elementDelete, $elementDeleteParams);
 
-<div class="catalog-section bx-<?=$arParams['TEMPLATE_THEME']?>" data-entity="<?=$containerName?>">
-	<?
-	if (!empty($arResult['ITEMS']) && !empty($arResult['ITEM_ROWS']))
-	{
-		$areaIds = array();
-
-		foreach ($arResult['ITEMS'] as $item)
-		{
-			$uniqueId = $item['ID'].'_'.md5($this->randString().$component->getAction());
-			$areaIds[$item['ID']] = $this->GetEditAreaId($uniqueId);
-			$this->AddEditAction($uniqueId, $item['EDIT_LINK'], $elementEdit);
-			$this->AddDeleteAction($uniqueId, $item['DELETE_LINK'], $elementDelete, $elementDeleteParams);
-		}
 		?>
-		<!-- items-container -->
-		<?
-		foreach ($arResult['ITEM_ROWS'] as $rowData)
-		{
-			$rowItems = array_splice($arResult['ITEMS'], 0, $rowData['COUNT']);
-			?>
-			<div class="row <?=$rowData['CLASS']?>" data-entity="items-row">
-				<?php
-
-				$filename = __DIR__ . "/variant/product-item-{$rowData['VARIANT']}.php";
-				if(file_exists($filename)) include $filename;
-
-				?>
-			</div>
-			<?
-		}
-		unset($generalParams, $rowItems);
-		?>
-		<!-- items-container -->
-		<?
-	}
-	else
-	{
-		// load css for bigData/deferred load
-		$APPLICATION->IncludeComponent(
+		<div class="col-sm-4 product-item-big-card">
+		<?$APPLICATION->IncludeComponent(
 			'bitrix:catalog.item',
 			'',
-			array(),
+			array(
+				'RESULT' => array(
+					'ITEM' => $item,
+					'AREA_ID' => $this->GetEditAreaId($uniqueId),
+					'TYPE' => 'CARD',
+					'BIG_LABEL' => 'N',
+					'BIG_DISCOUNT_PERCENT' => 'N',
+					'BIG_BUTTONS' => 'Y',
+					'SCALABLE' => 'N'
+				),
+				'PARAMS' => $generalParams
+					+ array('SKU_PROPS' => $arResult['SKU_PROPS'][$item['IBLOCK_ID']])
+			),
 			$component,
 			array('HIDE_ICONS' => 'Y')
-		);
-	}
-	?>
-</div>
-<?php
-
-if ($arParams['HIDE_SECTION_DESCRIPTION'] !== 'Y')
-{
-	?>
-	<div class="bx-section-desc bx-<?=$arParams['TEMPLATE_THEME']?>">
-		<p class="bx-section-desc-post"><?=$arResult['DESCRIPTION']?></p>
-	</div>
-	<?
-}
-
-if ($showLazyLoad)
-{
-	?>
-	<div class="row bx-<?=$arParams['TEMPLATE_THEME']?>">
-		<div class="btn btn-default btn-lg center-block" style="margin: 15px;"
-			data-use="show-more-<?=$navParams['NavNum']?>">
-			<?=$arParams['MESS_BTN_LAZY_LOAD']?>
+		);?>
 		</div>
-	</div>
-	<?
-}
-
-if ($showBottomPager)
-{
+		<?php
+	}
+	unset($generalParams, $rowItems);
 	?>
-	<div data-pagination-num="<?=$navParams['NavNum']?>">
-		<!-- pagination-container -->
-		<?=$arResult['NAV_STRING']?>
-		<!-- pagination-container -->
 	</div>
+	<!-- items-container -->
 	<?
 }
+else
+{
+	// load css for bigData/deferred load
+	$APPLICATION->IncludeComponent(
+		'bitrix:catalog.item',
+		'',
+		array(),
+		$component,
+		array('HIDE_ICONS' => 'Y')
+	);
+}
+?>
+</div>
+
+<?php if ($arParams['HIDE_SECTION_DESCRIPTION'] !== 'Y') : ?>
+<div class="bx-section-desc bx-<?=$arParams['TEMPLATE_THEME']?>">
+	<p class="bx-section-desc-post"><?=$arResult['DESCRIPTION']?></p>
+</div>
+<?php endif ?>
+
+<?php if ($showLazyLoad) : ?>
+<div class="row bx-<?=$arParams['TEMPLATE_THEME']?>">
+	<div class="btn btn-default btn-lg center-block" style="margin: 15px;"
+		data-use="show-more-<?=$navParams['NavNum']?>">
+		<?=$arParams['MESS_BTN_LAZY_LOAD']?>
+	</div>
+</div>
+<?php endif ?>
+
+<?php if ($showBottomPager) : ?>
+<div data-pagination-num="<?=$navParams['NavNum']?>">
+	<!-- pagination-container -->
+	<?=$arResult['NAV_STRING']?>
+	<!-- pagination-container -->
+</div>
+<?php endif;
 
 $signer = new \Bitrix\Main\Security\Sign\Signer;
 $signedTemplate = $signer->sign($templateName, 'catalog.section');

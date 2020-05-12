@@ -83,8 +83,8 @@ ob_start();
         </div>
     </div>
 <?php
-$paging = ob_get_contents();
-/*$paging = preg_replace_callback('/href="([^"]+)"/is', function($matches) {
+/*$paging = ob_get_contents();
+$paging = preg_replace_callback('/href="([^"]+)"/is', function($matches) {
     $url = $matches[1];
     $newUrl = '';
     if ($arUrl = parse_url($url)) {
@@ -110,6 +110,6 @@ $paging = ob_get_contents();
         }
     }
     return 'href="'.$newUrl.'"';
-}, $paging);*/
+}, $paging);
 ob_end_clean();
-echo $paging;
+echo $paging;*/
