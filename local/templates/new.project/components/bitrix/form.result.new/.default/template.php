@@ -7,7 +7,7 @@
                 hspace="3" vscape="3" border="0"/></a>
 <? endif; ?>
 
-<? if ($arResult["isFormTitle"]): ?><h4><?= $arResult["FORM_TITLE"] ?></h4><? endif; ?>
+<? /*if ($arResult["isFormTitle"]): ?><h4><?= $arResult["FORM_TITLE"] ?></h4><? endif;*/ ?>
 <?
 if ('TOP' == $arParams['SHOW_DESCRIPTION']) {
     echo '<div class="description">' . $arResult["FORM_DESCRIPTION"] . '</div>';
