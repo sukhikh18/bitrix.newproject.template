@@ -45,7 +45,25 @@ if ( ! function_exists('enqueue_assets')) {
 		 * Slick slider
 		 */
 		$Asset->addCss(TPL . '/assets/vendor/slick/slick.css');
-		$Asset->addJs(TPL . '/assets/vendor/slick/slick' . $min . '.js');
+		$Asset->addJs(TPL . '/assets/vendor/slick/slick.min.js');
+
+		/**
+		 * Fancybox
+		 */
+		$Asset->addCss(TPL . '/assets/vendor/fancybox/jquery.fancybox.min.css');
+		$Asset->addJs(TPL . '/assets/vendor/fancybox/jquery.fancybox.min.js');
+
+		/**
+		 * Cleave
+		 */
+		$Asset->addJs(TPL . '/assets/vendor/cleave/cleave.min.js');
+		$Asset->addJs(TPL . '/assets/vendor/cleave/addons/cleave-phone.ru.js');
+
+		/**
+		 * Selectize
+		 */
+		$Asset->addCss(TPL . '/assets/vendor/selectize/selectize.css');
+		$Asset->addJs(TPL . '/assets/vendor/selectize/selectize.js');
 
 		// Masked input
 		// $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.min.js');

@@ -1,6 +1,9 @@
 <?php
 
-namespace local\handlers;
+namespace handlers;
+
+use Bitrix\Main\Security\Random;
+use Bitrix\Main\UserTable;
 
 /**
  *
@@ -149,19 +152,66 @@ class User
         }
     }
 
-    public function beforeUpdate()
+    /**
+     * @note REGISTER[LOGIN] required in main.register component.
+     * You must insert hidden input with random string value.
+     * Try \Bitrix\Main\Security\Random::getString(lenght: Int); for example
+     */
+    public function fetchLoginByEmail(&$arFields)
     {
+        // Get first part email.
+        list($arFields['LOGIN']) = explode('@', $arFields['EMAIL'], 2);
+
+        // Check unique.
+        $userRowsList = UserTable::getList(array(
+            'filter' => array('=LOGIN' => $arFields['LOGIN']),
+            'limit' => 1,
+        ));
+
+        // Add random string when login exists.
+        if($userRowsList->getSelectedRowsCount() > 0) {
+            $arFields['LOGIN'] .= '_' . Random::getString(4);
+        }
+
+        return $arFields;
     }
 
-    public function afterUpdate()
+    function checkEmailField(&$arFields)
     {
-    }
+        global $APPLICATION;
 
-    public function beforeDelete()
-    {
-    }
+        $sLogin = trim($arFields["LOGIN"]);
 
-    public function afterDelete()
-    {
+        // not a mail
+        if(false === strpos($sLogin, '@')) {
+            return $arFields;
+        }
+
+        // Need when exlude check email string
+        // if( ! $sLogin) {
+        //     // Login field is empty.
+        //     $APPLICATION->ThrowException('Введите электронный адрес.', "EMAIL_IS_EMPTY");
+        //     return $arFields;
+        // }
+
+        $userRowsList = UserTable::getList(array(
+            'select' => array('LOGIN'),
+            'filter' => array(
+                '=ACTIVE' => true,
+                '=EMAIL' => $sLogin,
+            ),
+            'limit' => 1,
+        ));
+
+        if($arUser = $userRowsList->fetch()) {
+            // Try LOGIN selected by EMAIL.
+            $arFields = array_merge($arFields, $arUser);
+        } else {
+            // Show error.
+            $APPLICATION->ThrowException('Не верный электронный адрес.', "EMAIL_NOT_EXISTS");
+            return $arFields;
+        }
+
+        return $arFields;
     }
 }

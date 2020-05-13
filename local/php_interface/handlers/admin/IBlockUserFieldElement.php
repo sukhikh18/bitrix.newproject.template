@@ -1,6 +1,6 @@
 <?
 
-namespace local\handlers\admin;
+namespace handlers\admin;
 
 /**
  *
