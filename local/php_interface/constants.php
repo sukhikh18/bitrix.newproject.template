@@ -14,8 +14,8 @@ if( !defined('DEVELOPER_NAME') ) define('DEVELOPER_NAME', 'SEO18');
 if( !defined('DEVELOPER_TESTMAIL') ) define('DEVELOPER_TESTMAIL', 'trashmailsizh@yandex.ru');
 // IP тестового сервера.
 if( !defined('DEVELOPMENT_IP') ) define('DEVELOPMENT_IP', '88.212.237.4');
-// if( !defined('MAIL_FROM') ) define('MAIL_FROM', '');
-// if( !defined('MAIL_ADMIN') ) define('MAIL_ADMIN', '');
+// if( !defined('EMAIL_FROM') ) define('EMAIL_FROM', '');
+// if( !defined('EMAIL_ADMIN') ) define('EMAIL_ADMIN', '');
 
 /**
  * IBlocks

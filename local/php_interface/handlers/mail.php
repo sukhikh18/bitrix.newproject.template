@@ -13,34 +13,34 @@ class Mail
 {
     static function getFromAddress()
     {
-        return defined('MAIL_FROM') && !empty(MAIL_FROM) ? MAIL_FROM : 'no-reply@' . $_SERVER['SERVER_NAME'];
+        return defined('EMAIL_FROM') && !empty(EMAIL_FROM) ? EMAIL_FROM : 'no-reply@' . $_SERVER['SERVER_NAME'];
     }
 
     static function getAdminAddress($siteId = false)
     {
-        return defined('MAIL_ADMIN') && !empty(MAIL_ADMIN) ? MAIL_ADMIN :
+        return defined('EMAIL_ADMIN') && !empty(EMAIL_ADMIN) ? EMAIL_ADMIN :
             COption::GetOptionString('main', 'email_from', 'no-reply@' . $_SERVER['SERVER_NAME'], $siteId);
     }
 
     static function getShopAdminAddress($siteId = false)
     {
-        return defined('MAIL_ADMIN') && !empty(MAIL_ADMIN) ? MAIL_ADMIN :
+        return defined('EMAIL_ADMIN') && !empty(EMAIL_ADMIN) ? EMAIL_ADMIN :
             COption::GetOptionString('sale', 'order_email', 'sale@' . $_SERVER['SERVER_NAME'], $siteId);
     }
 
     function changeFromAddress(&$arFields, &$arTemplate)
     {
-        $arTemplate['FROM'] = static::getFromAddress();
+        $arTemplate['EMAIL_FROM'] = static::getFromAddress();
     }
 
     function adminNotifications(&$arFields, &$arTemplate)
     {
-        if(defined('MAIL_ADMIN') && !empty(MAIL_ADMIN)) {
+        if(defined('EMAIL_ADMIN') && !empty(EMAIL_ADMIN)) {
             $mainFrom = COption::GetOptionString('main', 'email_from');
             $saleFrom = COption::GetOptionString('sale', 'order_email');
 
             if(in_array($arTemplate['TO'], array($mainFrom, $saleFrom))) {
-                $arTemplate['TO'] = MAIL_ADMIN;
+                $arTemplate['TO'] = EMAIL_ADMIN;
             }
         }
     }
