@@ -1,6 +1,6 @@
 <?
 
-namespace local\handlers\admin;
+namespace handlers\admin;
 
 global $MESS;
 $MESS['IBLOCK_PROP_CHECKBOX_DESC'] = 'Флажок';

@@ -1,6 +1,6 @@
 <?php
 
-namespace local\handlers\admin;
+namespace handlers\admin;
 
 class IBlockVisualEditorComponents
 {

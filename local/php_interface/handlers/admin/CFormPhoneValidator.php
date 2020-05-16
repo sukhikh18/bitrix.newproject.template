@@ -1,5 +1,7 @@
 <?php
 
+namespace handlers\admin;
+
 class CFormPhoneValidator
 {
     function getDescription()

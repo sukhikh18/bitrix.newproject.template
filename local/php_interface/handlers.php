@@ -1,40 +1,47 @@
 <?php
 
-use \Bitrix\Main\EventManager;
-use \Bitrix\Main\Loader;
+use Bitrix\Main\EventManager;
+use Bitrix\Main\Security\Random;
+use Bitrix\Main\UserTable;
 
-$eventManager = EventManager::getInstance();
+$obEeventManager = EventManager::getInstance();
 
-// ADMIN
+/**
+ * ADMIN
+ *
+ * Компоненты в элементах инфоблока
+ */
+$obEeventManager->addEventHandler("fileman", "OnBeforeHTMLEditorScriptRuns",
+    array("handlers\admin\IBlockVisualEditorComponents", "beforeHTMLEditorScriptRuns"));
+$obEeventManager->addEventHandler("main", "onEndBufferContent",
+    array("handlers\admin\IBlockVisualEditorComponents", "endBufferContent"));
 // Свойство чекбокс
-$eventManager->AddEventHandler('iblock', 'OnIBlockPropertyBuildList',
-	array('local\handlers\admin\IBlockPropertyCheckbox', 'GetUserTypeDescription'));
+$obEeventManager->AddEventHandler('iblock', 'OnIBlockPropertyBuildList',
+	array('handlers\admin\IBlockPropertyCheckbox', 'GetUserTypeDescription'));
 // Пользовательское свойство "Связь с элементом"
-$eventManager->AddEventHandler('main', 'OnUserTypeBuildList',
-	array('local\handlers\admin\CUserTypeIBlockElement', 'GetUserTypeDescription'), 5000);
-// Компоненты в элементах инфоблока
-$eventManager->addEventHandler("fileman", "OnBeforeHTMLEditorScriptRuns", array(
-	"local\handlers\admin\IBlockVisualEditorComponents", "beforeHTMLEditorScriptRuns"));
-$eventManager->addEventHandler("main", "onEndBufferContent", array(
-	"local\handlers\admin\IBlockVisualEditorComponents", "endBufferContent" ));
-// Too long phone number.
-$eventManager->addEventHandler('form', 'onFormValidatorBuildList', array('CFormPhoneValidator', 'getDescription'));
+$obEeventManager->AddEventHandler('main', 'OnUserTypeBuildList',
+	array('handlers\admin\CUserTypeIBlockElement', 'GetUserTypeDescription'), 5000);
+// Валидация длины номера телефона
+$obEeventManager->addEventHandler('form', 'onFormValidatorBuildList',
+    array('handlers\admin\CFormPhoneValidator', 'getDescription'));
 
-// PAGE
-$eventManager->addEventHandler("main", "OnBeforeProlog", array("local\handlers\Page", "includeFunctions"));
-// $eventManager->addEventHandler("main", "OnPageStart", array("local\handlers\Page", "includeModules"), 1);
+/**
+ * MAIL
+ *
+ * Изменить на "правильный (доменный)" адрес или MAIL_FROM если задано
+ */
+$obEeventManager->addEventHandler("main", "OnBeforeEventSend", array("handlers\Mail", "changeFromAddress"));
+// Отправлять сообщение по адресу MAIL_ADMIN, если отправляется на email_from или order_email и MAIL_ADMIN задано
+$obEeventManager->addEventHandler("main", "OnBeforeEventSend", array("handlers\Mail", "adminNotifications"));
+// Отправлять разработчику сообщения для дебага
+$obEeventManager->addEventHandler("main", "OnBeforeEventSend", array("handlers\Mail", "debugMailMessages"));
+// Оповестить администратора о новом заказе
+$obEeventManager->addEventHandler('sale', 'OnSaleOrderSaved', array("handlers\Mail", "notifyNewOrder"));
 
-// BASKET
-// $eventManager->addEventHandler("sale", "OnBeforeBasketUpdate", array("local\handlers\Basket", "beforeUpdate"));
-// $eventManager->addEventHandler("sale", "OnBasketUpdate", array("local\handlers\Basket", "afterUpdate"));
-
-// ORDER
-// $eventManager->addEventHandler("sale", "OnOrderAdd", array("local\handlers\Order", "afterAdd"));
-// $eventManager->addEventHandler("sale", "OnOrderUpdate", array("local\handlers\Order", "afterUpdate"));
-
-// USER
-// $eventManager->addEventHandler("main", "OnBeforeUserRegister", array("\local\handlers\User", "beforeRegister"));
-// $eventManager->addEventHandler("main", "OnAfterUserRegister", array("\local\handlers\User", "afterRegister"));
-// $eventManager->addEventHandler("main", "OnSendUserInfo", array("\local\handlers\User", "sendUserInfo"));
-// $eventManager->addEventHandler("main", "OnAfterUserAdd", array("\local\handlers\User", "afterAdd"));
-
+/**
+ * USER
+ */
+// Установить логин пользователя относительно его Email (не зависимо введен LOGIN или нет)
+$obEeventManager->addEventHandler("main", "OnBeforeUserRegister", array("handlers\User", "fetchLoginByEmail"));
+// Пробовать авторизироваться по емэйл
+$obEeventManager->addEventHandler("main", "OnBeforeUserLogin", array("handlers\User", "checkEmailField"));
