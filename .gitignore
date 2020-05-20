@@ -23,9 +23,3 @@ _config.yml
 /.htaccess.restore
 /bitrix
 /upload
-/dev
-
-## Sources (For development)
-# /local/templates/new.project/assets/js/
-# /local/templates/new.project/assets/scss/
-# /local/templates/new.project/assets/pages/
