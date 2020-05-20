@@ -20,6 +20,6 @@ _config.yml
 *.lock
 
 # /.htaccess
-/.htaccess.restore
-/bitrix
-/upload
+/public_html/.htaccess.restore
+/public_html/bitrix
+/public_html/upload
