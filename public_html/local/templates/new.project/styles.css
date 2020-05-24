@@ -3,6 +3,6 @@
     --primary: #20c997;
 }
 
-.page_type_primary .site__breadcrumb {
+.page_type_primary .page__breadcrumb {
     display: none;
 }
