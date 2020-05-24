@@ -114,7 +114,7 @@ if (function_exists('find_section')) {
             <div class="row align-items-center head-info">
                 <div class="col-4 logotype">
                     <? $APPLICATION->IncludeFile(
-                        SITE_DIR . "include/head.logotype.php",
+                        SITE_DIR . "local/include/logotype.php",
                         array(),
                         Array("MODE" => "html")
                     ); ?>
@@ -122,7 +122,7 @@ if (function_exists('find_section')) {
                 <div class="col-4 contacts">
                     <!-- Contacts -->
                     <? $APPLICATION->IncludeFile(
-                        SITE_DIR . "include/head.contacts.php",
+                        SITE_DIR . "local/include/head.contacts.php",
                         array(),
                         Array("MODE" => "html")
                     ); ?>
@@ -130,7 +130,7 @@ if (function_exists('find_section')) {
                 <div class="col-4 callback">
                     <!-- <a href="#" id="get-callback"></a> -->
                     <? $APPLICATION->IncludeFile(
-                        SITE_DIR . "include/head.numbers.php",
+                        SITE_DIR . "local/include/head.numbers.php",
                         array(),
                         Array("MODE" => "html")
                     ); ?>
