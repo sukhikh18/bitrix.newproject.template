@@ -1,11 +1,13 @@
-<?if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
+<?php if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
-
 /**
  * @global CMain $APPLICATION
  * @global CUser $USER
  */
+use \Bitrix\Main\Page\Asset;
+/** @var $Asset Asset */
+$Asset = Asset::getInstance();
 
 require realpath(__DIR__ . '/functions.php');
 
@@ -20,10 +22,55 @@ if (function_exists('find_section')) {
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title><? $APPLICATION->ShowTitle() ?></title>
+    <title><?php $APPLICATION->ShowTitle(false) ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php
-    enqueue_assets();
+    // Place favicon.ico in the root directory
+    $Asset->addString('<link rel="shortcut icon" href="/favicon.ico" />');
+    // $Asset->addString('<link rel="apple-touch-icon" href="/favicon.png" />');
+    // $Asset->addString('<link rel="manifest" href="site.webmanifest">');
+
+    // \CJSCore::Init( array('jquery') );
+    $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js');
+    $Asset->addString(sprintf(
+        '<script>window.jQuery || document.write(\'<script src="%s"><\/script>\')</script>',
+        str_replace('/', '\/', TPL . '/assets/vendor/jquery/jquery.min.js')
+    ));
+
+    // Bitrix has own small modernizr.
+    // $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js');
+
+    // Bootstrap framework
+    $Asset->addCss(TPL . '/assets/vendor/bootstrap.min.css');
+    $Asset->addJs(TPL . '/assets/vendor/bootstrap/bootstrap.min.js');
+
+    // Responsive mobile menu with animation
+    $Asset->addCss(TPL . '/assets/vendor/hamburgers.min.css');
+
+    // Slick slider
+    $Asset->addCss(TPL . '/assets/vendor/slick/slick.css');
+    $Asset->addJs(TPL . '/assets/vendor/slick/slick.min.js');
+
+    // Fancybox
+    $Asset->addCss(TPL . '/assets/vendor/fancybox/jquery.fancybox.min.css');
+    $Asset->addJs(TPL . '/assets/vendor/fancybox/jquery.fancybox.min.js');
+
+    // Cleave
+    $Asset->addJs(TPL . '/assets/vendor/cleave/cleave.min.js');
+    $Asset->addJs(TPL . '/assets/vendor/cleave/addons/cleave-phone.ru.js');
+
+    // Masked input
+    // $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.min.js');
+
+    // VK Api
+    // $Asset->addJs('https://vk.com/js/api/openapi.js?152');
+
+    // Font Awesome (Icons)
+    // $Asset->addCss('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css');
+
+    // Animate
+    // $Asset->addCss(TPL . '/assets/vendor/animate'.$min.'.css');
+
     enqueue_template_assets();
     enqueue_page_assets();
 
