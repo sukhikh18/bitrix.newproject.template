@@ -2,60 +2,56 @@
 $aMenuLinks = Array(
 	Array(
 		"Мой кабинет",
-		"personal/",
+		"user/",
 		Array(),
 		Array(),
 		""
 	),
-
-
 	Array(
 		"Текущие заказы",
-		"personal/orders/",
+		"user/orders/",
 		Array(),
 		Array(),
 		""
 	),
-
 	Array(
 		"Личный счет",
-		"personal/account/",
+		"user/account/",
 		Array(), 
 		Array(),
 		"CBXFeatures::IsFeatureEnabled('SaleAccounts')"
 	),
-
 	Array(
 		"Личные данные",
-		"personal/private/",
+		"user/private/",
 		Array(), 
 		Array(), 
 		"" 
 	),
 	Array(
 		"История заказов",
-		"personal/orders/?filter_history=Y",
+		"user/orders/?filter_history=Y",
 		Array(),
 		Array(),
 		""
 	),
 	Array(
 		"Профили заказов",
-		"personal/profiles/",
+		"user/profiles/",
 		Array(),
 		Array(),
 		""
 	),
 	Array(
 		"Корзина",
-		"personal/cart/",
+		"user/cart/",
 		Array(),
 		Array(),
 		""
 	),
 	Array(
 		"Подписки",
-		"personal/subscribe/",
+		"user/subscribe/",
 		Array(),
 		Array(),
 		""
