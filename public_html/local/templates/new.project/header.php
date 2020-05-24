@@ -11,12 +11,6 @@ $Asset = Asset::getInstance();
 
 require realpath(__DIR__ . '/functions.php');
 
-if (function_exists('find_section')) {
-    if ($sidebar = find_section('sidebar')) {
-        $APPLICATION->SetPageProperty('content-class', 'col-10');
-    }
-}
-
 ?><!DOCTYPE html>
 <html class="no-js" lang="ru-RU">
 <head>
