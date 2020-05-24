@@ -1,5 +1,6 @@
 <?php
 
+use \Bitrix\Main\Application;
 use \Bitrix\Main\Page\Asset;
 
 if ( ! function_exists('enqueue_template_assets')) {
