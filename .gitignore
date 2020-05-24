@@ -33,4 +33,5 @@ _config.yml
 
 /*.*
 !.gitignore
+!composer.json
 !readme.md
