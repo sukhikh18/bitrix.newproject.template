@@ -118,7 +118,7 @@ jQuery(document).ready(function ($) {
    * Set event when DOM element in appearance
    * @param  Int (in piexels) | String (in percents) | callable  offset
    */
-  // $('.site-header').waypoint({
+  // $('.page__header').waypoint({
   //     handler: function(event, direction) {
   //         console.log(direction, this, event);
   //     },

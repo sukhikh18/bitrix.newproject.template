@@ -112,37 +112,37 @@ h1 {
   font-size: 22px;
 }
 
-.site-header {
+.page__header {
   padding: .5rem 0;
 }
 
-.site-footer {
+.page__footer {
   margin-top: 4rem;
 }
 
-.site-navigation {
+.page__navigation {
   width: 100%;
   margin-bottom: 2rem;
 }
 
-.site-navigation .container {
+.page__navigation .container {
   padding: 0 15px;
 }
 
-.site-navigation .navbar {
+.page__navigation .navbar {
   z-index: 999;
   background: #fff;
   padding: 0;
   border-radius: 0;
 }
 
-.site-navigation .navbar .nav-link,
-.site-navigation .navbar .nav-link:hover,
-.site-navigation .navbar .nav-link:focus {
+.page__navigation .navbar .nav-link,
+.page__navigation .navbar .nav-link:hover,
+.page__navigation .navbar .nav-link:focus {
   text-decoration: none;
 }
 
-.site-navigation .navbar-toggler {
+.page__navigation .navbar-toggler {
   padding: 0 10px;
   border: 0;
   border-radius: 0;
@@ -169,11 +169,13 @@ h1 {
 
 @media screen and (min-width: 576.02px) {
   h1 {
-    font-size: calc( 22px + 18 * (100vw - 576px) / 1104);
+    font-size: calc( 22px + 18 *
+ (100vw - 576px) / 1104);
   }
 
   .sidebar__title {
-    font-size: calc( 18px + 4 * (100vw - 576px) / 1104);
+    font-size: calc( 18px + 4 *
+ (100vw - 576px) / 1104);
   }
 }
 
