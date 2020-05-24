@@ -86,34 +86,35 @@ require realpath(__DIR__ . '/functions.php');
             src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
     <script data-skip-moving="true">var isIE = true;</script>
     <![endif]-->
+    <?php /* ?>
     <script data-skip-moving="true">
-        var isIE = false /*@cc_on || true @*/;
+        var isIE = false /*@cc_on || true @*/?><?php /*;
         if (isIE) {
             document.createElement("picture");
             document.write('<script src="https:\/\/cdnjs.cloudflare.com\/ajax\/libs\/picturefill\/3.0.3\/picturefill.min.js" async><\/script>');
         }
     </script>
+    <?php */ ?>
 </head>
-<body <?php body_class(); ?>>
-<? $APPLICATION->ShowPanel(); ?>
-<!--[if lte IE 9]>
-<p class="browserupgrade">Вы используете <strong>устаревший</strong> браузер. Пожалуйста <a
-        href="https://browsehappy.com/">обновите ваш браузер</a> для лучшего отображения и безопасности.</p>
-<![endif]-->
-<div id="page" class="site">
+<body class="page page_<?= LANGUAGE_ID ?> page_type_<?php $APPLICATION->ShowProperty('page_type', 'secondary')?>">
+    <?php $APPLICATION->ShowPanel(); ?>
+    <!--[if lte IE 9]>
+    <p class="browserupgrade">Вы используете <strong>устаревший</strong> браузер. Пожалуйста <a
+            href="https://browsehappy.com/">обновите ваш браузер</a> для лучшего отображения и безопасности.</p>
+    <![endif]-->
 
-    <header class="site-header">
+    <header class="page__header">
         <!-- <div itemscope itemtype="http://schema.org/LocalBusiness"> -->
         <div class="container">
-            <div class="row align-items-center head-info">
-                <div class="col-4 logotype">
+            <div class="masthead row align-items-center">
+                <div class="masthead__logotype col-4">
                     <? $APPLICATION->IncludeFile(
                         SITE_DIR . "local/include/logotype.php",
                         array(),
                         Array("MODE" => "html")
                     ); ?>
                 </div>
-                <div class="col-4 contacts">
+                <div class="masthead__contacts col-4">
                     <!-- Contacts -->
                     <? $APPLICATION->IncludeFile(
                         SITE_DIR . "local/include/head.contacts.php",
@@ -121,24 +122,25 @@ require realpath(__DIR__ . '/functions.php');
                         Array("MODE" => "html")
                     ); ?>
                 </div>
-                <div class="col-4 callback">
-                    <!-- <a href="#" id="get-callback"></a> -->
+                <div class="masthead__callback col-4">
                     <? $APPLICATION->IncludeFile(
                         SITE_DIR . "local/include/head.numbers.php",
                         array(),
                         Array("MODE" => "html")
                     ); ?>
                 </div>
-            </div><!--.row head-info-->
+            </div>
+            <!-- .masthead -->
         </div>
 
         <!-- <div class="hidden-xs-up">
             <span itemprop="priceRange">RUB</span>
         </div> -->
         <!-- </div> -->
-    </header><!-- .site-header -->
+    </header>
+    <!-- .page__header -->
 
-    <section class="site-navigation navbar-default">
+    <section class="page__navigation navbar-default">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
                 <div class="navbar-brand hidden-lg-up text-center text-primary"><a href="/">Brand name</a></div>
@@ -179,27 +181,23 @@ require realpath(__DIR__ . '/functions.php');
             </div>
         </nav>
     </section>
+    <!-- .page__navigation -->
 
-    <? if ( ! is_front_page()): ?>
-        <section class="breadcrumb">
-            <div class="container">
-                <? $APPLICATION->IncludeComponent(
-                    "bitrix:breadcrumb",
-                    ".default",
-                    array(
-                        "PATH"               => "",
-                        "SITE_ID"            => "s1",
-                        "START_FROM"         => "0",
-                        "COMPONENT_TEMPLATE" => ".default"
-                    ),
-                    false
-                ); ?>
-            </div>
-        </section>
-    <? endif ?>
+    <section class="page__breadcrumb breadcrumb">
+        <div class="container">
+            <? $APPLICATION->IncludeComponent(
+                "bitrix:breadcrumb",
+                ".default",
+                array(
+                    "PATH"               => "",
+                    "SITE_ID"            => "s1",
+                    "START_FROM"         => "0",
+                    "COMPONENT_TEMPLATE" => ".default"
+                ),
+                false
+            ); ?>
+        </div>
+    </section>
+    <!-- .page__breadcrumb -->
 
-    <div id="content" class="site-content <?php
-        if ( ! is_front_page()) {
-            $APPLICATION->ShowProperty("container-class", "container");
-        }
-    ?>">
+    <div id="page_content" class="<?php $APPLICATION->ShowProperty("page__conetnt_class", "page__content container"); ?>">

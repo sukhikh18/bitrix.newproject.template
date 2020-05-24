@@ -1,6 +1,7 @@
 <?
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
 $APPLICATION->SetTitle('Главная');
+$APPLICATION->SetPageProperty('page_type', 'primary');
 ?> 
 
 <section class="catalog-top">
