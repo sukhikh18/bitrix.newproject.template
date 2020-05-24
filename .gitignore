@@ -18,8 +18,19 @@ ehthumbs.db
 Thumbs.db
 _config.yml
 *.lock
+*.restore
 
-# /.htaccess
-/public_html/.htaccess.restore
-/public_html/bitrix
-/public_html/upload
+/*/
+!/public_html/
+/public_html/bitrix/
+/public_html/upload/
+!/public_html/upload/.htaccess
+# /public_html/upload/resize_cache/
+# /public_html/upload/tmp/
+# /public_html/upload/iblock/
+# /public_html/upload/sale/
+# /public_html/upload/uf/
+
+/*.*
+!.gitignore
+!readme.md
