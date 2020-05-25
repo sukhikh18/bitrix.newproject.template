@@ -18,14 +18,20 @@ ehthumbs.db
 Thumbs.db
 _config.yml
 *.lock
+*.restore
 
-# /.htaccess
-/.htaccess.restore
-/bitrix
-/upload
-/dev
+/*/
+!/public_html/
+/public_html/bitrix/
+/public_html/upload/
+!/public_html/upload/.htaccess
+# /public_html/upload/resize_cache/
+# /public_html/upload/tmp/
+# /public_html/upload/iblock/
+# /public_html/upload/sale/
+# /public_html/upload/uf/
 
-## Sources (For development)
-# /local/templates/new.project/assets/js/
-# /local/templates/new.project/assets/scss/
-# /local/templates/new.project/assets/pages/
+/*.*
+!.gitignore
+!composer.json
+!readme.md

@@ -1,0 +1,8 @@
+/*********************************** Content **********************************/
+:root {
+    --primary: #20c997;
+}
+
+.page_type_primary .page__breadcrumb {
+    display: none;
+}
