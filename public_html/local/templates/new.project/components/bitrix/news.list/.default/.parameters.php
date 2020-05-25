@@ -98,7 +98,7 @@ $arTemplateParameters = array(
         "NAME"    => 'Расположение элементов',
         "TYPE"    => "CUSTOM",
         "DEFAULT" => "PICT,NAME,DESC,MORE",
-        "JS_FILE" => "/local/assets/dragdrop_order/script.js",
+        "JS_FILE" => "/local/templates/new.project/assets/dragdrop_order/script.js",
         'JS_EVENT' => 'initDraggableOrderControl',
         'JS_DATA'  => Json::encode($sortElements),
     ),
