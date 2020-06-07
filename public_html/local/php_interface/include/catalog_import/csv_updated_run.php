@@ -25,15 +25,18 @@
 /**
  * Updated:
  * - Принудительная транслитерация
- * - Повторная транслитерация функцией esc_cyr
- * - Если валюта не указана, указать: RUB
+ * - Повторная транслитерация функцией transliterate
+ * - Если не указана цена, указать: DEFAULT_PRICE
+ * - Если валюта не указана, указать: DEFAULT_CURRENCY
+ * - Добавлен режим STRICT_MODE. Останавливать выгрузку при первой ошибке и вывести на экран
+ * - Добавлены функции генерации кода групп и товаров buildGroupCode, buildElementCode
+ * - Добавлена рассширенная информация об ошибках при STRICT_MODE
+ * - Добавлена возможность пропускать остановку скрипта при STRICT_MODE, если у товара
+ * отсутсвует внешний код или имя (SKIP_PRODUCT_WITH_EMPTY_XML_ID, SKIP_PRODUCT_WITH_EMPTY_TITLE)
  */
 use Bitrix\Main,
 	Bitrix\Catalog,
 	Bitrix\Iblock;
-
-$USE_TRANSLIT = "Y";
-$TRANSLIT_LANG = "ru";
 
 IncludeModuleLangFile($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/catalog/import_setup_templ.php');
 $startImportExecTime = getmicrotime();
@@ -65,11 +68,17 @@ global
 	$defCatalogAvailGroupFields,
 	$defCatalogAvailCurrencies;
 
-if ( ! function_exists( 'esc_cyr' ) ) {
+define('STRICT_MODE', true);
+define('DEFAULT_PRICE', 0);
+define('DEFAULT_CURRENCY', 'RUB');
+define('SKIP_PRODUCT_WITH_EMPTY_XML_ID', true);
+define('SKIP_PRODUCT_WITH_EMPTY_TITLE', true);
+
+if ( ! function_exists( 'transliterate' ) ) {
     /**
      * Escape cyrilic chars
      */
-    function esc_cyr( $s, $context = 'url' ) {
+    function transliterate( $s, $context = 'url' ) {
         if ( 'url' == $context ) {
             $s = strip_tags( (string) $s );
             $s = str_replace( array( "\n", "\r" ), " ", $s );
@@ -121,6 +130,18 @@ if ( ! function_exists( 'esc_cyr' ) ) {
 
         return $s;
     }
+}
+
+if ( ! function_exists( 'buildGroupCode' ) ) {
+	function buildGroupCode($code, $arGroup) {
+		return transliterate($code);
+	}
+}
+
+if ( ! function_exists( 'buildElementCode' ) ) {
+	function buildElementCode($code, $arElement) {
+		return transliterate($code) . '-' . $arElement['XML_ID'];
+	}
 }
 
 if (!isset($arCatalogAvailProdFields))
@@ -706,7 +727,7 @@ if ('' == $strImportErrorMessage)
 							if (!isset($arGroupsTmp[$i]['CODE']) || '' === $arGroupsTmp[$i]['CODE'])
 							{
 								$arGroupsTmp[$i]['CODE'] = CUtil::translit($arGroupsTmp[$i]["NAME"], $TRANSLIT_LANG, $arTranslitSection);
-								$arGroupsTmp[$i]['CODE'] = esc_cyr($arGroupsTmp[$i]['CODE'] ?: $arGroupsTmp[$i]["NAME"]);
+								$arGroupsTmp[$i]['CODE'] = buildGroupCode($arGroupsTmp[$i]['CODE'] ?: $arGroupsTmp[$i]["NAME"], $arGroupsTmp);
 							}
 						}
 						$LAST_GROUP_CODE = $arr["ID"];
@@ -723,7 +744,7 @@ if ('' == $strImportErrorMessage)
 							if (!isset($arGroupsTmp[$i]['CODE']) || '' === $arGroupsTmp[$i]['CODE'])
 							{
 								$arGroupsTmp[$i]['CODE'] = CUtil::translit($arGroupsTmp[$i]["NAME"], $TRANSLIT_LANG, $arTranslitSection);
-								$arGroupsTmp[$i]['CODE'] = esc_cyr($arGroupsTmp[$i]['CODE'] ?: $arGroupsTmp[$i]["NAME"]);
+								$arGroupsTmp[$i]['CODE'] = buildGroupCode($arGroupsTmp[$i]['CODE'] ?: $arGroupsTmp[$i]["NAME"], $arGroupsTmp);
 							}
 						}
 						$arGroupsTmp[$i]["IBLOCK_ID"] = $IBLOCK_ID;
@@ -738,6 +759,14 @@ if ('' == $strImportErrorMessage)
 					if ('' === $strErrorR)
 					{
 						$arSectionCache[$sectionIndex] = $LAST_GROUP_CODE;
+					}
+					elseif(defined('STRICT_MODE') && true === STRICT_MODE)
+					{
+						echo $strErrorR;
+						echo "<pre>";
+						var_dump( $arGroupsTmp );
+						echo "</pre>";
+						die();
 					}
 				}
 				else
@@ -862,7 +891,7 @@ if ('' == $strImportErrorMessage)
 						if (!isset($arLoadProductArray['CODE']) || '' === $arLoadProductArray['CODE'])
 						{
 							$arLoadProductArray['CODE'] = CUtil::translit($arLoadProductArray["NAME"], $TRANSLIT_LANG, $arTranslitElement);
-							$arLoadProductArray['CODE'] = esc_cyr($arLoadProductArray['CODE'] ?: $arLoadProductArray["NAME"]);
+							$arLoadProductArray['CODE'] = buildElementCode($arLoadProductArray['CODE'] ?: $arLoadProductArray["NAME"], $arLoadProductArray);
 						}
 					}
 					if ($bThereIsGroups)
@@ -895,7 +924,7 @@ if ('' == $strImportErrorMessage)
 						if (!isset($arLoadProductArray['CODE']) || '' === $arLoadProductArray['CODE'])
 						{
 							$arLoadProductArray['CODE'] = CUtil::translit($arLoadProductArray["NAME"], $TRANSLIT_LANG, $arTranslitElement);
-							$arLoadProductArray['CODE'] = esc_cyr($arLoadProductArray['CODE'] ?: $arLoadProductArray["NAME"]);
+							$arLoadProductArray['CODE'] = buildElementCode($arLoadProductArray['CODE'] ?: $arLoadProductArray["NAME"], $arLoadProductArray);
 						}
 					}
 
@@ -1263,10 +1292,11 @@ if ('' == $strImportErrorMessage)
 								}
 								else
 								{
+									if(empty($value['PRICE'])) $value['PRICE'] = DEFAULT_PRICE;
+									if(empty($value['CURRENCY'])) $value['CURRENCY'] = DEFAULT_CURRENCY;
+
 									if (isset($value['PRICE']))
 										$value['PRICE'] = str_replace(array(' ', ','), array('', '.'), $value['PRICE']);
-
-									if(empty($value['CURRENCY'])) $value['CURRENCY'] = 'RUB';
 
 									$priceResult = Catalog\Model\Price::update($priceId, $value);
 									if ($priceResult->isSuccess())
@@ -1292,10 +1322,11 @@ if ('' == $strImportErrorMessage)
 								);
 								if (!$boolEmptyNewPrice)
 								{
+									if(empty($value['PRICE'])) $value['PRICE'] = DEFAULT_PRICE;
+									if(empty($value['CURRENCY'])) $value['CURRENCY'] = DEFAULT_CURRENCY;
+
 									if (isset($value['PRICE']))
 										$value['PRICE'] = str_replace(array(' ', ','), array('', '.'), $value['PRICE']);
-
-									if(empty($value['CURRENCY'])) $value['CURRENCY'] = 'RUB';
 
 									$priceResult = Catalog\Model\Price::add($value);
 									if ($priceResult->isSuccess())
@@ -1345,6 +1376,30 @@ if ('' == $strImportErrorMessage)
 					}
 					$updateFacet = false;
 					$previousProductId = $PRODUCT_ID;
+				}
+			}
+			elseif(defined('STRICT_MODE') && true === STRICT_MODE)
+			{
+				if(defined('SKIP_PRODUCT_WITH_EMPTY_XML_ID') && SKIP_PRODUCT_WITH_EMPTY_XML_ID && empty($arLoadProductArray['XML_ID']))
+				{
+					$error_lines++;
+					$strImportErrorMessage .= $strErrorR;
+				}
+				elseif(defined('SKIP_PRODUCT_WITH_EMPTY_TITLE') && SKIP_PRODUCT_WITH_EMPTY_TITLE && empty($arLoadProductArray['NAME']))
+				{
+					$error_lines++;
+					$strImportErrorMessage .= $strErrorR;
+				}
+				else
+				{
+					echo $strErrorR;
+					echo "<pre>";
+					echo "Product: \n";
+					var_dump($arLoadProductArray);
+					echo "Offer: \n";
+					var_dump($arLoadOfferArray);
+					echo "</pre>";
+					die();
 				}
 			}
 			else
