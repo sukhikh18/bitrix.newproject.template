@@ -1,7 +1,7 @@
 <?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
-if ( !function_exists('body_class') ) {
-    function body_class()
+if (!function_exists('bodyClass')):
+    function bodyClass()
     {
         /** @var CMain $APPLICATION */
         global $APPLICATION;
@@ -14,4 +14,4 @@ if ( !function_exists('body_class') ) {
         $APPLICATION->ShowProperty('body-class');
         echo '"';
     }
-}
+endif;

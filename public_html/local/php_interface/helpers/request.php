@@ -2,14 +2,14 @@
 
 use Bitrix\Main\Context;
 
-if ( !function_exists('is_front_page') ) {
-    function is_front_page() {
+if ( !function_exists('isFrontPage') ) {
+    function isFrontPage() {
         return '' === Context::getCurrent()->getRequest()->getRequestedPageDirectory();
     }
 }
 
-if ( !function_exists('is_catalog') ) {
-    function is_catalog() {
+if ( !function_exists('isCatalog') ) {
+    function isCatalog() {
         return rtrim(PATH_TO_CATALOG, '/') === Context::getCurrent()->getRequest()->getRequestedPageDirectory();
     }
 }

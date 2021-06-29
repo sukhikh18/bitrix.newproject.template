@@ -1,71 +1,56 @@
-<?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+<?php
 
-if ( !function_exists('find_section') ) {
-    function find_section($suffix = null, $recursive = true, $type = 'sect') {
-        global $APPLICATION;
+if (!function_exists('getSectionsHierarchical')):
+	/**
+	 * Получение секций в удобный (иерархичный) массив данных
+	 *
+	 * @param  Mixed  $iblockId ИД информационного блока. Передается в переменную $arFilter[IBLOCK_ID].
+	 *                           При использовании инфоблоков 1.0 можно передать массив
+	 * @param  Array  $arFilter  Остальные параметры переменной $arFilter для CIBlockSection::GetList
+	 * @param  Array  $arOrder   Параметры сортировки элементов
+	 * @param  Array  $arSelect  Параметры выборки компанентов
+	 * @return Array
+	 */
+	function getSectionsHierarchical(int $iblockId, array $arFilter = array(), array $arOrder = array(), array $arSelect = array()) {
+		\Bitrix\Main\Loader::includeModule('iblock');
 
-        $type = ("sect" !== $type) ? "page" : "sect"; // bx required sect | page
-        $suffix = strlen($suffix) > 0 ? $suffix : "inc";
-        $recursive = in_array($recursive, array("N", false)) ? "N" : "Y";
+		$rsSections = \Bitrix\Iblock\SectionTable::getList([
+			'order' => [
+				'DEPTH_LEVEL' => 'ASC',
+				'SORT' => 'ASC',
+			],
+			'filter' => array_merge($arFilter, [
+				"IBLOCK_ID" => $iblockId,
+				'ACTIVE' => 'Y',
+				'GLOBAL_ACTIVE' => 'Y',
+			]),
+			'select' => array_merge($arSelect, [
+				'IBLOCK_ID',
+				'IBLOCK_SECTION_ID',
+				'ID',
+				'CODE',
+				'NAME',
+				'DEPTH_LEVEL',
+				// Присоединить таблицу инфоблоков Iblock\IblockTable и выбрать SECTION_PAGE_URL
+				'IBLOCK_SECTION_PAGE_URL' => 'IBLOCK.SECTION_PAGE_URL',
+			]),
+		]);
 
-        $io = CBXVirtualIo::GetInstance();
-        $realPath = $_SERVER["REAL_FILE_PATH"];
+		$arResult = ['ROOT' => []];
+		$sectionLink = [0 => &$arResult['ROOT']];
 
-        // if page is in SEF mode - check real path
-        if (strlen($realPath) > 0)
-        {
-            $slash_pos = strrpos($realPath, "/");
-            $sFilePath = substr($realPath, 0, $slash_pos+1);
-        }
-        // otherwise use current
-        else
-        {
-            $sFilePath = $APPLICATION->GetCurDir();
-        }
+		while ($arSection = $rsSections->fetch()) {
+			$arSection['SECTION_PAGE_URL'] = \CIBlock::ReplaceDetailUrl(
+				$arSection['IBLOCK_SECTION_PAGE_URL'], $arSection, true, 'S');
 
-        if ( "page" == $type ) {
-            $sFileName = "index_$suffix.php";
-        }
-        else //if ("sect" == $type)
-        {
-            $sFileName = "$type_$suffix.php";
-        }
+			$iblockSectId = intval($arSection['IBLOCK_SECTION_ID']);
+			$sectId = intval($arSection['ID']);
 
-        $path = $sFilePath.$sFileName;
+			$sectionLink[ $iblockSectId ]['CHILD'][ $sectId ] = $arSection;
+			$sectionLink[ $sectId ] = &$sectionLink[ $iblockSectId ]['CHILD'][ $sectId ];
+		}
 
-        $bFileFound = $io->FileExists($_SERVER['DOCUMENT_ROOT'].$path);
-
-        // if file not found and is set recursive check - start it
-        if (!$bFileFound && $recursive == "Y" && $sFilePath != "/")
-        {
-            $finish = false;
-
-            do
-            {
-                // back one level
-                if (substr($sFilePath, -1) == "/") $sFilePath = substr($sFilePath, 0, -1);
-                $slash_pos = strrpos($sFilePath, "/");
-                $sFilePath = substr($sFilePath, 0, $slash_pos+1);
-
-                $path = $sFilePath.$sFileName;
-                $bFileFound = $io->FileExists($_SERVER['DOCUMENT_ROOT'].$path);
-
-                // if we are on the root - finish
-                $finish = $sFilePath == "/";
-            }
-            while (!$finish && !$bFileFound);
-        }
-
-        return $bFileFound ? $path : false;
-    }
-}
-
-if ( !function_exists('section_exist') ) {
-    function section_exist( $name = null ) {
-        $filename = find_section($name);
-        if ( $filename && filesize($_SERVER['DOCUMENT_ROOT'].$filename) > 72 )
-            return $filename;
-
-        return false;
-    }
-}
+		unset($sectionLink);
+		return (array) $arResult['ROOT']['CHILD'];
+	}
+endif;
