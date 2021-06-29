@@ -1,10 +1,10 @@
-<? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+<?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
 use \Bitrix\Main\Application;
 
 $documentRoot = Application::getDocumentRoot();
 $composer =  realpath($documentRoot . "/../vendor/autoload.php");
-if(is_file($composer)) require_once $composer;
+if (is_file($composer)) require_once $composer;
 
 $php_interface = '/local/php_interface';
 
@@ -22,6 +22,5 @@ CModule::AddAutoloadClasses(
 );
 
 require_once $documentRoot . $php_interface . "/constants.php";
-require_once $documentRoot . $php_interface . "/assets.php";
 require_once $documentRoot . $php_interface . "/functions.php";
 require_once $documentRoot . $php_interface . "/handlers.php";

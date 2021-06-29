@@ -65,8 +65,8 @@ require realpath(__DIR__ . '/functions.php');
     // Animate
     // $Asset->addCss(TPL . '/assets/vendor/animate'.$min.'.css');
 
-    enqueue_template_assets();
-    enqueue_page_assets();
+    $Asset->addJs(TPL . '/assets/script.js');
+    $Asset->addCss(TPL . '/assets/template.min.css');
 
     // BITRIX ->ShowHead()
     CJSCore::Init(array("fx"));
