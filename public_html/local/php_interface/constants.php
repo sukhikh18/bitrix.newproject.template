@@ -16,7 +16,7 @@ if ( !defined('EMAIL_ADMIN') ) define('EMAIL_ADMIN', '');
 /**
  * Static paths (Не использовать в SEF настройках компонентов, испортит .urlrewrite)
  */
-define('PATH_TO_CATALOG', '/shop/');
+define('PATH_TO_CATALOG', '/catalog/');
 
 define('PATH_TO_AUTH',            '/user/');
 define('PATH_TO_REGISTER',        PATH_TO_AUTH . '?register=yes');
