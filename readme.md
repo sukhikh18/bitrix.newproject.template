@@ -13,7 +13,7 @@
 ├── Catalog.Element      - [Товар (Представление товара с детальной/подробной информацией)](https://dev.1c-bitrix.ru/user_help/components/content/catalog/catalog_element.php)  
 └── Catalog.Filter       - [Фильтр по элементам](https://dev.1c-bitrix.ru/user_help/components/content/catalog/catalog_filter.php)  
 
-Sale (Модуль продаж)
+Sale (Модуль продаж)  
 ├── Sale.Personal.Order:      - [Персональная информация (/personal/order/)](https://dev.1c-bitrix.ru/user_help/components/magazin/profiles/sale_personal_order.php)  
 └── Sale.Personal.Order.List: - [Список заказов](https://dev.1c-bitrix.ru/user_help/components/magazin/profiles/sale_personal_order_list.php)  
 
