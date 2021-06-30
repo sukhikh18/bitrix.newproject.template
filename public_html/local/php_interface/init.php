@@ -4,7 +4,7 @@ use Bitrix\Main\Application;
 use Bitrix\Main\Loader;
 
 $documentRoot = Application::getDocumentRoot();
-$composer =  realpath(__DIR__ . '/../../vendor/autoload.php');
+$composer =  realpath($documentRoot . '/../vendor/autoload.php');
 if (is_file($composer)) require_once $composer;
 
 Loader::registerAutoLoadClasses(null, [
