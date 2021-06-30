@@ -1,22 +1,14 @@
-<?php if ( ! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
-    die();
-}
-/**
- * @global CMain $APPLICATION
- * @global CUser $USER
- */
-use \Bitrix\Main\Page\Asset;
-/** @var $Asset Asset */
-$Asset = Asset::getInstance();
-
-require realpath(__DIR__ . '/functions.php');
+<?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+/** @var CMain $APPLICATION */
+global $APPLICATION;
+/** @var \Bitrix\Main\Page\Asset $Asset */
+$Asset = \Bitrix\Main\Page\Asset::getInstance();
 
 ?><!DOCTYPE html>
 <html class="no-js" lang="ru-RU">
 <head>
-    <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title><?php $APPLICATION->ShowTitle(false) ?></title>
+    <title><?php $APPLICATION->ShowTitle() ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php
     // Place favicon.ico in the root directory
@@ -28,30 +20,30 @@ require realpath(__DIR__ . '/functions.php');
     $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js');
     $Asset->addString(sprintf(
         '<script>window.jQuery || document.write(\'<script src="%s"><\/script>\')</script>',
-        str_replace('/', '\/', TPL . '/assets/vendor/jquery/jquery.min.js')
+        str_replace('/', '\/', SITE_TEMPLATE_PATH . '/assets/vendor/jquery/jquery.min.js')
     ));
 
     // Bitrix has own small modernizr.
     // $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js');
 
     // Bootstrap framework
-    $Asset->addCss(TPL . '/assets/vendor/bootstrap.min.css');
-    $Asset->addJs(TPL . '/assets/vendor/bootstrap/bootstrap.min.js');
+    $Asset->addCss(SITE_TEMPLATE_PATH . '/assets/vendor/bootstrap.min.css');
+    $Asset->addJs(SITE_TEMPLATE_PATH . '/assets/vendor/bootstrap/bootstrap.min.js');
 
     // Responsive mobile menu with animation
-    $Asset->addCss(TPL . '/assets/vendor/hamburgers.min.css');
+    $Asset->addCss(SITE_TEMPLATE_PATH . '/assets/vendor/hamburgers.min.css');
 
     // Slick slider
-    $Asset->addCss(TPL . '/assets/vendor/slick/slick.css');
-    $Asset->addJs(TPL . '/assets/vendor/slick/slick.min.js');
+    $Asset->addCss(SITE_TEMPLATE_PATH . '/assets/vendor/slick/slick.css');
+    $Asset->addJs(SITE_TEMPLATE_PATH . '/assets/vendor/slick/slick.min.js');
 
     // Fancybox
-    $Asset->addCss(TPL . '/assets/vendor/fancybox/jquery.fancybox.min.css');
-    $Asset->addJs(TPL . '/assets/vendor/fancybox/jquery.fancybox.min.js');
+    $Asset->addCss(SITE_TEMPLATE_PATH . '/assets/vendor/fancybox/jquery.fancybox.min.css');
+    $Asset->addJs(SITE_TEMPLATE_PATH . '/assets/vendor/fancybox/jquery.fancybox.min.js');
 
     // Cleave
-    $Asset->addJs(TPL . '/assets/vendor/cleave/cleave.min.js');
-    $Asset->addJs(TPL . '/assets/vendor/cleave/addons/cleave-phone.ru.js');
+    $Asset->addJs(SITE_TEMPLATE_PATH . '/assets/vendor/cleave/cleave.min.js');
+    $Asset->addJs(SITE_TEMPLATE_PATH . '/assets/vendor/cleave/addons/cleave-phone.ru.js');
 
     // Masked input
     // $Asset->addJs('https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.min.js');
@@ -63,38 +55,13 @@ require realpath(__DIR__ . '/functions.php');
     // $Asset->addCss('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css');
 
     // Animate
-    // $Asset->addCss(TPL . '/assets/vendor/animate'.$min.'.css');
+    // $Asset->addCss(SITE_TEMPLATE_PATH . '/assets/vendor/animate'.$min.'.css');
 
-    enqueue_template_assets();
-    enqueue_page_assets();
+    $Asset->addJs(SITE_TEMPLATE_PATH . '/assets/script.js');
+    $Asset->addCss(SITE_TEMPLATE_PATH . '/assets/template.min.css');
 
-    // BITRIX ->ShowHead()
-    CJSCore::Init(array("fx"));
-
-    $APPLICATION->ShowMeta("robots", false);
-    $APPLICATION->ShowMeta("keywords", false);
-    $APPLICATION->ShowMeta("description", false);
-    $APPLICATION->ShowLink("canonical", null);
-    $APPLICATION->ShowCSS(true);
-    $APPLICATION->ShowHeadStrings();
-    $APPLICATION->ShowHeadScripts();
+    $APPLICATION->ShowHead();
     ?>
-
-    <!-- IE compatibility -->
-    <!--[if lt IE 9]>
-    <script data-skip-moving="true" type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-    <script data-skip-moving="true">var isIE = true;</script>
-    <![endif]-->
-    <?php /* ?>
-    <script data-skip-moving="true">
-        var isIE = false /*@cc_on || true @*/?><?php /*;
-        if (isIE) {
-            document.createElement("picture");
-            document.write('<script src="https:\/\/cdnjs.cloudflare.com\/ajax\/libs\/picturefill\/3.0.3\/picturefill.min.js" async><\/script>');
-        }
-    </script>
-    <?php */ ?>
 </head>
 <body class="page page_<?= LANGUAGE_ID ?> page_type_<?php $APPLICATION->ShowProperty('page_type', 'secondary')?>">
     <?php $APPLICATION->ShowPanel(); ?>
@@ -103,8 +70,7 @@ require realpath(__DIR__ . '/functions.php');
             href="https://browsehappy.com/">обновите ваш браузер</a> для лучшего отображения и безопасности.</p>
     <![endif]-->
 
-    <header class="page__header">
-        <!-- <div itemscope itemtype="http://schema.org/LocalBusiness"> -->
+    <header class="page__header"><!-- itemscope itemtype="http://schema.org/LocalBusiness" -->
         <div class="container">
             <div class="masthead row align-items-center">
                 <div class="masthead__logotype col-4">
@@ -115,7 +81,6 @@ require realpath(__DIR__ . '/functions.php');
                     ); ?>
                 </div>
                 <div class="masthead__contacts col-4">
-                    <!-- Contacts -->
                     <? $APPLICATION->IncludeFile(
                         SITE_DIR . "local/include/head.contacts.php",
                         array(),
@@ -132,11 +97,7 @@ require realpath(__DIR__ . '/functions.php');
             </div>
             <!-- .masthead -->
         </div>
-
-        <!-- <div class="hidden-xs-up">
-            <span itemprop="priceRange">RUB</span>
-        </div> -->
-        <!-- </div> -->
+        <!-- <div class="hidden-xs-up"><span itemprop="priceRange">RUB</span></div> -->
     </header>
     <!-- .page__header -->
 
@@ -158,17 +119,17 @@ require realpath(__DIR__ . '/functions.php');
                         "bitrix:menu",
                         "bootstrap_multilevel",
                         array(
-                            "COMPONENT_TEMPLATE"    => "bootstrap_multilevel",
-                            "ROOT_MENU_TYPE"        => "top",
-                            "MENU_CACHE_TYPE"       => "N",
-                            "MENU_CACHE_TIME"       => "3600",
+                            "COMPONENT_TEMPLATE" => "bootstrap_multilevel",
+                            "ROOT_MENU_TYPE" => "top",
+                            "MENU_CACHE_TYPE" => "N",
+                            "MENU_CACHE_TIME" => "3600",
                             "MENU_CACHE_USE_GROUPS" => "Y",
-                            "MENU_CACHE_GET_VARS"   => array(),
-                            "MAX_LEVEL"             => "1",
-                            "CHILD_MENU_TYPE"       => "top",
-                            "USE_EXT"               => "N",
-                            "DELAY"                 => "N",
-                            "ALLOW_MULTI_SELECT"    => "N",
+                            "MENU_CACHE_GET_VARS" => array(),
+                            "MAX_LEVEL" => "1",
+                            "CHILD_MENU_TYPE" => "top",
+                            "USE_EXT" => "N",
+                            "DELAY" => "N",
+                            "ALLOW_MULTI_SELECT" => "N",
                         ),
                         false
                     ); ?>
@@ -189,10 +150,9 @@ require realpath(__DIR__ . '/functions.php');
                 "bitrix:breadcrumb",
                 ".default",
                 array(
-                    "PATH"               => "",
-                    "SITE_ID"            => "s1",
-                    "START_FROM"         => "0",
-                    "COMPONENT_TEMPLATE" => ".default"
+                    "PATH" => "",
+                    "SITE_ID" => SITE_ID,
+                    "START_FROM" => "0",
                 ),
                 false
             ); ?>
