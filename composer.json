@@ -1,5 +1,5 @@
 {
-    "name": "bitrix.newproject.template",
+    "name": "bitrix/newproject.template",
     "authors": [
         {
             "name": "nikolays93",
@@ -12,6 +12,7 @@
         }
     },
     "require": {
-        "andreyryabin/sprint.migration": "dev-master",
-    },
+        "webarchitect609/bitrix-user-type": "^0.7.3",
+        "andreyryabin/sprint.migration": "^3.28"
+    }
 }
