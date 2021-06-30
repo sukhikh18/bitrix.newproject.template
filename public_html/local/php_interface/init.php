@@ -17,5 +17,3 @@ require_once $documentRoot . '/local/php_interface' . '/handlers/mail.php';
 require_once $documentRoot . '/local/php_interface' . '/handlers/user.php';
 require_once $documentRoot . '/local/php_interface' . '/helpers/classes.php';
 require_once $documentRoot . '/local/php_interface' . '/helpers/request.php';
-require_once $documentRoot . '/local/php_interface' . '/helpers/path.php';
-require_once $documentRoot . '/local/php_interface' . '/helpers/section.php';
