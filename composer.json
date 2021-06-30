@@ -1,16 +1,17 @@
 {
-    "name": "newproject.template/bitrix",
+    "name": "bitrix.newproject.template",
     "authors": [
         {
             "name": "nikolays93",
             "email": "nikolays93@ya.ru"
         }
     ],
-    "require": {},
-    "repositories": [
-    	{
-    		"type": "git",
-    		"url": "https://github.com/nikolays93/bootstrap.templates"
-    	}
-    ]
+    "extra": {
+        "installer-paths": {
+            "/public_html/local/modules/{$name}/": ["type:bitrix-module"]
+        }
+    },
+    "require": {
+        "andreyryabin/sprint.migration": "dev-master",
+    },
 }
