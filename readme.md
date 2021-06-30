@@ -1,4 +1,3 @@
-
 ## Описание/структура компонентов
 
 [News (Комплексный компонент)](https://dev.1c-bitrix.ru/user_help/components/content/articles_and_news/news.php)  
@@ -21,23 +20,3 @@ Sale.Personal.Order:      - [Персональная информация (/per
 Sale.Personal.Order.List: - [Список заказов](https://dev.1c-bitrix.ru/user_help/components/magazin/profiles/sale_personal_order_list.php)  
 
 \* Комплексный компонент - Обертка запускающая/связывающая под-компоненты
-
-## Многосайтовость
-### Windows
-Все ниже указанные команды выполняются в окне команд Windows из папки с проектом (из bash может не работать)
-#### Изменение структуры сайта
-```
-mkdir sites\s1
-move public_html\bitrix .\
-move public_html\upload .\
-move public_html\local .\
-move public_html sites\s1
-```
-
-#### Создание симлинков
-```
-mklink /j .\sites\s1\bitrix .\bitrix
-mklink /j .\sites\s1\upload .\upload
-mklink /j .\sites\s1\local .\local
-mklink /j .\public_html .\sites\s1
-```
