@@ -7,12 +7,18 @@
         }
     ],
     "extra": {
+        "merge-plugin": {
+            "require": [
+                "/var/www/public_html/bitrix/composer-bx.json"
+            ]
+        },
         "installer-paths": {
             "/public_html/local/modules/{$name}/": ["type:bitrix-module"]
         }
     },
     "require": {
         "webarchitect609/bitrix-user-type": "^0.7.3",
-        "andreyryabin/sprint.migration": "^3.28"
+        "andreyryabin/sprint.migration": "^3.28",
+        "wikimedia/composer-merge-plugin": "^2.0"
     }
 }
