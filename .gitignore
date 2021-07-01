@@ -1,15 +1,10 @@
-/*/
-!/public_html/
+/data/
+/docker/
+.env*
+docker-compose.yml
+/bitrix/
+/upload/
+/vendor/
 /public_html/upload
-# /public_html/upload/resize_cache/
-# /public_html/upload/tmp/
-# /public_html/upload/iblock/
-# /public_html/upload/sale/
-# /public_html/upload/uf/
-/public_html/bitrix/*
-!/public_html/bitrix/.settings_extra.php
-
-/*.*
-!.gitignore
-!composer.json
-!readme.md
+/public_html/bitrix
+*.lock
