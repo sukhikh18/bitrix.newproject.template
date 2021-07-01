@@ -20,6 +20,7 @@
         "andreyryabin/sprint.migration": "^3.28",
         "webarchitect609/bitrix-user-type": "^0.7.3",
         "webarchitect609/bitrix-iblock-property-type": "^1.2",
-        "wikimedia/composer-merge-plugin": "^2.0"
+        "wikimedia/composer-merge-plugin": "^2.0",
+        "notamedia/console-jedi": "^1.*"
     }
 }
